@@ -1,0 +1,925 @@
+/*
+ * case
+ * [MOBILE]
+ * 1. 홈서비스 주소 선택
+ *  1) 배달존
+ *   - 배달존 PIN (4개)
+ *   - 기준 위치 : N
+ *  2) 현 위치로 주소 설정
+ *   - 현재 위치 마킹
+ *   - 현재 위치 갱신
+ *   - 좌표 주소로 변환
+ *   - 기준 위치 : Y / 기준 위치 표시 : Y
+ * 2. 퀵오더 매장 선택
+ * 	1) 가까운 매장
+ *   - 현재 위치 마킹
+ *   - 현재 위치 갱신
+ *   - 매장 PIN (2km 반경)
+ *   - 드라이빙 스루 토글
+ *   - 기준 위치 : Y / 기준 위치 표시 : Y
+ *   2) 매장명 검색 - 확인 필요
+ *   3) 지역 검색 - 확인 필요
+ * 3. 매장 상세
+ *   - 매장 PIN
+ *   - 기준 위치 : N
+ * [PC]
+ * 1. 홈서비스 주소 선택
+ *  1) 배달존
+ *   - 배달존 PIN (4개)
+ * 2. 매장 상세
+ *   - 매장 PIN
+ */
+
+/*
+ * 디자인 · 퍼블리싱 요청사항
+ * 1. 매장 및 주소 기반 PIN 디자인 및 스타일
+ * 2. 현 위치 마커 디자인 및 스타일
+ * 3. 인포 윈도우 디자인 및 스타일
+ * 4. 현 위치 재설정 버튼 및 영역 디자인 및 스타일
+ */
+
+/**
+ * 맵 관리
+ */
+var MapManager = {
+	mapContainer: null
+	, map: null
+	, option: null		//옵션
+	, renewable: true
+	, geocoder: new kakao.maps.services.Geocoder()	//주소-좌표 변환 객체
+	, bounds: null
+	//, basePosition: null//기준 위치
+	, basePosition: {}//기준 위치
+	, pins: []			//핀 배열 (오버레이 -매장명, 매장상태) 
+	, markers: []   //마커 (위치저-브랜드 이미지 사용)
+	, activePin: null	//선택된 핀
+	, serverType: null
+	/**
+	 * 맵 초기화
+	 * @param level 줌 레벨
+	 */
+	, init: function(level, useControl, renewable, isPopup) {
+//		if(isPopup) {   //상품목록 페이지: 초기에 mapContainer설정 안되는 오류로 주석처리
+			this.renewable = renewable;
+//		}
+		//초기지도 셋팅
+		if(!this.renewable && isPopup !== undefined) {
+			if(isPopup) {
+				//팝업 지도에 셋팅
+				this.mapContainer = $("#mapPopup").get(0);
+			} else {
+				this.mapContainer = $("#map").get(0);
+			}
+		}
+		this.serverType = serverType;
+		this.option = {
+			center: new kakao.maps.LatLng(37.46459907076597, 126.8907822368867) //중심 좌표  //중심 좌표 230210 grs 본사 좌표수정
+//			center: new kakao.maps.LatLng(currAddress.point.lat, currAddress.point.lng) //중심 좌표
+			//center: new kakao.maps.LatLng(33.450701, 126.570667) //중심 좌표
+			, level: level //확대 레벨
+		};
+		if(!isPopup) {
+			this.renewable = renewable;
+		}
+		//div와 옵션으로 맵 생성
+		this.map = new kakao.maps.Map(this.mapContainer, this.option);
+		if(useControl) {
+			var zoomControl = new kakao.maps.ZoomControl();
+			MapManager.map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+		}
+		this.bounds = new kakao.maps.LatLngBounds();
+		this.boundsCenter = this.map.getCenter();
+	}
+	/**
+	 * 매장찾기 맵 초기화
+	 * 221229 바로 설정주소 중심좌표로 초기화하기 위해 추가
+	 * @param level 줌 레벨
+	 */
+	, initForSearchStore: function(level, useControl, renewable, isPopup, point) {
+			this.renewable = renewable;
+		//초기지도 셋팅
+		if(!this.renewable && isPopup !== undefined) {
+			if(isPopup) {
+				//팝업 지도에 셋팅
+				this.mapContainer = $("#mapPopup").get(0);
+			} else {
+				this.mapContainer = $("#map").get(0);
+			}
+		}
+		this.serverType = serverType;
+		var latlng;
+		if(point != undefined) {
+			latlng = new kakao.maps.LatLng(point.lat, point.lng);
+		} else {
+			latlng = new kakao.maps.LatLng(37.46459907076597, 126.8907822368867);
+		}
+		this.option = {
+			center:  latlng//중심 좌표
+//			center: new kakao.maps.LatLng(currAddress.point.lat, currAddress.point.lng) //중심 좌표
+			//center: new kakao.maps.LatLng(33.450701, 126.570667) //중심 좌표
+			, level: level //확대 레벨
+		};
+		if(!isPopup) {
+			this.renewable = renewable;
+		}
+		//div와 옵션으로 맵 생성
+		this.map = new kakao.maps.Map(this.mapContainer, this.option);
+		if(useControl) {
+			var zoomControl = new kakao.maps.ZoomControl();
+			MapManager.map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+		}
+		this.bounds = new kakao.maps.LatLngBounds();
+		this.boundsCenter = this.map.getCenter();
+	}
+	/**
+	 * 요소 고정
+	 */
+	, fix: function(element) {
+		kakao.maps.event.addListener(MapManager.map, 'bounds_changed', function() {
+			MapManager.boundsCenter = MapManager.map.getCenter();
+			if(!(window.location.pathname.includes('event') || window.location.pathname.includes('searchStore'))) {
+				element.setPosition(MapManager.map.getCenter());
+			}
+		});
+		kakao.maps.event.addListener(MapManager.map, 'zoom_changed', function() {
+			MapManager.map.setCenter(MapManager.boundsCenter);
+		});
+	}
+	, boundsCenter: null
+	/**
+	 * 핀 배열 추가
+	 */
+	, addPins: function(pins) {
+		MapManager.renewable ? MapManager.removePins() : null;
+		MapManager.pins = MapManager.pins.concat(pins);
+		MapManager.showPins(pins);
+		//레벨 재설정
+		MapManager.renewable ? MapManager.map.setLevel(this.option.level) : null;
+	}
+	/**
+	 * 바운드로 핀 추가
+	 */
+	, addPinsWithBounds: function(pins) {
+		if(MapManager.renewable) {
+			MapManager.removePins();
+			MapManager.bounds = new kakao.maps.LatLngBounds();
+		}
+		MapManager.pins = MapManager.pins.concat(pins);  //?? 주석처리
+		//console.log("addPinsWithBounds => " + MapManager.pins);
+//		pins.forEach(p => MapManager.bounds.extend(p.getPosition()));
+//		MapManager.map.setBounds(MapManager.bounds);
+	}
+	/**
+	 * 핀 클릭 이벤트
+	 */
+	, clickListener: function(pin, callback) {
+		return function() {
+			MapManager.setActivePin(pin);
+			if(callback) {
+				callback(pin);
+			}
+		};
+	}
+	, updateClickEvent: function(event) {
+		MapManager.pins.forEach(function(p) {
+			MapManager.updateClickEventBy(p, event);
+		});
+	}
+	, updateClickEventBy: function(pin, event) {
+		kakao.maps.event.addListener(pin, 'click', function(data) {
+			event(pin);
+		});
+	}
+	, dragendListener: function(func) {
+		kakao.maps.event.addListener(MapManager.map, 'dragend', func);
+	}
+	/**
+	 * 핀 배열 생성
+	 */
+	, createPins: function(latlngs, pinImage, event) {
+		//return latlngs.map(l => MapManager.createPin(l, pinImage, false, event));
+		return latlngs.map(function (l) {
+			return MapManager.createPin(l, pinImage, false, event);
+		});
+	}
+	/**
+	 * 핀 객체 생성
+	 */
+	, createPin: function(latlng, pinImage, fixable, event) {
+		var pin = new kakao.maps.Marker({
+			map: MapManager.map 	//핀을 표시할 지도
+			, position: latlng		//핀의 위치
+			, image: pinImage 		//핀 이미지
+		});
+		event ? kakao.maps.event.addListener(pin, 'click', MapManager.clickListener(pin, event)) : null;
+		fixable ? this.fix(pin) : null;
+		return pin;
+	}
+	, createBasicPins: function(positions, pinImage, event) {
+		//return positions.map(l => MapManager.createBasicPin(l, pinImage, false, event));
+		return positions.map(function (l) {
+			return MapManager.createBasicPin(l, pinImage, false, event);
+		});
+	}
+	/**
+	 * 전체브랜드
+	 */
+	//--bosystems begin 20200908 IJW REQ-025
+	// 체험클래스 - type추가(EXP로 전달)
+	, createBasicPinsAllBrand: function(sttusFlag, positions, pinImage, event, type) {
+		//return positions.map(l => MapManager.createBasicPin(l, pinImage, false, event));
+		return positions.map(function (l) {
+			if(l.division.divcd == '10'){
+				src = "/assets/images/common/comm_ico_marker_state_lotteria.png"; 
+				content = '<div class="pin-brand-state" >'+
+								   '<div class="info-area">' +
+                   		   		   '	<span class="store-name">'+l.storeNm+'</span>';
+             if(sttusFlag) {
+				//미운영매장
+				if(l.operYn === 'N' || l.operInfo.opentimeYn === 'N'){
+					content +=  '<span class="badge-sm-round badge-fill-light-black"><span class="text">불가</span></span>';
+				}
+				//운영매장
+				else {
+					 if(l.storeSttusCode == 'FAST') {
+					 content +=  '<span class="badge-sm-round badge-fill-light-green"><span class="text">원활</span></span>';
+					} else if(l.storeSttusCode == 'NORMAL') {
+						 content +=  '<span class="badge-sm-round badge-fill-light-blue"><span class="text">보통</span></span>';
+					} else if(l.storeSttusCode == 'SLOW') {
+						 content +=  '<span class="badge-sm-round badge-fill-light-orange"><span class="text">지연</span></span>';
+					} else if(l.storeSttusCode == 'INVALID') {
+						 content +=  '<span class="badge-sm-round badge-fill-light-black"><span class="text">불가</span></span>';
+					} 
+				}
+			}
+           content +=   '</div>'+  '</div>';
+			}else if(l.division.divcd == '20'){
+				src = "/assets/images/common/comm_ico_marker_state_angelinus.png"; 
+				content = '<div class="pin-brand-state">'+
+								   '<div class="info-area">' +
+                   				  '	<span class="store-name">'+l.storeNm+'</span>';
+             if(sttusFlag) {
+	            //미운영매장
+				if(l.operYn === 'N' || l.operInfo.opentimeYn === 'N'){
+					content +=  '<span class="badge-sm-round badge-fill-light-black"><span class="text">불가</span></span>';
+				}
+				//운영매장
+				else {
+					 if(l.storeSttusCode == 'FAST') {
+					 content +=  '<span class="badge-sm-round badge-fill-light-green"><span class="text">원활</span></span>';
+					} else if(l.storeSttusCode == 'NORMAL') {
+						 content +=  '<span class="badge-sm-round badge-fill-light-blue"><span class="text">보통</span></span>';
+					} else if(l.storeSttusCode == 'SLOW') {
+						 content +=  '<span class="badge-sm-round badge-fill-light-orange"><span class="text">지연</span></span>';
+					} else if(l.storeSttusCode == 'INVALID') {
+						 content +=  '<span class="badge-sm-round badge-fill-light-black"><span class="text">불가</span></span>';
+					} 
+				}
+			}   
+           content +=   '</div>'+  '</div>';
+			}else if(l.division.divcd == '40'){
+			src = "/assets/images/common/comm_ico_marker_state_krispy.png"; 
+			content =  '<div class="pin-brand-state">'+
+							    '<div class="info-area">' +
+                  				 '	<span class="store-name">'+l.storeNm+'</span>';
+             if(sttusFlag) {
+	            //미운영매장
+				if(l.operYn === 'N' || l.operInfo.opentimeYn === 'N'){
+					content +=  '<span class="badge-sm-round badge-fill-light-black"><span class="text">불가</span></span>';
+				}
+				//운영매장
+				else {
+					 if(l.storeSttusCode == 'FAST') {
+					 content +=  '<span class="badge-sm-round badge-fill-light-green"><span class="text">원활</span></span>';
+					} else if(l.storeSttusCode == 'NORMAL') {
+						 content +=  '<span class="badge-sm-round badge-fill-light-blue"><span class="text">보통</span></span>';
+					} else if(l.storeSttusCode == 'SLOW') {
+						 content +=  '<span class="badge-sm-round badge-fill-light-orange"><span class="text">지연</span></span>';
+					} else if(l.storeSttusCode == 'INVALID') {
+						 content +=  '<span class="badge-sm-round badge-fill-light-black"><span class="text">불가</span></span>';
+					} 
+				}
+			}
+           content +=   '</div>'+  '</div>';
+		}else if(l.division.divcd == '66'){
+			src = "/assets/images/common/comm_ico_marker_state_plating.png"; 
+			content =  '<div class="pin-brand-state">'+
+							    '<div class="info-area">' +
+                  				 '	<span class="store-name">'+l.storeNm+'</span>';
+             if(sttusFlag) {
+	             //미운영매장
+				if(l.operYn === 'N' || l.operInfo.opentimeYn === 'N'){
+					content +=  '<span class="badge-sm-round badge-fill-light-black"><span class="text">불가</span></span>';
+				}
+				//운영매장
+				else {
+					 if(l.storeSttusCode == 'FAST') {
+					 content +=  '<span class="badge-sm-round badge-fill-light-green"><span class="text">원활</span></span>';
+					} else if(l.storeSttusCode == 'NORMAL') {
+						 content +=  '<span class="badge-sm-round badge-fill-light-blue"><span class="text">보통</span></span>';
+					} else if(l.storeSttusCode == 'SLOW') {
+						 content +=  '<span class="badge-sm-round badge-fill-light-orange"><span class="text">지연</span></span>';
+					} else if(l.storeSttusCode == 'INVALID') {
+						 content +=  '<span class="badge-sm-round badge-fill-light-black"><span class="text">불가</span></span>';
+					} 
+				}
+			}    
+           content +=   '</div>'+  '</div>';
+		}
+			var size = new kakao.maps.Size(30, 30);
+			var options = {};
+			pinImage =MapManager.createMarkerImage(src, size, options);
+			MapManager.createInfo(l.latlng,content, false);
+
+			//type의 값에 따른 분기
+			if(type != undefined && type != ""){ //type이 비어있지 않음
+				if(l.rcrtNumPeople != null && l.rcrtNumPeople != undefined){
+					return MapManager.createBasicPin(l, pinImage, false, event); //체험클래스 진행		
+				}else{
+					return MapManager.createBasicPin(l, pinImage, false, null); // 체험클래스 미진행
+				}
+				
+			}else{
+				return MapManager.createBasicPin(l, pinImage, false, event); //기존 
+			}
+
+			
+		});
+	}
+	//--bosystems end 20200908 IJW REQ-025
+	/**
+	 * 핀 객체 생성
+	 */
+	, createBasicPin: function(positions, pinImage, fixable, event) {
+		var pin = new kakao.maps.Marker({
+			map: MapManager.map 		//핀을 표시할 지도
+			, position: positions.latlng	//핀의 위치
+			, title: positions.title		//핀의 제목
+			, image: pinImage 			//핀 이미지
+			, yAnchor: 0
+		});
+		
+		
+		MapManager.markers = MapManager.markers.concat(pin);
+		event ? kakao.maps.event.addListener(pin, 'click', MapManager.clickListener(pin, event)) : null;
+		//event ? kakao.maps.event.addListener(pin, 'click', MapManager.clickListener(pin, MapManager.showPopup)) : null;
+		fixable ? this.fix(pin) : null;
+		return pin;
+	}
+	/**
+	 * 마커 이미지 객체 생성 및 초기화
+	 */
+	, createMarkerImage: function(src, size, options) {
+		return new kakao.maps.MarkerImage(src, size, options);
+	}
+	/**
+	 * 인포윈도우 객체 생성
+	 */
+	, createInfo: function(latlng, content, fixable) {
+		var overlay = new kakao.maps.CustomOverlay({
+			map: MapManager.map,
+			content: content,
+			position: latlng,
+			yAnchor: 2.2
+		});
+		fixable ? this.fix(overlay) : null;
+		MapManager.pins = MapManager.pins.concat(overlay);
+		return overlay;
+	}
+	/**
+	 * 기준 위치 설정 초기화
+	 * @param pinImage : 핀 이미지
+	 * @param fixable : 드래그 시 맵 고정 여부
+	 * @param radius : 반경
+	 * @param visible : 노출여부
+     * @param focus : 줌 이벤트 발생여부
+	 * required : false;
+	 */
+	, initBasePositionConfig: function(pinImage, fixable, radius, visible, defaultPosition) {
+		MapManager.basePosition = {
+			config: {
+				pinImage: pinImage ? pinImage : MapManager.getBasePinImage()
+				, fixable: fixable
+				, radius: radius
+				, visible: visible
+				, focus: focus 
+				, defaultPosition: defaultPosition
+			}
+		}
+	}
+	, getBasePinImage: function() {
+		var size = new kakao.maps.Size(40, 47); //사이즈 설정
+		//var src = "/resources/web/common/images/order_mylocation.svg"; //경로
+		var src = "/assets/images/common/comm_ico_map_marker.png"; //경로
+		var options = { //옵션 설정
+//				offset: new kakao.maps.Point(27, 69)
+			//, spriteSize: new kakao.maps.Size(36, 98)
+		};
+		return MapManager.createMarkerImage(src, size, options);
+	}
+	/**
+	 * 기준 위치 초기화
+	 */
+	, setBasePosition: function(latlng) {
+		MapManager.basePosition.latlng ? this.removeBasePosition() : null;
+		this.basePosition.latlng = latlng;
+		var config = MapManager.basePosition.config;
+		if(config.visible) { //기준 위치 노출 설정 시
+			//기준 위치 그리기
+			MapManager.basePosition.pin = config.pinImage ?
+				this.createPin(latlng, config.pinImage, config.fixable) : this.drawDot(latlng);
+			MapManager.basePosition.circle = config.radius ?
+				MapManager.drawCircle(latlng, config.radius, config.fixable) : null;
+			MapManager.showPins([MapManager.basePosition.pin]);
+		}
+		//줌 이벤트 발생 시 기준 위치에 센터 맞추기
+		//TODO 박선주 : 필요 기능인지 확인
+		if(config.focus) {
+			kakao.maps.event.addListener(MapManager.map, 'zoom_changed', function() {
+//				MapManager.map.setCenter(MapManager.basePosition.latlng);
+			});
+		}
+		MapManager.map.setCenter(latlng);
+	}
+	//--bosystems begin 20201021 IJW REQ-023
+	/**
+	 * 최근배달주소는 기본위치 없음
+	 */
+	, setBasePosition2: function(latlng) {
+		MapManager.basePosition.latlng ? this.removeBasePosition() : null;
+		this.basePosition.latlng = latlng;
+		var config = MapManager.basePosition.config;
+		if(config.visible) { //기준 위치 노출 설정 시
+			//기준 위치 그리기 
+			/*MapManager.basePosition.pin = config.pinImage ?
+					this.createPin(latlng, config.pinImage, config.fixable) : this.drawDot(latlng);*/
+			MapManager.basePosition.circle = config.radius ?
+				MapManager.drawCircle(latlng, config.radius, config.fixable) : null;
+			//MapManager.showPins([MapManager.basePosition.pin]);
+		}
+		//줌 이벤트 발생 시 기준 위치에 센터 맞추기
+		//TODO 박선주 : 필요 기능인지 확인
+		if(config.focus) {
+			kakao.maps.event.addListener(MapManager.map, 'zoom_changed', function() {
+				MapManager.map.setCenter(MapManager.basePosition.latlng);
+			});
+		}
+		MapManager.map.setCenter(latlng);
+	}
+	//--bosystems end 20201021 IJW REQ-023
+	/**
+	 * 현재 위치를 기준 위치로 설정
+	 */
+	, setCurrentPosition: function(func, errFunc) {
+		MapManager.getCurrentPosition()
+			.then(function(position) {
+				var latlng = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
+				MapManager.setBasePosition(latlng);
+				func(latlng);
+			})
+			.catch(function(err) {
+				console.error(err);
+				//현재 위치 조회 중 오류 발생할 경우에도 기본으로 설정된 좌표가 있다면 진행
+				var basePosition = MapManager.basePosition;
+				if(basePosition && basePosition.config.defaultPosition) {
+					MapManager.setBasePosition(basePosition.config.defaultPosition);
+					func ? func(basePosition.config.defaultPosition) : null;
+				}
+				errFunc ? errFunc() : null;
+			});
+	}
+	//--bosystems begin 20201021 IJW REQ-023
+	/**
+	 * 최신 배달 위치를 기준 위치로 설정
+	 */
+	, setDeliveryPosition: function(func, errFunc,address) {
+		MapManager.getLatlng(address)
+			.then(function(latlng) {
+				MapManager.setBasePosition2(latlng);
+				func(latlng);
+			})
+			.catch(function(err) {
+				console.error(err);
+				//현재 위치 조회 중 오류 발생할 경우에도 기본으로 설정된 좌표가 있다면 진행
+				var basePosition = MapManager.basePosition;
+				if(basePosition && basePosition.config.defaultPosition) {
+					MapManager.setBasePosition(basePosition.config.defaultPosition);
+					func ? func(basePosition.config.defaultPosition) : null;
+				}
+				errFunc ? errFunc() : null;
+			});
+
+	}
+	/**
+	 * 매장위치를 기준으로 핀 생성하기
+	 * 팝업 여부 추가
+	 */
+	 , setStorePin: function(level, lat, lng, isPopup) {
+		var latlng = new kakao.maps.LatLng(lat, lng);
+		this.init(level,false,false, isPopup);
+		this.map.setCenter(latlng);
+		
+		var pinImage = "/assets/images/common/comm_ico_map_marker.png",
+		    imageSize = new kakao.maps.Size(40,47), // 마커크기
+		    imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커의 좌표와 일치시킬 이미지 안에서의 좌표 설정
+		      
+		var markerImage = new kakao.maps.MarkerImage(pinImage, imageSize, imageOption),
+		    markerPosition = new kakao.maps.LatLng(lat, lng); // 마커가 표시될 위치입니다
+		
+		var marker = new kakao.maps.Marker({
+		    position: markerPosition, 
+		    image: markerImage // 마커이미지 설정 
+		});
+		marker.setMap(MapManager.map);  
+	}
+	//--bosystems end 20201021 IJW REQ-023
+	/**
+	 * 점 그리기
+	 */
+	, drawDot: function(latlng) {
+		return new kakao.maps.CustomOverlay({
+			content: '<span class="dot"></span>', //임시
+			position: latlng,
+			zIndex: 1
+		});
+	}
+	/**
+	 * 원 그리기
+	 */
+	, drawCircle: function(latlng, radius, fixable) {
+		var circle = new kakao.maps.Circle({
+			center: latlng, // 원의 중심좌표
+			radius: radius, // 원의 반지름
+			strokeWeight: 1, // 선의 두께
+			strokeColor: '#00a0e9', // 선의 색깔
+			strokeOpacity: 0.1, // 선의 불투명도
+			strokeStyle: 'solid', // 선의 스타일
+			fillColor: '#00a0e9', // 채우기 색깔
+			fillOpacity: 0.2  // 채우기 불투명도
+		});
+
+		circle.setMap(MapManager.map); //지도에 표시
+		fixable ? this.fix(circle) : null;
+		return circle;
+	}
+	/**
+	 * 현재 위치 가져오기
+	 * @returns
+	 */
+	, getCurrentPosition: function() {
+		return new Promise(function (resolve, reject) {
+			if(MapManager.serverType === 'dev' || MapManager.serverType === 'stg' || MapManager.serverType === 'product'){
+				if(navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(resolve, reject, {
+						enableHighAccuracy: false,
+						maximumAge: 0,
+						timeout: Infinity
+					});
+				} else {
+					reject();
+				}
+			} else{ //https 아닐 경우 잠실로 디폴트값 세팅 -> 230120 GRS 본사로 수정
+				resolve({
+					coords: {
+						latitude: 37.46459907076597,
+						longitude: 126.8907822368867
+	
+					}
+				});
+			}
+		});
+	}
+	/**
+	 * 거리 계산
+	 */
+	, getDistance: function(basePosition, targetPosition) {
+		//기준좌표가 null 경우에만 Default 위치로 셋팅  230210 grs 본사로 수정
+		if(!basePosition) {
+			basePosition = new kakao.maps.LatLng(37.46459907076597, 126.8907822368867)
+		}
+		var linePath = [
+			basePosition,	//측정 기준 위치
+			targetPosition	//측정 대상 위치
+		];
+		var polyline = new kakao.maps.Polyline({
+			path: linePath, //선을 구성하는 좌표배열
+		});
+		var distance = polyline.getLength();
+		return Math.round(distance);
+	}
+	/**
+	 * 좌표로 주소 가져오기
+	 */
+	, getAddress: function(latlng, func) {
+		return new Promise(function(resolve, reject) {
+			MapManager.geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(data) {
+				resolve(data[0]);
+			});
+		});
+	}
+	/**
+	 * 주소로 좌표 가져오기
+	 */
+	, getLatlng: function(address) {
+		return new Promise(function(resolve) {
+			MapManager.geocoder.addressSearch(address, function(data, status) {
+				//정상적으로 검색 완료 시
+				if (status === kakao.maps.services.Status.OK) {
+					var coords = new kakao.maps.LatLng(data[0].y, data[0].x);
+					resolve(coords);
+				} else {
+					//TODO 에러 처리
+					console.error(status);
+				}
+			});
+		})
+	}
+	/**
+	 * 인포 보이기
+	 */
+	, showInfo: function(info) {
+		info.setMap(MapManager.map);
+	}
+	/**
+	 * 인포 숨기기
+	 */
+	, hideInfo: function(info) {
+		MapManager.activePin.info.setMap(null);
+	}
+	/**
+	 * 핀 클릭시 팝업 띄우기
+	 */
+	, showPopup: function(pin) {
+		var storecd = pin.storecd
+		StoreManager.get(storecd); 
+	}
+	/**
+	 * 핀 숨기기
+	 */
+	, hidePins: function(pins) {
+		this.resetActivePin();
+		//pins.forEach(p => p.setMap(null));
+		pins.forEach(function (p) {
+			return p.setMap(null);
+		});
+	}
+	/**
+	 * 마커 숨기기
+	 */
+	, hideMarkers: function(markers) {
+		this.resetActivePin();
+		//pins.forEach(p => p.setMap(null));
+		markers.forEach(function (m) {
+			return m.setMap(null);
+		});
+	}
+	/**
+	 * 핀 보이기
+	 */
+	, showPins: function(pins) {
+		//pins.forEach(p => p.setMap(MapManager.map));
+		pins.forEach(function (p) {
+			return p.setMap(MapManager.map);
+		});
+	}
+	/**
+	 * 핀 제거
+	 */
+	, removePins: function() {
+		MapManager.hidePins(MapManager.pins);
+		MapManager.pins = [];
+		this.resetActivePin();
+	}	
+	/**
+	 * 마커 제거
+	 */
+	, removeMarkers: function() {
+		MapManager.hideMarkers(MapManager.markers);
+		MapManager.markers = [];
+		this.resetActivePin();
+	}
+	/**
+	 * 기준 위치 제거
+	 */
+	, removeBasePosition: function() {
+		MapManager.basePosition.pin ? MapManager.basePosition.pin.setMap(null) : null;
+		MapManager.basePosition.circle ? MapManager.basePosition.circle.setMap(null) : null;
+		MapManager.basePosition.latlng = null;
+	}
+	/**
+	 * 선택된 핀 설정
+	 */
+	, setActivePin: function(pin) {
+		activePin = MapManager.activePin;
+		//기존 선택된 핀이 없거나 새로 선택된 핀과 같지 않을 경우
+		if(!activePin || activePin != pin) {
+			MapManager.resetActivePin(); //기존 핀의 인포 닫기
+			MapManager.activePin = pin;
+		}
+		pin.info ? MapManager.showInfo(pin.info) : null; //새 핀의 인포 열기
+	}
+	/**
+	 * 기존 선택된 핀 정보 초기화
+	 */
+	, resetActivePin: function() {
+		MapManager.activePin && MapManager.activePin.info ?
+			MapManager.hideInfo(MapManager.activePin.info) : null;
+		MapManager.activePin = null;
+	}
+	/**
+	 * 클리어
+	 */
+	, clear: function() {
+		this.removePins();
+		this.removeBasePosition();
+		this.resetActivePin();
+	}
+	, moveMap: function(lat, lng) {
+		var moveLatLon = new kakao.maps.LatLng(lat, lng);
+		MapManager.map.setCenter(moveLatLon);
+	}
+};
+
+const DelvMapManager = {
+	mapContainer: null,
+	map: null,
+	option: null,		//옵션
+	renewable: false,
+	bounds: null,
+	basePosition: null,	//기준 위치
+	activePin: null,	//선택된 핀
+	pinImage : null,
+	pins: [],			//핀 배열
+	positions : [],
+	delvZones : [],
+	/**
+	 * 맵 초기화
+	 * @param level 줌 레벨
+	 */
+	init: function(level, useControl, renewable) {
+		this.mapContainer = $("#delv_map").get(0);
+		this.option = {
+			center: new kakao.maps.LatLng(37.46459907076597, 126.8907822368867), //중심 좌표 230210 grs 본사 좌표수정
+			level: level //확대 레벨
+		};
+		this.renewable = renewable;
+		
+		this.basePosition = new kakao.maps.LatLng(37.46459907076597, 126.8907822368867); //중심 좌표 230210 grs 본사 좌표수정
+		
+		//div와 옵션으로 맵 생성
+		this.map = new kakao.maps.Map(this.mapContainer, this.option);
+		
+		/*//내 위치 마커 생성
+		// 마커 이미지를 생성합니다	
+		let locationImage = new kakao.maps.MarkerImage('/assets/images/common/comm_ico_marker.svg', new kakao.maps.Size(30, 30)); 
+		
+		// 마커를 생성합니다
+		let marker = new kakao.maps.Marker({
+			map: DelvMapManager.map, // 마커를 표시할 지도
+			position: this.basePosition, // 마커를 표시할 위치
+			image : locationImage // 마커 이미지 
+		});*/
+		
+		
+		//드래그 종료 시 주소 갱신
+		/*kakao.maps.event.addListener(DelvMapManager.map, 'dragend', function() {
+			DelvMapManager.map.setCenter(DelvMapManager.option.center);
+		});*/
+	},
+	search: function() {
+		DelvMapManager.positions = [];
+		
+		$.getJSON('/data/delv_zone.json', function(data) {
+			data.forEach(function (s) {
+				s.latlng = new kakao.maps.LatLng(s.latlng.lat, s.latlng.lng);
+				s.title = s.name;
+				DelvMapManager.positions.push(s);
+			});
+		})
+		.fail(function(e) {
+			console.error(e);
+		})
+		.done(function(data) {
+			let array = [];
+			let imageSrc = "/assets/images/common/comm_ico_marker_state_delivery_zone.png";
+			// 마커 이미지의 이미지 크기 입니다
+			let imageSize = new kakao.maps.Size(30, 30);
+			// 마커 이미지를 생성합니다	
+			let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+			
+			$(DelvMapManager.positions).each(function(index, data) {
+				let distance = DelvMapManager.getDistance(data.latlng);
+				// 거리가 2km 이내 배달존만 표시
+				if(distance <= 2000) array.push([distance, data]);
+			});
+			
+			let delvHtml = "";
+			if(array.length > 0) {
+				//거리순으로 정렬
+				array.sort(function(a,b) {
+					return a[0]-b[0]
+				});
+				
+				for(let i = 0; i < array.length; i++) {
+					let data = array[i][1];
+					let address = {
+						rnAdres: data.addrRoad,
+						lnmAdres: data.addrJibun,
+						rnAdresDetail: data.addrDetail,
+						lnmAdresDetail: data.addrDetail,
+						zipNo: data.addrZipNo,
+						point: {
+							lat: data.latlng.Ma,
+							lng: data.latlng.La
+						},
+						delv_seq: (i+1)
+					}
+					
+					delvHtml += '<li class="addr-history-item">';
+					delvHtml += '<p class="addr-tit">배달존 '+(i+1)+' ('+ array[i][0] + 'm)</p>';
+					delvHtml += '<ul class="addr-list">';
+					delvHtml += '<li class="addr-list-item">';
+					delvHtml += '<p class="addr-text">'+data.name+'</p>';
+					delvHtml += '</li>';
+					delvHtml += '</ul>';
+					delvHtml += "<button type='button' class='btn-link' onclick='addrViewUiManager.chooseLiverAddr("+(i+1)+")'><span class='offscreen'>주소 설정</span></button>";
+					delvHtml += '</li>';
+					DelvMapManager.delvZones.push(address);
+					
+					let content = '<div class="pin-delivery-state"><div class="info-area"><span class="store-name">배달존 ' + (i+1) + '</span></div></div>';
+				
+					DelvMapManager.createInfo(data.latlng, content, false);
+					
+					// 마커를 생성합니다
+					let marker = new kakao.maps.Marker({
+						map: DelvMapManager.map, // 마커를 표시할 지도
+						position: data.latlng, // 마커를 표시할 위치
+						title : data.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+						image : markerImage // 마커 이미지 
+					});
+					
+					const clickEvent = function() {
+						addrViewUiManager.chooseLiverAddr((i+1));
+					}
+					
+					kakao.maps.event.addListener(marker, 'click', clickEvent);
+				}
+				
+				$("#delvZoneList").empty();
+				$("#delvZoneList").html(delvHtml);
+			} else {
+				delvHtml += "<li onclick='alert(\"2km 반경 내 배달존이 없습니다.\");'>";
+				delvHtml += "	<a href='javascript:void(0);' >";
+				delvHtml += "		<p class='tit'>2km 반경 내 배달존이 없습니다.</p>";
+				delvHtml += "	</a>";
+				delvHtml += "</li>";	
+				
+				$("#delvZoneList").empty();
+				$("#delvZoneList").html(delvHtml);
+			}
+		});
+	},
+	getDistance: function(targetPosition) {
+		let linePath = [
+			DelvMapManager.basePosition,	//측정 기준 위치
+			targetPosition					//측정 대상 위치
+		];
+		let polyline = new kakao.maps.Polyline({
+			path: linePath, //선을 구성하는 좌표배열
+		});
+		let distance = polyline.getLength();
+		
+		return Math.round(distance);
+	},
+	/**
+	 * 인포윈도우 객체 생성
+	 */
+	createInfo: function(latlng, content, fixable) {
+		var overlay = new kakao.maps.CustomOverlay({
+			map: DelvMapManager.map,
+			content: content,
+			position: latlng,
+			yAnchor: 2
+		});
+		fixable ? this.fix(overlay) : null;
+		DelvMapManager.pins = DelvMapManager.pins.concat(overlay);
+		return overlay;
+	}
+};
+
+/*
+ * 타입
+ * 1. 매장 상세
+ * 2. 다수 매장
+ * 3. 주소
+ */
+
+/**
+ * 맵 데이터 타입
+ */
+var MapDataType = {
+	"STORE_LIST": "STORE_LIST"
+	, "STORE_DETAIL": "STORE_DETAIL"
+	, "ADDRESS": "ADDRESS"
+}
+Object.freeze(MapDataType);

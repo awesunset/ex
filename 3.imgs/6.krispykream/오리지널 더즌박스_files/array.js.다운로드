@@ -1,0 +1,43 @@
+/**
+ * 배열 나누기 
+ */
+const splitAt = (index, array) => {
+  const part1 = array.slice(0, index);
+  const part2 = array.slice(index, array.length);
+  return [part1, part2];
+}
+
+/**
+ * 배열 섞기 
+ */
+const shuffle = arr => {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+/**
+ * 배열 중 하나의 값 반환
+ */
+const sample = arr => arr[Math.floor(Math.random() * arr.length)];
+
+/**
+ * form (number) ~ to (number) 범위로 구성된 int 배열 생성
+ * range(1,3) -> [1,2,3]
+ */
+const range = (from, to) => {
+  if (to < from) return [];
+  let len = to - from + 1;
+  let range = new Array(len);
+  for (let i = from; i <= to; i++) {
+    range[i - from] = i;
+  }
+  return range;
+}
+
+/**
+ * 배열 마지막 값 반환
+ */
+const last = arr => arr[arr.length - 1]

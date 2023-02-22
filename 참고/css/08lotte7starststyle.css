@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+/* 08lotte7stars t */
+.inner{ width: 100%; }
+h1{
+    font-size: 50px;
+    line-height: 1;
+}
+h2{
+    font-size: 25px;
+    line-height: 1;
+}
+
+.sec1 .inner{ padding: 50px 40px; }
+.sec1 .inner p span:last-child{ display: none; }
+
+.sec2{ background: url(/images/lotte/lotte_06.png) no-repeat 50% 0 / auto 430px; }
+.sec2 .inner{
+    flex-flow: column nowrap;
+    padding: 50px 40px 0;
+    gap: 20px 0;
+}
+.sec2 .inner article{
+    flex: 1 1 100%;
+    display: flex;
+}
+.sec2 .inner > article:nth-of-type(2),
+.sec2 .inner > article:nth-of-type(3){ padding: 0; }
+article > img{
+    flex: 0 0 200px;
+    width: 200px;
+    height: 170px;
+}
+article > div{
+    flex: 1 1 100%;
+    padding: 20px;
+    gap: 10px;
+    background: #fff;
+}

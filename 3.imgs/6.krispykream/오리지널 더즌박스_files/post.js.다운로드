@@ -1,0 +1,176 @@
+var postManager = {
+	layer: null
+	, daum: null
+	, func: null
+	, element: null
+	/**
+	 * 초기화
+	 */
+	, init: function(id, func){
+		this.layer = $("#" +id);
+		this.func = func;
+		this.element = this.layer.get(0);
+		this.show(id);
+	}
+	/**
+	 * 닫기
+	 */
+	, close: function() {
+		$(".layerXbt").trigger("click");
+	}
+	/**
+	 * 열기
+	 */
+	, show: function(el) {
+		this.daum = new daum.Postcode({
+			oncomplete: function(data) {
+				var result = {
+					zonecode: data.zonecode
+					, jibun: data.jibunAddress == "" ? data.autoJibunAddress : data.jibunAddress
+					, road: data.roadAddress
+					, english: data.addressEnglish
+				};
+				//postManager.getLatlng(result.jibun, function(data) {
+					//result.point = data;
+					postManager.func(result);
+				//});
+			},
+			width : '100%',
+			height : '100%',
+			maxSuggestItems : 5,
+			hideMapBtn : true,
+			submitMode : false
+		}).embed(postManager.element, {
+			autoClose: false //자동 종료 방지
+		});
+		this.setPosition(el);
+	}
+	/**
+	 * 돔에 세팅
+	 * @returns
+	 */
+	, setPosition: function(el) {
+		var width = 760; //우편번호서비스가 들어갈 element의 width
+		if(el) width = $("#" + el).width();
+		var height = 485; //우편번호서비스가 들어갈 element의 height
+		var borderWidth = 5; //샘플에서 사용하는 border의 두께
+		// 위에서 선언한 값들을 실제 element에 삽입
+		this.layer.height(height);
+		var left = (((window.innerWidth || document.documentElement.clientWidth) - width)/2 - borderWidth) + 'px';
+		var top = (((window.innerHeight || document.documentElement.clientHeight) - height)/2 - borderWidth) + 'px';
+		//this.layer.css({top: top, left: left, position:'absolute', display: 'block'});
+	}
+	/**
+	 * 주소 -> 좌표 변환
+	 * @param address
+	 * @returns
+	 */
+	, getLatlng: function(address, func) {
+		let rand = Math.floor(Math.random() * 15);
+		let ketArr = [
+			'KakaoAK 4eae7df1e5f33bbb1f62aa36de33839a',
+			'KakaoAK ed2be0ad851218d56a75c91ae118ecd9',
+			'KakaoAK fb6f30a74eb2d6fd3196024b921a9f3f',
+			'KakaoAK 07df50b2fc96034dfea899a75050794c',
+			'KakaoAK a7e8a11b835e7e258b991cb119e73447',
+			'KakaoAK e42bd4297784d29e7d98f45dabba01dd',
+			'KakaoAK 8a5e54edc34e4a86ed392d16c7c87e08',
+			'KakaoAK f6ef0f4687731a4a05d8dae9c47a0c66',
+			'KakaoAK 23a79d5ab3fac1360130ba00b8f35e9f',
+			'KakaoAK 72b8613eee756f0c90b0c5218dcb6de7',
+			'KakaoAK 2aa021425452d2fb2812a8950e99b579',
+			'KakaoAK 41fff8e00062bccb0728bd68e470b502',
+			'KakaoAK 2a822a343837e91e4b7ec5211eeb9780',
+			'KakaoAK 402b754df8db0cac6f41da3b6e1d1fe1',
+			'KakaoAK a46048ef8fccbe95a2acce2577e6d3f3',
+		]
+		
+		$.ajax({
+			url: 'https://dapi.kakao.com/v2/local/search/address.json'
+			, headers: {
+				/*IS팀에서 전달해 준 키*/
+				//TODO 키값 프로퍼티로 빼기
+				Authorization: serverType === 'product' ? ketArr[rand] : 'KakaoAK f5c00aad449ffc2dd401506b3d0f00d5'
+			}
+			, type: 'GET'
+			, data: {
+				query: address
+			},
+			success: function(result) {
+				if (result) {
+					//console.log(result);
+					// 2021.08.12 [cs 접수] : 카카오맵 좌표 설정 오류로 success로 떨어져도 좌표 검색되지 않는 문제 발생
+					// 모든 경우의 조건을 걸어서 오류가 났을 경우, 독산동 본사 좌표로 default 설정
+					//2022.12.22 잠실역 좌표로 default 설정 변경
+					var data = {};
+					if (result.documents[0] == '' || result.documents[0] == null || result.documents[0] == undefined
+						|| result.documents[0].x == '' || result.documents[0].x == null || result.documents[0].x == undefined
+						|| result.documents[0].y == '' || result.documents[0].y == null || result.documents[0].y == undefined) {
+						data = {
+							lat: null
+							, lng: null
+							, errorYn : true
+						}
+					} else {
+						data = {
+							lat: result.documents[0].y
+							, lng: result.documents[0].x
+							, errorYn : false
+						}
+					}
+					func ? func(data) : null;
+				} else {
+					console.error("fail");
+				}
+			},
+			error: function(data) {
+				console.log(data);
+			}
+		});
+	}
+	, getDaumAdres: function(address, func, errFunc) {
+		let rand = Math.floor(Math.random() * 15);
+		let ketArr = [
+			'KakaoAK 61536a8c621cf37de0cbbcf96e2db8d5',
+			'KakaoAK ed2be0ad851218d56a75c91ae118ecd9',
+			'KakaoAK fb6f30a74eb2d6fd3196024b921a9f3f',
+			'KakaoAK 07df50b2fc96034dfea899a75050794c',
+			'KakaoAK a7e8a11b835e7e258b991cb119e73447',
+			'KakaoAK e42bd4297784d29e7d98f45dabba01dd',
+			'KakaoAK 8a5e54edc34e4a86ed392d16c7c87e08',
+			'KakaoAK f6ef0f4687731a4a05d8dae9c47a0c66',
+			'KakaoAK 23a79d5ab3fac1360130ba00b8f35e9f',
+			'KakaoAK 72b8613eee756f0c90b0c5218dcb6de7',
+			'KakaoAK 2aa021425452d2fb2812a8950e99b579',
+			'KakaoAK 41fff8e00062bccb0728bd68e470b502',
+			'KakaoAK 2a822a343837e91e4b7ec5211eeb9780',
+			'KakaoAK 402b754df8db0cac6f41da3b6e1d1fe1',
+			'KakaoAK a46048ef8fccbe95a2acce2577e6d3f3',
+		]
+		
+		$.ajax({
+			url: 'https://dapi.kakao.com/v2/local/search/address.json'
+			, headers: {
+				/*IS팀에서 전달해 준 키*/
+				//TODO 키값 프로퍼티로 빼기
+				Authorization: serverType === 'product' ? ketArr[rand] : 'KakaoAK f5c00aad449ffc2dd401506b3d0f00d5'
+			}
+			, type: 'GET'
+			, data: {
+				query: address
+			},
+			success: function(result) {
+				if (result) {
+					//console.log(result.documents[0]);
+					func ? func(result.documents[0]) : null;
+				} else {
+					console.error("fail");
+				}
+			},
+			error: function(data) {
+				errFunc ? errFunc(result) : null;
+				console.log(data);
+			}
+		});
+	}
+};

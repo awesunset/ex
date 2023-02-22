@@ -1,0 +1,276 @@
+/*
+ * name : 23-01-06.spy.js
+ * desc : 스크롤스파이
+ * writer : glim
+ * date : 2022/08/24
+ * last : 2022/10/18
+
+ * 싱글톤 - 재실행되더라도 기존 객체 반환해줌
+ * js-scrollspy-nav : nav
+ * js-scrollspy-content : content
+*/
+
+/*
+* elname-
+* Container Name : ####-scrollspy
+* Nav Class name : ####-scrollspy > scrollspy-nav
+* Content Classname : ####-scrollspy > scrollspy-content
+*
+* Call :  * $('.allmenu-brand-cate-scrollspy').scrollSpy({ elName:'allmenu-brand-cate'});
+* Markup :
+<div class="tab-wrap allmenu-brand-cate-scrollspy-wrap allmenu-brand-cate-scrollspy">
+    <div class="tab-nav-5 allmenu-brand-scrollspy-nav scrollspy-nav">
+        <ul class="tab-list">
+            <li class="tab-item is-active"><a href="#scrollspy-allmenu-brand-cate-1" class="tab-link"><span><em>탭1</em></span></a></li>
+            <li class="tab-item"><a href="#scrollspy-allmenu-brand-cate-2" class="tab-link"><span><em>탭2</em></span></a></li>
+            <li class="tab-item"><span class="tab-link blank"></span></li> << 빈버튼일때
+        </ul>
+    </div>
+
+    <!--S:scrollspy-content-->
+    <div id="scrollspy-allmenu-brand-cate-1" class="blank-anchor scrollspy-content">컨텐츠 </div>
+    <div id="scrollspy-allmenu-brand-cate-2" class="blank-anchor scrollspy-content">컨텐츠 </div>
+    <!--E:scrollspy-content-->
+</div>
+*
+* */
+(function($) {
+    $.fn.scrollSpy = function(config) {
+        if($(this).length==0) {
+            return null;
+        }
+        /*if("undefined" == typeof $(this).data("scrollSpy") || $(this).data("scrollSpy") == null) {
+        }
+        else {
+            $(window).scrollTop(0);
+            return $(this).data();
+        }*/
+        var data = {
+            element : $(this),
+            elName : null,
+            elSelector : null,
+            elNavSelector : null,
+            elContentSelector : null,
+            nav : null,
+            contents : null,
+            posy : [],//각 탭 position y save
+            showScollspyNavFixed : false,//고정여부
+            scrollSpyNavTop : 110,//nav scroll 위치
+            noFixedPosy : 0,
+            //function
+            scrollTop : function() {
+                if(this.container !=null ) {
+                    $(window).scrollTop(0);
+                }
+            },
+            /*
+            * date : 20220824
+            * last : 20220824
+            * name : funcPosySet(  )
+            * pram : container(컨테이너 selector), el(tabcontent element selector)
+            * desc : 각 탭 컨테이너 y 저장
+            */
+            funcPosySet : function (container, el) {
+
+                //var padTop = $_headerWrapper.outerHeight() + $(data.elNavSelector).outerHeight();
+                var padTop = $(data.elNavSelector).outerHeight();
+                var navScrollTop = 0; // 네비 fixed 위치가 페이지 중간부터 고정되는 경우
+
+                var citem = $(el,container);
+                setPosy();
+                var scrollSpyChange = new ResizeSensor($(data.elSelector), function() { setPosy(); });
+                function setPosy() {
+                    data.posy = [-1];
+                    switch (data.elName) {
+                        case 'anchor':
+                            var contWrap = data.element.closest('.cont-body');
+                            //console.log( data.noFixedPosy );
+                            navScrollTop = Math.floor(data.element.offset().top);
+                            if( contWrap.length > 0 ) {
+                                data.noFixedPosy = contWrap.height() + contWrap.offset().top;
+                                var contChange = new ResizeSensor(data.element.closest('.aside-content-inner'), function() { data.noFixedPosy = contWrap.height() + contWrap.offset().top; });
+                            }
+                            break;
+                        default:
+                            //navScrollTop = Math.floor($(data.elNavSelector).outerHeight(true));
+                            navScrollTop = Math.floor(data.element.offset().top);
+                            break;
+
+                    }
+
+                    $(citem).each(function(i) {
+                        data.posy.push ( Math.floor($(this).position().top) + Math.floor($(this).before().outerHeight(true)) - padTop + navScrollTop );
+
+                    });
+                }
+                data.funcScrollEvent();
+            },
+
+            /*
+            * date : 20220824
+            * last : 20220824
+            * name : funcScrollEvent(  )
+            * pram : e(event)
+            * desc : 스크롤 이벤트 발생시 호출
+            - 제일 마지막일때 활성화탭 수정/top 버튼추가(scroll=0일때 hidden 처리 )
+            */
+            funcScrollEvent : function (e) {
+                var lastScrollTop = $(data.elSelector).height() - $(window).height();//마지막 position
+                var currenty = $(window).scrollTop(); //현재 스크롤 top 위치
+                var adjusty = currenty; //보정값
+
+                adjusty = (adjusty < 0 ) ? 0 : adjusty; //0보다 작을경우..
+
+                data._scrollSpyNavTop = 0;
+
+                if ( data.posy.length < 1) {return;}
+                var setPos;
+                for ( var i = 0;i < data.posy.length;i++) {
+                    if ( data.posy[i] <= adjusty && adjusty < data.posy[i+1] ) {
+                        setPos = i;
+                        break;
+                    }
+                }
+                if( data.elName === 'anchor' && data.element.closest('.cont-body').length > 0) {
+                    var contWrap = data.element.closest('.cont-body');
+                    if( data.noFixedPosy <= adjusty + $(data.elNavSelector).height() ) {
+                        if( !contWrap.hasClass('is-anchor-bottom') ) contWrap.addClass('is-anchor-bottom');
+                    } else {
+                        if( contWrap.hasClass('is-anchor-bottom') ) contWrap.removeClass('is-anchor-bottom');
+                    }
+                }
+
+
+                if( isNaN(setPos) ) return;
+
+                $(data.elNavSelector).find('.tab-item').removeClass('ui-state-active');//tab 활성화 remove
+
+                var tg = setPos+1;
+                if ( lastScrollTop == currenty ) { tg = data.posy.length-1; }//스크롤마지막일때
+                if ( isNaN(tg) == false ){//값이 nan 이면 실행안함
+                    //$(data.elNavSelector).find('.tab-item:nth-of-type('+tg+')').addClass('ui-state-active');
+
+                    $(data.elNavSelector).find('.tab-item').eq(setPos).addClass('ui-state-active');
+
+                    if( $(data.elNavSelector)[0].swiper !== undefined ) $(data.elNavSelector)[0].swiper.slideTo(setPos);
+                }
+
+                //네비게이터 스크롤 위치
+                if ($(window).scrollTop() < data._scrollSpyNavTop && !$('body').hasClass('modal-open') || isNaN(tg) == true) {
+                    $(data.elNavSelector).removeClass('is-fixed');
+                    data.showScollspyNavFixed = false;
+                }
+
+                // scrollspy 영역 밖으로 벗어난경우, sps 해제
+                if($(window).scrollTop() > data.posy[data.posy.length - 1]) {
+                    $(data.elNavSelector).addClass('is-release');
+                }else{
+                    $(data.elNavSelector).removeClass('is-release');
+                }
+            },
+
+            /*
+            * date : 20220824
+            * last : 20220824
+            * name : funcScrollMove(  )
+            * pram : target(타겟 컨텐츠)
+            * desc : 앵커 클릭 시 해당 컨텐츠 이동
+            */
+            funcScrollMove : function(target) {
+                // Does a scroll target exist?
+                if (target.length) {
+                    // Only prevent default if animation is actually gonna happen
+                    //console.log(target.offset().top + $('.scrollspy-nav').outerHeight())
+                    event.preventDefault();
+                    // (Math.floor($(this).position().top) + Math.floor($(this).before().outerHeight(true)) - padTop + navScrollTop)
+                    //var padTop = Math.floor($(data.elNavSelector).closest('.sps').outerHeight(true)-1);
+                    var padTop = Math.floor($(data.elNavSelector).closest('.sps').outerHeight(true)-1);
+
+                    //var padTop = $_headerWrapper.outerHeight() + $(data.elNavSelector).outerHeight();
+                    $('html, body').stop().queue('fx', []).animate({
+                        scrollTop: target.offset().top - padTop
+                    }, 400, function() {
+                        // Callback after animation
+                        // Must change focus!
+
+                        if( !$('html, body').is(':animated') ) {
+                            if(_sizeViewSta === 'mobile') _noScroll = false;
+                        }
+
+                        var $target = $(target);
+                        //$target.addClass('ui-state-active');
+                        //$target.focus();
+                        if ($target.is(":focus")) { // Checking if the target was focused
+                            return false;
+                        } else {
+                            $target.attr('tabindex','-1'); // Adding tabindex for elements not focusable
+                            //$target.focus(); // Set focus again
+                        };
+                    });
+
+                }
+            },
+        };
+        /*
+        * date : 20221019
+        * last : 20221019
+        * name : init()
+        * pram :
+        * desc : 초기화
+        */
+        data.element.bind('init', function() {
+            data.elName = config.elName;
+            data.elSelector = config.elSelector || "." + data.elName + "-scrollspy";
+            data.elNavSelector = config.elNavSelector || "." + data.elName + "-scrollspy > .scrollspy-nav";
+            data.elContentSelector = config.elContentSelector || "." + data.elName + "-scrollspy .scrollspy-content";
+
+            data.nav = $(data.elNavSelector);
+            data.contents = $(data.elContentSelector);
+
+            setTimeout(function() {
+                data.funcPosySet(data.elSelector, data.contents);
+            }, 300);
+            switch (data.elName) {
+                default:
+                    $('a[href*="#"]', $(data.elNavSelector))
+                            // Remove links that don't actually link to anything
+                            .not('[href="#"]')
+                            .not('[href="#0"]')
+                            .click(function(event) {
+                                // On-page links
+                                if (
+                                        location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+                                        &&
+                                        location.hostname == this.hostname
+                                )
+                                {
+                                    // Figure out element to scroll to
+                                    var target = $(this.hash);
+                                    target = target.length ? target : $(data.elSelector+' [name=' + this.hash.slice(1) + ']');
+                                    if(_sizeViewSta === 'mobile') _noScroll = true;
+                                    data.funcScrollMove(target);
+
+                                }
+                            });
+            }
+        });
+
+        data.element.trigger('init');
+
+        $(window).on('scroll', function(event) { //scroll event
+            if (data.element.is(':visible') === true ) {
+                data.funcScrollEvent();
+            }
+        });
+
+        /*$(window).on('resize',function(){//resize 각 tab position resave
+            if (data.element.is(':visible') === true ) {
+                data.funcPosySet(data.elSelector, data.contents);
+            }
+        });*/
+
+        $(this).data("scrollSpy", data);
+        return data;
+    };
+})(jQuery);
+

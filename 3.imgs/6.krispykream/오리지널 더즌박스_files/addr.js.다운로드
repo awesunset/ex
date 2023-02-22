@@ -1,0 +1,1240 @@
+/** 현재 설정 중 주소 */
+let currAddress = {
+					seq: null,
+					ncm: null,
+					zipNo: null,
+					rnAdres: null,
+					rnAdresDetail: null,
+					lnmAdres: null,
+					lnmAdresDetail: null
+				};
+				
+let appLocationCallback;
+
+let addrViewUi;
+let addrMapViewUi;
+let activeViewUi;
+const addrViewUiManager = {
+	/** 주소 설정 초기화 */
+	init: function(address) {
+		if(!address) {
+			address = {
+				seq: null,
+				ncm: null,
+				zipNo: null,
+				rnAdres: null,
+				rnAdresDetail: null,
+				lnmAdres: null,
+				lnmAdresDetail: null,
+				basicYn: "N"
+			}
+		}
+		
+		if(isLoggedIn === 'Y' && mberType !== 'NMBR' && location.href.indexOf("/mall/order") < 0){
+			document.querySelector("#ncm").value = "";
+			document.querySelector("#ncm").disabled = true;
+			document.querySelector("#saveAddressBook").disabled = false;
+			document.querySelector("#saveAddressBook").checked = false;
+			document.querySelector("#defAddress").checked = false;
+			$("#ncmInput").removeClass("fail");
+			$("#ncmInput").find(".valid-desc").text("");
+		}
+		document.querySelector("#rnAdresDetail").value = "";
+		$("#addrSearchPopup").find(".dialog-footer").show();
+		
+		//다음 POST API 초기화
+		addrViewUi = new Vue({
+			data: {
+				address: address
+				, tempAddress: Object.assign({}, address)
+			}
+			, watch: {
+				'address.rnAdresDetail': function() {
+					this.address.lnmAdresDetail = this.address.rnAdresDetail;
+				}
+			}
+			, methods: {
+				selectPost: function(address) {
+					this.tempAddress.rnAdres = address.road;
+					this.tempAddress.lnmAdres = address.jibun;
+					this.tempAddress.zipNo = address.zonecode;
+					$("#postLayer").hide();
+					$("#addrSearchTitle").html("주소 등록");
+					$("#postDetail").show();
+					$("#addrSearchPopup").find(".dialog-footer").show();
+					document.querySelector("#rnAdres").innerHTML = address.road;
+					document.querySelector("#lnmAdres").innerHTML = address.jibun;
+					this.tempAddress = {
+						...this.tempAddress,
+						point: {
+							lat: address.lat,
+							lng: address.lng
+						},
+						position: new kakao.maps.LatLng(address.lat, address.lng)
+					}
+					
+					$("#saveAddressBookArea").show();
+					$("#saveAddressBookNmArea").show();
+				},
+				editPost: function(address) {
+					this.tempAddress.seq = address.seq;
+					this.tempAddress.rnAdres = address.rnAdres;
+					this.tempAddress.lnmAdres = address.lnmAdres;
+					this.tempAddress.zipNo = address.zipNo;
+					this.tempAddress.sortSno = address.sortSno;
+					$("#postLayer").hide();
+					$("#addrSearchTitle").html("주소 변경");
+					$("#postDetail").show();
+					$("#addrSearchPopup").find(".dialog-footer").show();
+					document.querySelector("#ncm").value = address.ncm ? address.ncm : '';
+					document.querySelector("#ncm").disabled = address.ncm ? false : true;
+					document.querySelector("#saveAddressBook").checked = address.ncm ? true : false;
+					document.querySelector("#saveAddressBook").disabled = true;
+					document.querySelector("#rnAdres").innerHTML = address.rnAdres;
+					document.querySelector("#lnmAdres").innerHTML = address.lnmAdres;
+					document.querySelector("#rnAdresDetail").value = address.rnAdresDetail;
+					document.querySelector("#defAddress").checked = address.basicYn === 'Y' ? true : false;
+					//document.querySelector("#defAddress").disabled = true;
+					//$("#defAddressArea").hide();
+					if(address.ncm){
+						$("#saveAddressBookArea").show();
+						$("#saveAddressBookNmArea").show();
+						$("#defAddressArea").show();
+					} else {
+						$("#saveAddressBookArea").hide();
+						$("#saveAddressBookNmArea").hide();
+						$("#defAddressArea").hide();
+					}
+				}
+			}
+		});
+		
+		// 카카오맵 API 초기화
+		addrMapViewUi = new Vue({
+			data: {
+				address: address
+				, tempAddress: Object.assign({}, address)
+			}
+			, watch: {
+				address: function() {
+					this.address.lnmAdresDetail = this.address.rnAdresDetail;
+					document.querySelector("#rnAdres").innerHTML = this.address.rnAdres;
+					document.querySelector("#lnmAdres").innerHTML = this.address.lnmAdres;
+				}
+			}
+			, methods: {
+				selectPost: function(address) {
+					this.tempAddress.rnAdres = address.road;
+					this.tempAddress.lnmAdres = address.jibun;
+					this.tempAddress.zipNo = address.zonecode;
+					this.tempAddress.point.lat = address.point.lat;
+					this.tempAddress.point.lng = address.point.lng;
+					this.tempAddress.position = new kakao.maps.LatLng(address.point.lat, address.point.lng);
+					$(".openLayer").find(".checkAddress").focus();
+					$(".openLayer").find(".addressList").scrollTop(100000);
+				}
+				, selectAddrByPosition: function(data) {
+					const roadAddress = data.road_address ?
+						data.road_address.address_name : "";
+					this.tempAddress.rnAdres = roadAddress;
+					this.tempAddress.lnmAdres = data.address.address_name;
+					this.tempAddress.point = data.point;
+					this.tempAddress.position = new kakao.maps.LatLng(data.point.lat, data.point.lng);
+				}
+			}
+		});
+	}
+	/** 주소 설정 콜백 함수 */
+	, callback: null
+	, openPostFlag: false
+	/** 주소 설정 팝업 오픈 */
+	, openPopup: function(callback, orderChk) {
+		$("#addrViewSection").remove();
+		$('#addrPopup').closest(".ui-dialog-container").remove();
+		$('#addrSearchPopup').closest(".ui-dialog-container").remove();
+		$('#delvZonePopup').closest(".ui-dialog-container").remove();
+		addrViewUiManager.openPostFlag = false;
+		$.ajax({
+			url: "/addr/addrView",
+			type: "GET",
+			success: function(fragment) {
+				if (fragment) {
+					$("#container").append(fragment);
+				}
+			}
+		}).done(function () {
+			addrViewUiManager.init();
+			addrViewUiManager.callback = callback;
+			eatzPub.front.setUIDialog();
+			eatzPub.front.dialogOnOff().popOpen('#addrPopup');
+			
+			if(isLoggedIn === 'Y' && mberType !== "NMBR" && !orderChk){
+				document.getElementById("saveAddressBook").addEventListener("change", (event) => {
+					if (event.currentTarget.checked) {
+						document.getElementById("ncm").disabled = false;
+						//document.getElementById("defAddress").disabled = false;
+						$("#defAddressArea").show();
+					} else {
+						document.getElementById("ncm").value = "";
+						document.getElementById("ncm").disabled = true;
+						document.getElementById("defAddress").checked = false;
+						//document.getElementById("defAddress").disabled = true;
+						$("#defAddressArea").hide();
+					}
+				});
+			} else if(orderChk) {
+				$("#saveAddressBook").closest('ul').hide();
+				$("#ncm").closest('.input-box').hide();
+			} else if(currAddress.lnmAdres !== null && currAddress.lnmAdres !== "") {
+				let rnAdres = currAddress.rnAdres !== null && currAddress.rnAdres !== '' ? currAddress.rnAdres + ' ' + currAddress.rnAdresDetail : '';
+				let rnAdresArr = rnAdres.split(' ').filter(c => c !== "");
+				let addrTit = rnAdresArr.length > 1 ? rnAdresArr[rnAdresArr.length - 3] + ' ' + rnAdresArr[rnAdresArr.length - 2] : '';
+				let addrMarkup = '<ul class="addr-history-list normal">'
+						+ '<li class="addr-history-item">'
+						+ '<p class="addr-tit">' + addrTit + ' <span class="badge-sm-round badge-fill-spot"><span class="text">현재 설정 중</span></span></p>'
+						+ '<ul class="addr-list">'
+						+ '<li class="addr-list-item"><span class="addr-head">도로명</span><span class="addr-cnt">' + rnAdres + '</span></li>'
+						+ '<li class="addr-list-item"><span class="addr-head">지번</span><span class="addr-cnt">' + currAddress.lnmAdres + ' ' + currAddress.lnmAdresDetail + '</span></li>'
+						+ '</ul>'
+						+ '<a href="javascript:void(0);" class="btn-link" onclick="addrViewUiManager.chooseCurrAddr()"><span class="offscreen">설정</span></a>'
+						+ '</li>'
+						+ '</ul>';
+				
+				$("#addrData").prepend(addrMarkup);
+				$("#addrNoData").remove();
+			}
+		});
+	}
+	/** 주소 검색 팝업 오픈 */
+	, openPost: function(storeFlag, callback, adbkFlag) {
+		// 매장찾기 - 주소검색 팝업 호출
+		if(storeFlag || adbkFlag){
+			$("#addrViewSection").remove();
+			$('#addrPopup').closest(".ui-dialog-container").remove();
+			$('#addrSearchPopup').closest(".ui-dialog-container").remove();
+			$('#delvZonePopup').closest(".ui-dialog-container").remove();
+			addrViewUiManager.openPostFlag = true;
+			$.ajax({
+				url: "/addr/addrView",
+				type: "GET",
+				success: function(fragment) {
+					if (fragment) {
+						$("#container").append(fragment);
+					}
+				}
+			}).done(function () {
+				addrViewUiManager.init();
+				activeViewUi = addrViewUi;
+				if(callback) addrViewUiManager.callback = callback;
+				eatzPub.front.setUIDialog();
+				
+				$("#addrSearchTitle").html("주소 검색");
+				$("#postDetail").hide();
+				$("#map-wrap").hide();
+				$("#addrSearchPopup").find(".dialog-footer").hide();
+				$("#postLayer").show();
+				
+				postManager.init("postLayer", function(address) {
+					let addr = {
+						rnAdres: address.road,
+						lnmAdres: address.jibun,
+						zipNo: address.zonecode,
+						rnAdresDetail: ""
+					}
+					
+					postManager.getLatlng(addr.lnmAdres, function(data) {
+						let point = {
+							lat: data.lat,
+							lng: data.lng
+						}
+						
+						const currPosition = new kakao.maps.LatLng(point.lat, point.lng);
+						if(!data.errorYn) {
+							currAddress = {
+								...addr,
+								seq: null,
+								ncm: null,
+								lnmAdresDetail: null,
+								point,
+								position: currPosition
+							}
+						}
+						if(storeFlag){
+							addrViewUiManager.setAddr(addr, true);
+							if(data.errorYn && storeListUi) {
+								if(addr.lnmAdres != '') {
+									storeListUi.addrDgmn = addr.lnmAdres.split(" ")[2];
+								}
+								storeListUi.searchStoreWithNoPoint(addr);
+								eatzPub.front.dialogOnOff().popClose('#addrSearchPopup');
+							}else {
+								if(storeListUi) {
+									$("#searchAddr").text(addr.rnAdres ? addr.rnAdres : addr.lnmAdres);
+									storeListUi.addrDgmn = addr.lnmAdres.split(" ")[2];
+									StoreListManager.resetStoreListPage(true); //목록 초기화, 페이지 초기화
+									AddrMapManager.init(storeListUi, "map", data, 'N'); 
+									storeListUi.searchStore(currPosition, true, "ADDRESS", addr, true);
+									eatzPub.front.dialogOnOff().popClose('#addrSearchPopup');
+								} else if(addrViewUiManager.callback) addrViewUiManager.callback(currAddress);
+							}
+						} else {
+							activeViewUi.selectPost(address);
+							if(isLoggedIn === 'Y' && mberType !== "NMBR" && location.href.indexOf("/mall/order") < 0) {
+								document.getElementById("saveAddressBook").addEventListener("change", (event) => {
+									if (event.currentTarget.checked) {
+										document.getElementById("ncm").disabled = false;
+										$("#defAddressArea").show();
+									} else {
+										document.getElementById("ncm").value = "";
+										document.getElementById("ncm").disabled = true;
+										document.getElementById("defAddress").checked = false;
+										$("#defAddressArea").hide();
+									}
+								});
+							}
+						}
+					});
+				});
+				
+				eatzPub.front.dialogOnOff().popClose('#addrPopup');
+				eatzPub.front.dialogOnOff().popOpen('#addrSearchPopup');
+				
+				var height = $("#postLayer").closest('.dialog-body').height();
+				postManager.layer.height(height);
+			});
+		// 주소설정 - 주소검색 팝업 호출
+		} else {
+			activeViewUi = addrViewUi;
+			addrViewUiManager.openPostFlag = false;
+			
+			$("#addrSearchTitle").html("주소 검색");
+			$("#postDetail").hide();
+			$("#map-wrap").hide();
+			$("#addrSearchPopup").find(".dialog-footer").hide();
+			$("#postLayer").show();
+			
+			postManager.init("postLayer", function(address) {
+				activeViewUi.selectPost(address);
+			});
+			
+			eatzPub.front.dialogOnOff().popClose('#addrPopup');
+			eatzPub.front.dialogOnOff().popOpen('#addrSearchPopup');
+			
+			var height = $("#postLayer").closest('.dialog-body').height();
+			postManager.layer.height(height);
+		}
+	}
+	/** 현 위치 설정 팝업 오픈 */
+	, openMap: async function() {
+		activeViewUi = addrMapViewUi;
+		addrViewUiManager.openPostFlag = false;
+		$("#map_layer").html("");
+			
+		$("#addrSearchTitle").html("현 위치 주소 설정");
+		$("#postLayer").hide();
+		$("#addrSearchPopup").find(".dialog-footer").show();
+		$("#postDetail").show();
+		$("#map-wrap").show();
+		$("#saveAddressBookArea").show();
+		$("#saveAddressBookNmArea").show();
+		eatzPub.front.dialogOnOff().popClose('#addrPopup');
+		eatzPub.front.dialogOnOff().popOpen('#addrSearchPopup');
+		
+		AddrMapManager.init(addrMapViewUi, "map_layer");
+	}
+	/** 한강 배달존 팝업 오픈 */
+	, openLiverMap: async function() {
+		activeViewUi = addrMapViewUi;
+		addrViewUiManager.openPostFlag = false;
+		$("#delv_map").html("");
+			
+		eatzPub.front.dialogOnOff().popClose('#addrPopup');
+		eatzPub.front.dialogOnOff().popOpen('#delvZonePopup');
+		
+		DelvMapManager.init(6, false, true);
+		DelvMapManager.search();
+	}
+	/** 팝업 닫기 */
+	, closePopup: function() {
+		eatzPub.front.dialogOnOff().popClose('#addrPopup');
+		eatzPub.front.dialogOnOff().popClose('#addrSearchPopup');
+		eatzPub.front.dialogOnOff().popClose('#delvZonePopup');
+	}
+	/** 주소검색 팝업 닫기 */
+	, closeSearchPopup: function() {
+		eatzPub.front.dialogOnOff().popClose('#addrSearchPopup');
+		eatzPub.front.dialogOnOff().popClose('#delvZonePopup');
+		if(!addrViewUiManager.openPostFlag) eatzPub.front.dialogOnOff().popOpen('#addrPopup');
+	}
+	/** 주소 저장 */
+	, addAddr: async function() {
+		const rnAdresDetail = document.querySelector("#rnAdresDetail").value || "";
+		const ncm = document.querySelector("#ncm").value || "";
+		const basicYn = document.querySelector("#defAddress").checked ? 'Y' : 'N';
+		
+		$("#ncmInput").removeClass("fail");
+		$("#ncmInput").find(".valid-desc").text("");
+		
+		if(activeViewUi.tempAddress.rnAdres === null || activeViewUi.tempAddress.rnAdres === ""){
+			await layer.alert(addrMsg.alert["0005"]);
+			return;
+		}
+		
+		/* 주소명 미입력여부 체크 */
+		if(location.href.indexOf("/mall/order") < 0 && document.querySelector("#saveAddressBook").checked && ncm === "") {
+			$("#ncmInput").addClass("fail");
+			$("#ncmInput").find(".valid-desc").text(addrMsg.alert["0001"]);
+			return;
+		}
+		
+		/* 주소명 길이 5자 초과 체크 */
+		if(location.href.indexOf("/mall/order") < 0 && document.querySelector("#saveAddressBook").checked && ncm.length > 5) {
+			$("#ncmInput").addClass("fail");
+			$("#ncmInput").find(".valid-desc").text(addrMsg.alert["0002"]);
+			return;
+		}
+		
+		/* 주소명 특수문자 여부 체크 */
+		var specialRule = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+		if(location.href.indexOf("/mall/order") < 0 && document.querySelector("#saveAddressBook").checked && specialRule.test(ncm)) {
+			$("#ncmInput").addClass("fail");
+			$("#ncmInput").find(".valid-desc").text(addrMsg.alert["0003"]);
+			return;
+		}
+		
+		/* 상세주소 입력여부 컨펌 */
+		if(rnAdresDetail === ""){
+			const confirm0001 = await layer.confirm(addrMsg.confirm["0001"], null, null, ['네', '아니오']);
+			if(confirm0001) return;
+		}
+		
+		/* 주소 저장 제한 초과시 가장 오래된 주소 삭제 여부 컨펌 */
+		if(activeViewUi.tempAddress.seq === undefined || activeViewUi.tempAddress.seq === '' || activeViewUi.tempAddress.seq === null){
+			if(ncm !== "" && Number(addrCnt) >= 3) {
+				const confirm0002 = await layer.confirm(addrMsg.confirm["0002"]);
+				if(!confirm0002) return;
+			}
+		}
+		
+		/* 기본주소 존재 시 기본주소 교체 여부 컨펌 */
+		if(basicAddrYn === "Y" && basicYn === "Y" && activeViewUi.address.basicYn !== "Y") {
+			const confirm0003 = await layer.confirm(addrMsg.confirm["0003"]);
+			if(!confirm0003) return;
+		}
+		
+		if(activeViewUi.tempAddress.seq) activeViewUi.address.seq = activeViewUi.tempAddress.seq;
+		activeViewUi.tempAddress.rnAdresDetail = rnAdresDetail;
+		activeViewUi.tempAddress.ncm = ncm;
+		activeViewUi.tempAddress.basicYn = basicYn;
+		
+		activeViewUi.address.rnAdres = activeViewUi.tempAddress.rnAdres;
+		activeViewUi.address.lnmAdres = activeViewUi.tempAddress.lnmAdres;
+		activeViewUi.address.zipNo = activeViewUi.tempAddress.zipNo;
+		activeViewUi.address.rnAdresDetail = activeViewUi.tempAddress.rnAdresDetail;
+		activeViewUi.address.ncm = activeViewUi.tempAddress.ncm;
+		activeViewUi.address.basicYn = activeViewUi.tempAddress.basicYn;
+		activeViewUi.address.sortSno = activeViewUi.tempAddress.seq && activeViewUi.tempAddress.seq !== currAddress.seq ? null : 1;
+		activeViewUi.address.point = activeViewUi.tempAddress.point;
+		activeViewUi.address.position = activeViewUi.tempAddress.position;
+		
+		let addr = {
+			...activeViewUi.address,
+			flag: "add"
+		}
+		addrViewUiManager.callback(addr);
+	}
+	/** 비회원 주소 설정 */
+	, addAddrNmbr: async function() {
+		const rnAdresDetail = document.querySelector("#rnAdresDetail").value || "";
+		/* 상세주소 입력여부 컨펌 */
+		if(rnAdresDetail === ""){
+			const confirm0001 = await layer.confirm(addrMsg.confirm["0001"], null, null, ['네', '아니오']);
+			if(confirm0001) return;
+		}
+		let addr = {
+			seq: null,
+			ncm: null,
+			zipNo: activeViewUi.tempAddress.zipNo,
+			rnAdres: activeViewUi.tempAddress.rnAdres,
+			rnAdresDetail: document.querySelector("#rnAdresDetail").value || "",
+			lnmAdres: activeViewUi.tempAddress.lnmAdres,
+			lnmAdresDetail: document.querySelector("#rnAdresDetail").value || ""
+		}
+		
+		addrViewUiManager.callback(addr);
+	}
+	/** 주소 선택 */
+	, chooseAddr: function(addrJson) {
+		let addr = JSON.parse(addrJson);
+		addr = {
+			...addr,
+			flag: "choose"
+		}
+		
+		postManager.getLatlng(addr.lnmAdres, function(data) {
+			if(!data.errorYn) {
+				addr = {
+					...addr,
+					point: {
+						lat: data.lat,
+						lng: data.lng
+					}
+				}
+			}
+			
+			addrViewUiManager.callback(addr);
+		});
+	}
+	/** 비로그인 현 주소 선택 */
+	, chooseCurrAddr: function() {
+		let addr = {
+			...currAddress,
+			flag: "choose"
+		}
+		
+		postManager.getLatlng(addr.lnmAdres, function(data) {
+			if(!data.errorYn) {
+				addr = {
+					...addr,
+					point: {
+						lat: data.lat,
+						lng: data.lng
+					}
+				}
+			}
+			
+			addrViewUiManager.callback(addr);
+		});
+	}
+	/** 한강존 주소 세팅 */
+	, chooseLiverAddr: function(delv_seq) {
+		let address = DelvMapManager.delvZones.find((ele) => ele.delv_seq === delv_seq);
+		address = {
+			...address,
+			flag: "choose"
+		}
+		addrViewUiManager.callback(address);
+	}
+	/** 주소 수정(나의 주소록) */
+	, openEdit: function(addrJson) {
+		addrViewUiManager.openPostFlag = true;
+		let addr = JSON.parse(addrJson);
+		
+		$("#addrViewSection").remove();
+		$('#addrPopup').closest(".ui-dialog-container").remove();
+		$('#addrSearchPopup').closest(".ui-dialog-container").remove();
+		$('#delvZonePopup').closest(".ui-dialog-container").remove();
+		$.ajax({
+			url: "/addr/addrView",
+			type: "GET",
+			success: function(fragment) {
+				if (fragment) {
+					$("#container").append(fragment);
+				}
+			}
+		}).done(async function () {
+			addrViewUiManager.init();
+			eatzPub.front.setUIDialog();
+			
+			activeViewUi = addrViewUi;
+			$("#addrSearchTitle").html("주소 변경");
+			$("#postDetail").hide();
+			$("#map-wrap").hide();
+			$("#postLayer").show();
+			
+			await activeViewUi.editPost(addr);
+			eatzPub.front.dialogOnOff().popOpen('#addrSearchPopup');
+		});
+	}
+	/** 주소 삭제(나의 주소록) */
+	, removeAddr: async function(seq) {
+		const alert0001 = await layer.confirm(myAdbkMsg.confirm["0001"]);
+		if(alert0001){
+			AddrManager.remove(seq, function() {
+				document.location.href = "/mypage/adbk";
+			});
+		}
+	}
+	/** 주소 세팅(로컬 스토리지 저장) */
+	, setAddr: function(address, nosaveFlag, saveFlag) {
+		currAddress = {
+			...address,
+			basicYn: address.basicYn ? address.basicYn : "N",
+			sortSno: 1
+		}
+		
+		let addrObj = localStorage.getItem("addr");
+		addrObj = addrObj? JSON.parse(addrObj) : null;
+		let nowDate = new Date();
+		if(addrObj === null || addrObj.addrJibun === "" || nowDate.getTime() >= addrObj.expire || (addrObj.addrJibun !== address.lnmAdres || addrObj.addrDetail !== address.rnAdresDetail) && !nosaveFlag) {
+			addrObj = {
+				addrRoad : address.rnAdres,
+				addrJibun : address.lnmAdres,
+				addrDetail : address.rnAdresDetail,
+				addrZipNo : address.zipNo,
+				expire : nowDate.getTime() + 1000*60*60*24*7
+			}
+			
+			try {
+				postManager.getLatlng(address.lnmAdres, function(data) {
+					if(!data.errorYn) {
+						let point = {
+							lat: data.lat,
+							lng: data.lng
+						}
+						
+						addrObj = {
+							...addrObj,
+							point
+						}
+						
+						const currPosition = new kakao.maps.LatLng(point.lat, point.lng);
+						
+						currAddress = {
+							...currAddress,
+							position: currPosition,
+							point
+						}
+						
+						setCookie("latlng", data.lng + " " + data.lat);
+					}
+					
+					localStorage.setItem("addr", JSON.stringify(addrObj));
+					
+					if (address.lnmAdres != null) {
+						setCookie("addr", address.lnmAdres, 7);
+					} else {
+						setCookie("addr", address.rnAdres, 7);
+					}
+					
+					if(isLoggedIn === 'Y' && mberType !== 'NMBR' && !nosaveFlag){
+						AddrManager.add(currAddress, function(result) {
+							currAddress = result;
+						});
+					}
+				});
+			} catch(e) {
+				console.log(e);
+				localStorage.setItem("addr", JSON.stringify(addrObj));
+				
+				if (address.lnmAdres != null) {
+					setCookie("addr", address.lnmAdres, 7);
+				} else {
+					setCookie("addr", address.rnAdres, 7);
+				}
+				
+				if(isLoggedIn === 'Y' && mberType !== 'NMBR' && !nosaveFlag){
+					AddrManager.add(currAddress, function(result) {
+						currAddress = result;
+					});
+				}
+			}
+		}
+		
+		if(nosaveFlag) {
+			if(!address.point || !address.point.lat){
+				try {
+					postManager.getLatlng(address.lnmAdres, function(data) {
+						if(!data.errorYn) {
+							let point = {
+								lat: data.lat,
+								lng: data.lng
+							}
+							
+							const currPosition = new kakao.maps.LatLng(point.lat, point.lng);
+							
+							currAddress = {
+								...currAddress,
+								position: currPosition,
+								point
+							}
+							
+							let addressJson = { ...address, point };
+							addressJson = JSON.stringify(addressJson);
+							
+							$.ajax({
+								url: "/addr/setCurrAddr",
+								contentType: "application/json",
+								type: "POST",
+								data : addressJson
+							}).done(function(data) {});
+						}
+					});
+				} catch(e) {
+					console.log(e);
+				}
+			}
+		}
+		
+		if(saveFlag) {
+			AddrManager.add(currAddress, function(result) {
+				currAddress = result;
+			});
+		}
+	}
+	/** 주소 세팅(로컬 스토리지 저장) */
+	, setAddrPromise: function(address) {
+		return new Promise(function(resolve, reject) {
+			currAddress = {
+				...address,
+				basicYn: address.basicYn ? address.basicYn : "N",
+				sortSno: 1
+			}
+			
+			let addrObj = localStorage.getItem("addr");
+			addrObj = addrObj? JSON.parse(addrObj) : null;
+			let nowDate = new Date();
+			if(addrObj === null || addrObj.addrJibun === "" || nowDate.getTime() >= addrObj.expire || (addrObj.addrJibun !== address.lnmAdres || addrObj.addrDetail !== address.rnAdresDetail)) {
+				addrObj = {
+					addrRoad : address.rnAdres,
+					addrJibun : address.lnmAdres,
+					addrDetail : address.rnAdresDetail,
+					addrZipNo : address.zipNo,
+					expire : nowDate.getTime() + 1000*60*60*24*7
+				}
+				
+				try {
+					postManager.getLatlng(address.lnmAdres, function(data) {
+						if(!data.errorYn) {
+							let point = {
+								lat: data.lat,
+								lng: data.lng
+							}
+							
+							addrObj = {
+								...addrObj,
+								point
+							}
+							
+							const currPosition = new kakao.maps.LatLng(point.lat, point.lng);
+							
+							currAddress = {
+								...currAddress,
+								position: currPosition,
+								point
+							}
+							
+							setCookie("latlng", data.lng + " " + data.lat);
+						}
+						
+						localStorage.setItem("addr", JSON.stringify(addrObj));
+						
+						if (address.lnmAdres != null) {
+							setCookie("addr", address.lnmAdres, 7);
+						} else {
+							setCookie("addr", address.rnAdres, 7);
+						}
+						
+						if(isLoggedIn === 'Y' && mberType !== 'NMBR'){
+							AddrManager.add(currAddress, function(result) {
+								currAddress = result;
+							});
+						}
+						
+						resolve();
+					});
+				} catch(e) {
+					console.log(e);
+					localStorage.setItem("addr", JSON.stringify(addrObj));
+					
+					if (address.lnmAdres != null) {
+						setCookie("addr", address.lnmAdres, 7);
+					} else {
+						setCookie("addr", address.rnAdres, 7);
+					}
+					
+					if(isLoggedIn === 'Y' && mberType !== 'NMBR'){
+						AddrManager.add(currAddress, function(result) {
+							currAddress = result;
+						});
+					}
+					
+					resolve();
+				}
+			}
+		});
+	}
+	/** 주소 기반 위경도 검색 */
+	, getPosition: function(lnmAdres) {
+		postManager.getLatlng(lnmAdres, function(data) {
+			return { lat: data.lat, lng: data.lng }
+		});
+	}
+	, setValExpObj: function(value, expireDate) {
+		const obj = {
+			value : value,
+			expire : Date.now() + 1000*60*60*24*expireDate
+			//expire : Date.now() + 1000*60
+		}
+		
+		return JSON.stringify(obj);
+	}
+}
+
+/** 주소 등록/삭제 AJAX */
+const AddrManager = {
+	add: function(address, func, errorFunc) {
+		if(address.rnAdres === null || address.lnmAdres === null || address.rnAdres === '' || address.lnmAdres === '') return;
+		if(address.lnmAdresDetail == null) address.lnmAdresDetail = '';
+		if(address.rnAdresDetail == null) address.rnAdresDetail = '';
+
+		$.ajax({
+			url: "/addr/add",
+			type: "POST",
+			contentType: "application/json",
+			data: JSON.stringify(address),
+			dataType: "json",
+			success: function(result) {
+				if (result) {
+					let rtnObj = result;
+					
+					if(address.point.lat) {
+						if(rtnObj.sortSno === 1 || rtnObj.sortSno === "1"){
+							let addressJson = { ...rtnObj, point: address.point };
+							addressJson = JSON.stringify(addressJson);
+							
+							$.ajax({
+								url: "/addr/setCurrAddr",
+								contentType: "application/json",
+								type: "POST",
+								data : addressJson
+							}).done(function(data) {});
+						}
+						rtnObj = {
+							...rtnObj,
+							point: address.point,
+							position: address.position,
+						}
+					}
+					
+					func ? func(rtnObj) : null;
+				} else {
+					console.error("fail");
+				}
+			},
+			error: function(data) {
+				console.log(data);
+
+				if(typeof data.responseJSON != "undefined") {
+					if(data.responseJSON.message) {
+						alert(data.responseJSON.message);
+					}
+				}
+
+				errorFunc ? errorFunc() : null;
+			}
+		});
+	}
+	
+	, remove: function(seq, func) {
+		$.ajax({
+			url: "/addr/del",
+			type: "POST",
+			contentType: "application/json",
+			data: "{\"seq\":" + seq + "}",
+			dataType: "json",
+			success: function(result) {
+				if (result) {
+					func ? func() : null;
+				} else {
+					console.error("fail");
+				}
+			}
+		});
+	}
+};
+
+/** 주소 기반 맵 관리 */
+const AddrMapManager = {
+	mapUiObj: null,
+	/** 초기화 */
+	init: function(mapUiObj, mapEleId, curPosition, agree = 'Y') {
+		this.mapUiObj = mapUiObj;
+		MapManager.mapContainer = $("#" + mapEleId).get(0);
+		if(storeListUi) {
+			MapManager.initForSearchStore(5, false, true, false,currAddress.point);
+		} else {
+			MapManager.init(5, false, true);
+		}
+		//위치 정보 동의 체크
+		this.lcSvcAgree(agree, true, null, true, function(data) {
+			if(!storeListUi) AddrMapManager.getAddr(data);
+		}, async function() {
+			// 웹 위치 접근 미허용 시 주소 검색 팝업 호출
+			await layer.alert(addrMsg.alert["0009"]);
+			if(!storeListUi) addrViewUiManager.openPost();
+		}, curPosition);
+		
+		//현위치 갱신
+		$(document).off("click", ".currentLocateBtn");
+		$(document).on("click", ".currentLocateBtn", function() {
+			//위치 정보 동의 체크
+			AddrMapManager.lcSvcAgree('Y', true, null, true, function(data) {
+//				if(storeListUi) storeListUi.searchStore(MapManager.map.getCenter(), true, "ADDRESS", "",true);
+				if(storeListUi) storeListUi.searchStoreWithCurrLocate(data);
+				else AddrMapManager.getAddr(MapManager.map.getCenter());
+			}, async function() {
+				// 웹 위치 접근 미허용 시 주소 검색 팝업 호출
+				await layer.alert(addrMsg.alert["0009"]);
+				if(!storeListUi) addrViewUiManager.openPost();
+			}, null);
+		});
+
+		//드래그 이벤트
+		MapManager.dragendListener(function(){
+			if(!storeListUi) AddrMapManager.getAddr(MapManager.map.getCenter());
+		});
+	}
+	/** 위치 기반 동의 체크 */
+	, lcSvcAgree : async function(agreeYn, visible, radius, fixable, func, errFunc, curPosition){
+		visible = !visible ? false : true;
+		//const defaultPosition = new kakao.maps.LatLng('37.541324504557466', '126.97170916936861');
+		//1.위치 정보 확인 (세션에 담은거 빼온다. > addView.jsp script에서 세션 추출)
+		if(lcSvcUseYn !== 'Y'){
+			//2.현재위치 호출시 위치정보 동의 없으면 동의 알럿 띄운다.
+			if(agreeYn === 'Y'){
+				//let lcSvcUseYn = 'N';
+				const confirm0004 = await layer.confirmNoDimClose(addrMsg.confirm["0004"]);
+				if(confirm0004) lcSvcUseYn = 'Y';
+				
+				$.ajax({
+					url: "/member/lcSvcUseYn",
+					type: "POST",
+					data : { setValue : lcSvcUseYn }
+				}).done (async function(data, status, xhr) {
+					if(data) {
+						lcSvcUseYn = data.lcSvcUseYn;
+						lcSvcUseYnChDate = data.lcSvcUseYnChDate;
+			
+						let dateString = xhr.getResponseHeader('Date');
+						let date = new Date(dateString);
+						let agreDate = dateFormat(date, '.');
+						
+						//2.1 동의성공했으면 setcurrentPositon진행한다.
+						if(lcSvcUseYn == 'Y'){
+							await layer.alert(addrMsg.alert["0006"], agreDate);
+							
+							if(Object.keys(MapManager.basePosition).length === 0 || !MapManager.basePosition.config) MapManager.initBasePositionConfig(null, fixable, radius, visible, null); //기준 위치 초기화
+							if(curPosition) {
+								const currPosition = new kakao.maps.LatLng(curPosition.lat, curPosition.lng);
+								MapManager.setBasePosition(currPosition);
+								func(currPosition);
+							} else {
+								if (isAgentChk() != "WEB") {
+									appLocationCallback = function(point){
+										MapManager.setBasePosition(point);
+										func(point);
+									}
+									
+									isApp.getLocation();
+								} else {
+									MapManager.setCurrentPosition(func, errFunc); //현재 위치로 기준 위치 설정 및 콜백 설정
+								}
+							}
+						} else {
+							//$("#currentLocateBtn").bind("click",false);
+							//$("#currentLocateBtn").hide();
+							////동의하지 않았으므로 기준위치는 GRS 본사로 정한다.
+							//MapManager.initBasePositionConfig(null, fixable, radius, visible, null); //기준 위치 초기화
+							//MapManager.setBasePosition(defaultPosition);
+							//func(defaultPosition);
+							await layer.alert(addrMsg.alert["0007"], agreDate);
+							if(!storeListUi) addrViewUiManager.openPost();
+						}
+					} else {
+						console.log("Post error: " + data);
+						if(!storeListUi) {
+							await layer.alert(addrMsg.alert["0008"]);
+							addrViewUiManager.openPost();
+						} else {
+							await layer.alert("현재 위치를 확인할 수 없습니다.");
+						}
+					}
+				}).fail(async function (jqXHR, textStatus, error) {
+					console.log("Post error: " + error);
+					if(!storeListUi) {
+						await layer.alert(addrMsg.alert["0008"]);
+						addrViewUiManager.openPost();
+					} else {
+						await layer.alert("현재 위치를 확인할 수 없습니다.");
+					}
+				});
+			}
+		} else {
+			//3.동의되어 있으면 위치 가져온다.
+			$(".currentLocateBtn").show();
+			if(Object.keys(MapManager.basePosition).length === 0 || !MapManager.basePosition.config) MapManager.initBasePositionConfig(null, fixable, radius, visible, null); //기준 위치 초기화
+			if(curPosition) {
+				const currPosition = new kakao.maps.LatLng(curPosition.lat, curPosition.lng);
+				MapManager.setBasePosition(currPosition);
+				func(currPosition);
+			} else {
+				if (isAgentChk() != "WEB") {
+					appLocationCallback = function(point){
+						MapManager.setBasePosition(point);
+						func(point);
+					}
+					
+					isApp.getLocation();
+				} else {
+					MapManager.setCurrentPosition(func, errFunc); //현재 위치로 기준 위치 설정 및 콜백 설정
+				}
+			}
+		}
+	}
+	/** 위치 기반 주소 가져오기 */
+	, getPosition: function(point) {
+		return new Promise(function(resolve, reject){
+			MapManager.getAddress(point)
+				.then(function(addr) {
+					const data = {
+						...addr,
+						point: {
+							lat: point.Ma,	// Ma: 37.483569528331
+							lng: point.La	// La: 130.910769910458
+						}
+					};
+					resolve(data);
+				});
+		});
+	}
+	/** 위치 기반 주소 가져오기 */
+	, getAddr: function(data) {
+		AddrMapManager.getPosition(data)
+			.then(function(addr) {
+				AddrMapManager.mapUiObj.selectAddrByPosition(addr);
+				AddrMapManager.mapUiObj.address = { ...AddrMapManager.mapUiObj.address
+					, rnAdres: addr.road_address ? addr.road_address.address_name : ''
+					, lnmAdres: addr.address ? addr.address.address_name : ''
+					, zipNo: addr.road_address ? addr.road_address.zone_no : ''
+				}
+			});
+	}
+};
+
+/** 현 위치로 주소 설정 */
+const setCurPointAddr = async () => {
+	const getCurrentPosition = function() {
+		return new Promise(function (resolve, reject) {
+			if(serverType === 'dev' || serverType === 'stg' || serverType === 'product'){
+				if(navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(resolve, reject, {
+						enableHighAccuracy: false,
+						maximumAge: 0,
+						timeout: Infinity
+					});
+				} else {
+					reject();
+				}
+			} else { //https 아닐 경우 본사로 디폴트값 세팅
+				resolve({
+					coords: {
+						latitude: 37.46459907076597,
+						longitude: 126.8907822368867
+					}
+				});
+			}
+		});
+	}
+	
+	const getAddress = function(latlng) {
+		return new Promise(function(resolve, reject) {
+			let geocoder = new kakao.maps.services.Geocoder();	//주소-좌표 변환 객체
+			
+			geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(data) {
+				resolve(data[0]);
+			});
+		});
+	}
+	
+	const setCurAddr = async function(flag) {
+		if (isAgentChk() != "WEB") {
+			appLocationCallback = function(point){
+				getAddress(point).then(function(addr) {
+					if(addr.road_address){
+						currAddress = {
+							seq: null,
+							ncm: null,
+							zipNo: addr.road_address.zone_no,
+							rnAdres: addr.road_address.address_name,
+							rnAdresDetail: "",
+							lnmAdres: addr.address.address_name,
+							lnmAdresDetail: "",
+							basicYn: "N",
+							point: {
+								lat: point.Ma,
+								lng: point.La
+							},
+							sortSno: 1
+						}
+						addrViewUiManager.setAddr(currAddress);
+						if(flag && $("#searchAddrR").length > 0){
+							$("#addressBefore").hide();
+							$("#addressAfter").show();
+							$("#searchAddrR").text(currAddress.rnAdres + " " + currAddress.rnAdresDetail);
+							searchStoreNew(currAddress);
+						}
+					} else {
+						if (location.pathname === "/") {
+							$("#noServiceCheck").hide();
+							$("#noAddressCheck").show();
+						}
+						console.log("현 위치 주소 설정 : 도로명 주소 없음");
+					}
+				});
+			}
+			
+			isApp.getLocation();
+		} else {
+			getCurrentPosition().then(function(position) {
+				let point = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
+				getAddress(point).then(function(addr) {
+					if(addr.road_address){
+						currAddress = {
+							seq: null,
+							ncm: null,
+							zipNo: addr.road_address.zone_no,
+							rnAdres: addr.road_address.address_name,
+							rnAdresDetail: "",
+							lnmAdres: addr.address.address_name,
+							lnmAdresDetail: "",
+							basicYn: "N",
+							point: {
+								lat: point.Ma,
+								lng: point.La
+							},
+							sortSno: 1
+						}
+						addrViewUiManager.setAddr(currAddress);
+						if(flag && $("#searchAddrR").length > 0){
+							$("#noServiceCheck").hide();
+							$("#noAddressCheck").hide();
+							$("#addressBefore").hide();
+		 					$("#addressAfter").show();
+		 					$("#searchAddrR").text(currAddress.rnAdres + " " + currAddress.rnAdresDetail);
+							searchStoreNew(currAddress);
+						}
+					} else {
+						if (location.pathname === "/") {
+							$("#noServiceCheck").hide();
+							$("#noAddressCheck").show();
+						}
+						console.log("현 위치 주소 설정 : 도로명 주소 없음");
+					}
+				});
+			}).catch(async function(err) {
+				console.error(err);
+				if (location.pathname === "/") {
+					$("#noServiceCheck").show();
+					$("#noAddressCheck").hide();
+				}
+				await layer.alert(addrMsg.alert["0009"]);
+			});
+		}
+	}
+	
+	// 메인인 경우 위치정보 약관 동의 체크
+	if((lcSvcUseYn === null || lcSvcUseYn === '' || (isLoggedIn === 'Y' && mberType !== 'NMBR' && lcSvcUseYnChDate === null)) && location.pathname === "/"){
+		setTimeout(async function(){
+			let lcSvcUse = 'N';
+			let confirm4 = await layer.confirm(addrMsg.confirm["0004"]);
+			if(confirm4) lcSvcUse = 'Y';
+			
+			$.ajax({
+				url: "/member/lcSvcUseYn",
+				type: "POST",
+				data : { setValue : lcSvcUse }
+			}).done(async function(data, status, xhr) {
+				if(data) {
+					lcSvcUseYn = data.lcSvcUseYn;
+					lcSvcUseYnChDate = data.lcSvcUseYnChDate;
+					
+					let dateString = xhr.getResponseHeader('Date');
+					let date = new Date(dateString);
+					let agreDate = dateFormat(date, '.');
+					
+					//2.1 동의성공했으면 setCurAddr진행한다.
+					if(lcSvcUseYn == 'Y') {
+						await layer.alert(addrMsg.alert["0006"], agreDate);
+						setCurAddr(true);
+					} else {
+						await layer.alert(addrMsg.alert["0007"], agreDate);
+						$("#noAddressCheck").hide();
+						$("#noServiceCheck").show();
+					}
+				} else {
+					console.log("Post error: " + data);
+					await layer.alert("현재 위치를 확인할 수 없습니다.");
+				}
+			}).fail(async function (jqXHR, textStatus, error) {
+				console.log("Post error: " + error);
+				await layer.alert("현재 위치를 확인할 수 없습니다.");
+			});
+		}, 1000)
+	} else if(lcSvcUseYn === 'Y' && location.pathname === "/") {
+		setCurAddr();
+	}
+}
+// 앱 위치정보 수신
+async function selectLocation(latitude, longitude) {
+	if(longitude === 'undefined'){
+		await layer.alert(addrMsg.alert["0004"]);
+		/** 앱 설정화면으로 이동 */
+		isApp.requestLocationPermit();
+	} else {
+		let point = new kakao.maps.LatLng(latitude, longitude);
+		if(typeof appLocationCallback === 'function') appLocationCallback(point);
+	}
+}
+
+const isAgentChk =  () => {
+	var agent = navigator.userAgent.toLowerCase();
+	if (agent.indexOf("lottegrsapp") != -1) {
+		if(agent.indexOf("android") != -1){
+			return "AND";
+		}else if(agent.indexOf("iphone") != -1 || agent.indexOf("ipad") != -1 || agent.indexOf("ipod") != -1){
+			return "IOS";
+		}
+	}else{
+		return "WEB";
+	}
+}
+
+(function() {
+	if(location.pathname !== '/mypage/adbk') {
+		let addrObj = localStorage.getItem("addr");
+		addrObj = addrObj? JSON.parse(addrObj) : null;
+		let nowDate = new Date();
+		if(addrObj !== null && addrObj.addrJibun !== "" && nowDate.getTime() < addrObj.expire) {
+			currAddress = {
+				seq: null,
+				ncm: null,
+				zipNo: addrObj.addrZipNo,
+				rnAdres: addrObj.addrRoad,
+				rnAdresDetail: addrObj.addrDetail,
+				lnmAdres: addrObj.addrJibun,
+				lnmAdresDetail: addrObj.addrDetail,
+				point: {
+					lat: addrObj.point && addrObj.point.lat ? addrObj.point.lat : null,
+					lng: addrObj.point && addrObj.point.lng ? addrObj.point.lng : null
+				},
+				basicYn: "N",
+				sortSno: 1
+			}
+		}
+		
+		/** 로그인 시 로컬 스토리지에 주소 있으면 최근 주소로 저장 후 로컬 스토리지 주소 삭제 */
+		if(isLoggedIn === 'Y' && mberType !== 'NMBR') {
+			if(currAddrSession) {
+				if(currAddress.lnmAdres !== null && (currAddress.lnmAdres !== currAddrSession.lnmAdres || currAddress.lnmAdresDetail !== currAddrSession.lnmAdresDetail)) addrViewUiManager.setAddr(currAddress, true, true);
+				else addrViewUiManager.setAddr(currAddrSession, true);
+			} else {
+				if(currAddress.lnmAdres !== null) addrViewUiManager.setAddr(currAddress);
+				else setCurPointAddr();
+			}
+		} else if(currAddress.lnmAdres === null && autoLoginType() === "logout"){
+			/* 현재 설정 중인 주소 없을 경우 현 위치로 주소 설정 */
+			setCurPointAddr();
+		}
+	}
+})();

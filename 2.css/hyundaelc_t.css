@@ -1,0 +1,136 @@
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+/* Noto Sans KR 폰트 */
+
+* {
+    /* line-height: 1; */
+    outline: 1px solid red;
+}
+
+section{height: 597px;
+width: 834px;}
+
+.textinner{
+    gap:20px;
+    justify-content: flex-end;
+}
+
+.textinner>h1{
+    font-size: 50px;
+letter-spacing: normal;}
+
+.textinner>h2{font-size: 30px;
+    font-weight:600;}
+
+.sec01 > p{display: none}
+
+.sec01 p + a{background-color: #009882;
+gap: 10px;
+font-size: 14px;
+font-weight: 500;
+    }
+
+    .sec02{
+        height: 1194px;
+        flex-direction: column;
+        align-items: center;
+    
+    }
+
+    .sec02 .left{
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .inner600{
+        height: 597px;
+        flex-direction: column;
+        position:unset;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .inner600 img{
+        width: 690px; height: 390px;
+        position:unset;
+   z-index: unset;}
+
+   .sec02 .right{
+    width: 100%;
+    justify-content: center;
+   }
+
+   .innerr{
+    text-align: center;
+    padding: 50px 0 0 0;
+   }
+
+   .innerr br{
+    display: none;
+   }
+
+.sec03{
+    flex-direction: column;
+padding: 20px 0;
+gap: 20px}
+
+   .sec03 .left,
+   .sec03 .right{
+    height: 268.5px;}
+
+    .innerleft{
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        position: relative;
+    }
+
+    .innerleft img{
+        width: 834px;
+        height: 100%;
+    }
+
+    .innerleft p{
+        position: absolute;
+        top:unset; right: 80px; bottom: 40px;
+        align-items: center;
+    }
+    
+            .innerright{
+                width: 100%;
+        height: 100%;
+        padding: 0;
+        gap: 0px;
+            }
+
+            .innerright img{
+                width: 834px;
+        height: 100%;
+        position: relative;}
+
+        .innerright h1{
+            display: none}
+
+            .innerright p{
+                top:unset; right: 80px; bottom: 40px;
+                align-items: center;
+            }
+
+            .sec04{
+                flex:1 1 100%
+            }
+
+            .sec04 .inner{
+                width: 834px;
+                padding: 170px 40px 0 40px;
+                justify-items: center;
+                text-align: center;
+                align-items: center;
+                gap: 50px;}
+
+                .sec04 .inner p{
+                    flex: 1 1 ;
+                }
+
+                .sec04 .inner p br{display: none;}

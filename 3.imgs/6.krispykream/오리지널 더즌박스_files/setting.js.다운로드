@@ -1,0 +1,393 @@
+/*	#################### EATZ 설정 ######################################################################### */
+
+/*********************************************************************************************/
+/** 공통 on/off 처리 */
+async function commonOnOff(thisId, thisValue){
+
+	if(thisValue == "N"){
+		// on
+		$('#' + thisId).val("Y");
+		var setThisValue_Y = $('#' + thisId).val();
+		if(thisId == 'rciptPrintYn'){
+			ajaxNotiSetting(thisId, setThisValue_Y);
+		}else if(thisId == 'lcSvcUseYn'){
+			if( deviceCd != "WEB") {
+				try{
+					isApp.setLocationPermit();
+				} catch(e) {
+				}
+			}
+			ajaxNotiSetting(thisId, setThisValue_Y);
+		}else if(thisId == 'grsMarktUseYn'){
+			ajaxNotiSetting(thisId, setThisValue_Y);
+		}else if(thisId == 'marktRecvYn'){
+
+			//마케팅 활용동의 ON 여부 확인
+			if("Y" == $('#grsMarktUseYn').val()){
+				if( deviceCd != "WEB") {
+					isApp.setPushMarketingPermit(setThisValue_Y);
+				}else{
+					ajaxNotiSetting(thisId, setThisValue_Y);		
+				}
+			}else{
+				const confirm = await createConfirm("마케팅 활용에 동의하셔야</br>혜택 알림을 받을 수 있습니다.</br>마케팅 활용에 동의하시겠습니까?", "", "" , ["확인" ,"취소"]);
+				if(confirm){
+					//동의
+					if( deviceCd != "WEB") {
+						isApp.setPushMarketingPermit(setThisValue_Y);
+					}else{
+						ajaxNotiSetting(thisId, setThisValue_Y);		
+					}
+				}else{
+					//취소
+					$("#" + thisId).prop("checked", false);
+					$("#" + thisId).val("N");
+				}
+			}			
+			
+		}else if(thisId == 'smsUseYn'){
+			
+			//마케팅 활용동의 ON 여부 확인
+			if("Y" == $('#grsMarktUseYn').val()){
+				ajaxNotiSetting(thisId, setThisValue_Y);
+			}else{
+				const confirm = await createConfirm("마케팅 활용에 동의하셔야</br>혜택 알림을 받을 수 있습니다.</br>마케팅 활용에 동의하시겠습니까?", "", "" , ["확인" ,"취소"]);
+				if(confirm){
+					//동의
+					ajaxNotiSetting(thisId, setThisValue_Y);		
+				}else{
+					//취소
+					$("#" + thisId).prop("checked", false);
+					$("#" + thisId).val("N");
+				}
+			}
+			
+		}else if(thisId == 'emailUseYn'){
+			
+			//마케팅 활용동의 ON 여부 확인
+			if("Y" == $('#grsMarktUseYn').val()){
+				if(!isEmpty(memberEmail)){
+					ajaxNotiSetting(thisId, setThisValue_Y);
+				}else{
+					await layer.alert("마이페이지에서 이메일정보를 등록 후 이용해 주세요.");
+					$("#" + thisId).prop("checked", false);
+					$("#" + thisId).val("N");
+				}
+			}else{
+				const confirm = await createConfirm("마케팅 활용에 동의하셔야</br>혜택 알림을 받을 수 있습니다.</br>마케팅 활용에 동의하시겠습니까?", "", "" , ["확인" ,"취소"]);
+				if(confirm){
+					//동의
+					if(!isEmpty(memberEmail)){
+					ajaxNotiSetting(thisId, setThisValue_Y);
+					}else{
+						await layer.alert("마이페이지에서 이메일정보를 등록 후 이용해 주세요.");
+						$("#" + thisId).prop("checked", false);
+						$("#" + thisId).val("N");
+					}	
+				}else{
+					//취소
+					$("#" + thisId).prop("checked", false);
+					$("#" + thisId).val("N");
+				}
+			}
+		}else if(thisId == 'bnefAlarmYn'){
+			
+			//마케팅 활용동의 ON 여부 확인
+			if( "Y" == $('#marktRecvYn').val() || "Y" == $('#smsUseYn').val()){
+				if("Y" == $('#grsMarktUseYn').val()){
+						ajaxNotiSetting(thisId, setThisValue_Y);
+				}else{
+					const confirm = await createConfirm("마케팅 활용에 동의하셔야</br>혜택 알림을 받을 수 있습니다.</br>마케팅 활용에 동의하시겠습니까?", "", "" , ["확인" ,"취소"]);
+					if(confirm){
+						//동의
+							ajaxNotiSetting(thisId, setThisValue_Y);
+					}else{
+						//취소
+						$("#" + thisId).prop("checked", false);
+						$("#" + thisId).val("N");
+					}
+				}
+			}else{
+				$("#" + thisId).prop("checked", false);
+				$("#" + thisId).val("N");
+				await createAlert('앱 푸시나 문자 메시지 알림을 </br>먼저 허용해 주세요.');
+			}
+		}else if(thisId == 'beaconUseYn'){
+			//블루투스 설정 ON OFF여부 확인 confirmBluetoothSetting 
+			isApp.getBluetoothSetting();
+		}
+		
+	}else{
+		// off
+		$('#' + thisId).val("N");
+		var setThisValue_N = $('#' + thisId).val();
+		if(thisId == 'rciptPrintYn'){
+			ajaxNotiSetting(thisId, setThisValue_N);
+		}else if(thisId == 'lcSvcUseYn'){
+			ajaxNotiSetting(thisId, setThisValue_N);
+		}else if(thisId == 'grsMarktUseYn'){
+			ajaxNotiSetting(thisId, setThisValue_N);
+		}else if(thisId == 'marktRecvYn'){
+			// 마케팅, 문자 꺼져있다면 야간알림 먼저 꺼지고 처리  
+			if( "Y" == $('#bnefAlarmYn').val() && "N" == $('#smsUseYn').val()){
+				new Promise( (succ, fail)=>{
+						$.ajax({
+							type : "POST",
+							url : "/member/bnefAlarmYn",
+							data : { setValue : "N" }
+						}).done (async function(data, status, xhr) {
+							if(data) {
+								if(!isEmpty(data.settingValue)){
+									$("#bnefAlarmYn").prop("checked", false);
+									$("#bnefAlarmYn").val(data.settingValue);
+									succ(data);
+								}
+							}
+						}).fail(async function (jqXHR, textStatus, error) {
+							fail(error);
+						});
+				}).then((arg) =>{    
+					$.ajax({
+							type : "POST",
+							url : "/member/marktRecvYn",
+							data : { setValue : "N" }
+						}).done (async function(data, status, xhr) {
+							if(data) {
+								if(!isEmpty(data.settingValue)){
+									$("#marktRecvYn").prop("checked", false);
+									$("#marktRecvYn").val(data.settingValue);
+									let date = new Date();
+									let agreDate = dateFormat(date, '.');
+									
+									eatzPub.front.toastPopupActive('LOTTE EATZ 광고성 앱 푸시 및 야간 마케팅 알림이 미수신 처리되었습니다. ('+ agreDate +')');
+								}
+							}
+						}).fail(async function (jqXHR, textStatus, error) {
+						});
+				});
+			}else{
+				ajaxNotiSetting(thisId, setThisValue_N);
+			}
+		}else if(thisId == 'smsUseYn'){
+			// 마케팅, 문자 꺼져있다면 야간알림 먼저 꺼지고 처리  
+			if( "Y" == $('#bnefAlarmYn').val() && "N" == $('#marktRecvYn').val()){
+				new Promise( (succ, fail)=>{
+						$.ajax({
+							type : "POST",
+							url : "/member/bnefAlarmYn",
+							data : { setValue : "N" }
+						}).done (async function(data, status, xhr) {
+							if(data) {
+								if(!isEmpty(data.settingValue)){
+									$("#bnefAlarmYn").prop("checked", false);
+									$("#bnefAlarmYn").val(data.settingValue);
+									succ(data);
+								}
+							}
+						}).fail(async function (jqXHR, textStatus, error) {
+							fail(error);
+						});
+				}).then((arg) =>{    
+					$.ajax({
+							type : "POST",
+							url : "/member/smsUseYn",
+							data : { setValue : "N" }
+						}).done (async function(data, status, xhr) {
+							if(data) {
+								if(!isEmpty(data.settingValue)){
+									$("#smsUseYn").prop("checked", false);
+									$("#smsUseYn").val(data.settingValue);
+									let date = new Date();
+									let agreDate = dateFormat(date, '.');
+									
+									eatzPub.front.toastPopupActive('LOTTE EATZ 광고성 문자 메시지 및 야간 마케팅 알림이 미수신 처리되었습니다. ('+ agreDate +')');
+								}
+							}
+						}).fail(async function (jqXHR, textStatus, error) {
+						});
+				});
+			}else{
+				ajaxNotiSetting(thisId, setThisValue_N);
+			}
+		}else if(thisId == 'emailUseYn'){
+			ajaxNotiSetting(thisId, setThisValue_N);
+		}else if(thisId == 'bnefAlarmYn'){
+			ajaxNotiSetting(thisId, setThisValue_N);
+		}else if(thisId == 'beaconUseYn'){
+			isApp.setBeaconSetting('N');
+			$("#beaconUseYn").prop("checked", false);
+			$("#beaconUseYn").val('N');
+		}
+		
+	}
+	
+}
+
+
+/*********************************************************************************************/
+/** 설정 변경 Ajax */
+function ajaxNotiSetting(thisId, setThisValue){
+	
+	var reqURL;
+	reqURL = "/member/" + thisId;
+	
+	$.ajax({
+		type : "POST",
+		url : reqURL,
+		data : { setValue : setThisValue }
+	}).done (async function(data, status, xhr) {
+		if(data) {
+			if(!isEmpty(data.settingValue)){
+				
+				let date = new Date();
+				let agreDate = dateFormat(date, '.');
+					
+				if(data.settingValue == "Y"){
+					$("#" + thisId).prop("checked", true);
+					$("#" + thisId).val(data.settingValue);
+					
+					if(thisId == 'rciptPrintYn'){
+						// 메세지 없음
+					}else if(thisId == 'lcSvcUseYn'){
+						eatzPub.front.toastPopupActive('위치기반서비스 이용에 동의되었습니다. ('+ agreDate +')');
+					}else if(thisId == 'grsMarktUseYn'){
+						//마케팅 ON 토스트 팝업 고지 
+						eatzPub.front.toastPopupActive('LOTTE EATZ 마케팅 활용 개인정보 수집에 동의되었습니다. ('+ agreDate +')');
+					}else if(thisId == 'marktRecvYn'){
+						if(data.msgFlg == "Y"){
+							eatzPub.front.toastPopupActive('LOTTE EATZ 마케팅 활용 개인정보 수집 및 광고성 앱 푸시 수신에 동의되었습니다. ('+ agreDate +')');
+						}else{
+							eatzPub.front.toastPopupActive('LOTTE EATZ 광고성 앱 푸시 마케팅 알림이 수신처리 되었습니다. ('+ agreDate +')');
+						}
+						$("#grsMarktUseYn").prop("checked", true);
+						$("#grsMarktUseYn").val(data.settingValue);
+					}else if(thisId == 'smsUseYn'){
+						if(data.msgFlg == "Y"){
+							eatzPub.front.toastPopupActive('LOTTE EATZ 마케팅 활용 개인정보 수집 및 광고성 문자 메시지 수신에 동의되었습니다. ('+ agreDate +')');
+						}else{
+							eatzPub.front.toastPopupActive('LOTTE EATZ 광고성 문자 메시지 마케팅 알림이 수신처리 되었습니다. ('+ agreDate +')');
+						}
+						$("#grsMarktUseYn").prop("checked", true);
+						$("#grsMarktUseYn").val(data.settingValue);
+					}else if(thisId == 'emailUseYn'){
+						if(data.msgFlg == "Y"){
+							eatzPub.front.toastPopupActive('LOTTE EATZ 마케팅 활용 개인정보 수집 및 광고성 이메일 수신에 동의되었습니다. ('+ agreDate +')');
+						}else{
+							eatzPub.front.toastPopupActive('LOTTE EATZ 광고성 이메일 마케팅 알림이 수신처리 되었습니다. ('+ agreDate +')');
+						}
+						$("#grsMarktUseYn").prop("checked", true);
+						$("#grsMarktUseYn").val(data.settingValue);
+					}else if(thisId == 'bnefAlarmYn'){
+						if(data.msgFlg == "Y"){
+							eatzPub.front.toastPopupActive('LOTTE EATZ 마케팅 활용 개인정보 수집 및 광고성 야간 알림 수신에 동의되었습니다. ('+ agreDate +')');
+						}else{
+							eatzPub.front.toastPopupActive('LOTTE EATZ 광고성 야간 알림 허용 마케팅 알림이 수신처리 되었습니다. ('+ agreDate +')');
+						}		
+						$("#grsMarktUseYn").prop("checked", true);
+						$("#grsMarktUseYn").val(data.settingValue);				
+					}
+					
+				}else{
+					$("#" + thisId).prop("checked", false);
+					$("#" + thisId).val(data.settingValue);
+					
+					if(thisId == 'rciptPrintYn'){
+						// 메세지 없음
+					}else if(thisId == 'lcSvcUseYn'){
+						eatzPub.front.toastPopupActive('위치기반서비스 이용에 미동의되었습니다. ('+ agreDate +')');
+					}else if(thisId == 'grsMarktUseYn'){
+						if(data.isOtherOffOption == "Y"){
+							eatzPub.front.toastPopupActive('LOTTE EATZ 마케팅 활용 개인정보 수집 및 광고성 정보 수신에 미동의 되었습니다. ('+ agreDate +')');
+						}else{
+							eatzPub.front.toastPopupActive('LOTTE EATZ 마케팅 활용 개인정보 수집에 미동의 되었습니다. ('+ agreDate +')');
+						}
+						$("#marktRecvYn").prop("checked", false);
+						$("#marktRecvYn").val(data.settingValue);
+						$("#smsUseYn").prop("checked", false);
+						$("#smsUseYn").val(data.settingValue);
+						$("#emailUseYn").prop("checked", false);
+						$("#emailUseYn").val(data.settingValue);
+						$("#bnefAlarmYn").prop("checked", false);
+						$("#bnefAlarmYn").val(data.settingValue);
+					}else if(thisId == 'marktRecvYn'){
+						eatzPub.front.toastPopupActive('LOTTE EATZ 광고성 앱 푸시 마케팅 알림이 미수신처리 되었습니다. ('+ agreDate +')');
+					}else if(thisId == 'smsUseYn'){
+						eatzPub.front.toastPopupActive('LOTTE EATZ 광고성 문자 메시지 마케팅 알림이 미수신처리 되었습니다. ('+ agreDate +')');
+					}else if(thisId == 'emailUseYn'){
+						eatzPub.front.toastPopupActive('LOTTE EATZ 광고성 이메일 마케팅 알림이 미수신처리 되었습니다. ('+ agreDate +')');
+					}else if(thisId == 'bnefAlarmYn'){
+						eatzPub.front.toastPopupActive('LOTTE EATZ 광고성 야간 알림 허용 마케팅 알림이 미수신처리 되었습니다. ('+ agreDate +')');
+					}
+					
+				}
+			}
+		}
+	}).fail(async function (jqXHR, textStatus, error) {
+		
+	});
+	    
+}
+
+/*********************************************************************************************/
+/** APP에서 콜백 : 위치기반 수신동의 여부 관련 설정 / YN */
+function locationPermit(val){
+	
+	var thisId = "lcSvcUseYn";
+
+	if(val != "N" && val != "Y"){
+		val = "N";
+	}
+
+	/** 푸시 마케팅 수신 설정 동의 : 리턴 */
+	if(val == $("#" + thisId).val()){
+		if(val == "Y"){
+			$("#" + thisId).prop("checked", true);
+			$("#" + thisId).val(val);
+
+		}else{
+			$("#" + thisId).prop("checked", false);
+			$("#" + thisId).val(val);
+		}
+	}else{
+		ajaxNotiSetting(thisId, val);
+	}
+}
+
+/** APP에서 콜백 :  블루투스 설정값 콜백 */
+async function confirmBluetoothSetting(Yn){
+	if(Yn != undefined  && Yn == 'Y'){
+		isApp.setBeaconSetting('Y');
+		$("#beaconUseYn").prop("checked", true);
+		$("#beaconUseYn").val('Y');
+	}else{
+		$("#beaconUseYn").prop("checked", false);
+		$("#beaconUseYn").val('N');
+		const confirm = await createConfirm("'기기의 블루투스 설정 및 권한을 확인해 주세요.", "", "" , ["확인" ,"취소"]);
+		if(confirm){
+			//동의 - 블루투스 설정으로 이동
+			isApp.callBluetoothSetting();
+		}
+	}
+}
+
+/** APP에서 콜백 : 블루투스 설정 후 앱에서 설정한 값 호출  / YN */
+function returnBluetoothPermit(Yn){
+	if(Yn){
+		if(Yn == 'Y'){
+			isApp.setBeaconSetting('Y');
+			$("#beaconUseYn").prop("checked", true);
+			$("#beaconUseYn").val('Y');
+		}else{
+			isApp.setBeaconSetting('N');
+			$("#beaconUseYn").prop("checked", false);
+			$("#beaconUseYn").val('N');
+		}
+	}else{
+		console.log('returnBluetoothPermit param is undefined');
+	}
+}
+/*********************************************************************************************/
+/** 블루투스 호출 */
+function callBluetooth(){
+	isApp.callBluetoothSetting();
+}

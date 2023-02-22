@@ -1,0 +1,80 @@
+if(typeof NetFunnel == "object"){ 
+NetFunnel.SkinUtil.add('eatzPC',{ 
+	prepareCallback:function(){ 
+		var progress_percent = document.getElementById("barWidth")
+		progress_percent.style.width = "100%";
+		var secDoc = document.getElementById("sec")
+		secDoc.innerHTML = '초';
+		
+	}, 
+	updateCallback:function(percent,nwait,totwait,timeleft){ 
+		var progress_percent = document.getElementById("barWidth")
+		progress_percent.style.width = (100 - percent)+"%";
+		var secDoc = document.getElementById("sec")
+		secDoc.innerHTML = timeleft+'초';
+	}, 
+	htmlStr:
+	`<div id = "NetFunnel_Skin_Top"class="dialog-body">
+        <div  class="cont-box">
+            <div  class="cont-inner">
+                <div class="netfunnel-info-wrap">
+                    <p class="guide-desc">서비스 <span class="fc-spot">접속 대기 중</span>입니다.</p>
+                    <p class="guide-sub-desc">예상 대기인원은 <span class="total-count" id="NetFunnel_Loading_Popup_Count"></span>명 입니다.</p>
+                    <div class="progress-box">
+                        <div class="frame">
+                            <div class="bar" id = "barWidth" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <p class="btext has-line-height">예상 대기 시간은 <span id = "sec" class="fc-spot">초</span> 입니다.
+                    <br>현재 접속 사용자가 많아 대기중이며, 잠시만 기다리시면 서비스로 자동 접속 됩니다.</p>
+                    <div class="btn-center-wrap">
+                        <button type="button" class="btn-md btn-line-gray" onclick="NetFunnel.countdown_stop()"><span class="text" >다음에 접속하기</span></button>
+                    </div>
+                    <div class="gray-box">
+                        <p class="dot-text">새로고침, 뒤로 가기 또는 재접속하시면 대기시간이 더 길어집니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`
+	},'normal'); 
+	
+	NetFunnel.SkinUtil.add('eatzMO',{ 
+	prepareCallback:function(){ 
+		var progress_percent = document.getElementById("barWidth")
+		progress_percent.style.width = "100%";
+		var secDoc = document.getElementById("sec")
+		secDoc.innerHTML = '초';
+	}, 
+	updateCallback:function(percent,nwait,totwait,timeleft){ 
+		var progress_percent = document.getElementById("barWidth")
+		progress_percent.style.width = (100 - percent)+"%";
+		var secDoc = document.getElementById("sec")
+		secDoc.innerHTML = timeleft+'초';
+	}, 
+	htmlStr:
+	`<div id = "NetFunnel_Skin_Top"class="dialog-body">
+        <div  class="cont-box">
+            <div  class="cont-inner">
+                <div class="netfunnel-info-wrap">
+                    <p class="guide-desc">서비스 <span class="fc-spot">접속 대기 중</span>입니다.</p>
+                    <p class="guide-sub-desc">예상 대기인원은 <span class="total-count" id="NetFunnel_Loading_Popup_Count"></span>명 입니다.</p>
+                    <div class="progress-box">
+                        <div class="frame">
+                            <div class="bar" id = "barWidth" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <p class="btext has-line-height">예상 대기 시간은 <span id = "sec" class="fc-spot">초</span> 입니다.
+                    <br>현재 접속 사용자가 많아 대기중이며, 잠시만 기다리시면 서비스로 자동 접속 됩니다.</p>
+                    <div class="btn-center-wrap">
+                        <button type="button" class="btn-md btn-line-gray" onclick="NetFunnel.countdown_stop()"><span class="text" >다음에 접속하기</span></button>
+                    </div>
+                    <div class="gray-box">
+                        <p class="dot-text">새로고침, 뒤로 가기 또는 재접속하시면 대기시간이 더 길어집니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`
+	},'mobile'); 
+} 

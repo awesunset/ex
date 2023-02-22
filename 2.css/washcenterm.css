@@ -1,0 +1,34 @@
+@charset "utf-8";
+
+.inner{
+    gap: 30px;
+       padding: 40px 40px 0 40px;
+       width: 100%;
+       flex:1 1 auto;
+   }
+   
+.sec{
+    gap: 20px;
+    width: 100%;
+    flex-direction: column;
+    align-items: unset;
+}
+
+.sec .txtbox{
+    flex: 1 1 auto;
+    padding: 0 0 0 10px;
+}
+
+.sec .txtbox span{
+    font-size: 1.125rem;
+}
+
+.sec .txtbox h2{
+    line-height: 35px;
+    font-size: 50px;
+    flex: 1 1 auto;
+}
+
+.sec:nth-child(2) img{
+    order:unset
+}

@@ -1,0 +1,37 @@
+/**
+ * 스케일 지정 [자율적으로 추가해주세요]
+ */
+const SCALAR_TYPES = ['boolean', 'number', 'string', 'undefined'];
+
+/**
+ *  스케일 체크
+ */
+ const isScalar = value => SCALAR_TYPES.includes(typeof value);
+ 
+ /**
+ * obj or arry 복사 
+ */
+ const clone = val => {
+  if (typeof val !== 'object' || val === null) {
+    return val;
+  }
+  const objOrArray = Array.isArray(val) ? new Array(val.length) : {};
+  for (let key in val) {
+    if (Object.prototype.hasOwnProperty.call(val, key)) {
+      objOrArray[key] = clone(val[key]);
+    }
+  }
+  return objOrArray;
+}
+
+ /**
+ * 두 날짜 차이 구하기 
+ */
+const getDateDiff = (d1, d2) => {
+  const date1 = new Date(d1);
+  const date2 = new Date(d2);
+  
+  const diffDate = date2.getTime() - date1.getTime();
+  
+  return diffDate / (1000 * 60 * 60 * 24); // 밀리세컨 * 초 * 분 * 시 = 일
+}

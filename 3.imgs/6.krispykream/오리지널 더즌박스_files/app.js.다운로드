@@ -1,0 +1,488 @@
+/*	############################################################################################################ */
+/*	##<APP설정>################################################################################################### */
+/*	############################################################################################################ */
+
+/**************************************************************************************************************/
+/** APP설정 */
+function isAgent (){
+	var agent = navigator.userAgent.toLowerCase();
+	if (agent.indexOf("lottegrsapp") != -1) {
+		if(agent.indexOf("android") != -1){
+			return "AND";
+		}else if(agent.indexOf("iphone") != -1 || agent.indexOf("ipad") != -1 || agent.indexOf("ipod") != -1){
+			return "IOS";
+		}
+	}else{
+		return "WEB";
+	}
+}
+
+/***************************************************************************************************************/
+/** APP설정 Webview 연동 인터페이스 */
+var isApp = {
+	ok : function(){
+		return isAgent();
+	},
+
+/***************************************************************************************************************/
+	/** 화면 닫기 : ReturnType - void */
+	closeActivity: function() {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.closeActivity.postMessage("");
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.closeActivity();
+			}
+		}
+	},
+
+/***************************************************************************************************************/
+	/** 로그인 완료, 푸시 로그인 및 푸시 설정 팝업 : ReturnType - void */
+	loginComplete: function(gno, name, pushRecvYn, marktRecvYn, memberType, autoLoginYn) {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				var message = {
+						'gno' : gno,
+						'name' : name,
+						'pushRecvYn' : pushRecvYn,
+						'marktRecvYn' : marktRecvYn,
+						'memberType' : memberType,
+						'autoLoginYn' : autoLoginYn
+				}
+				window.webkit.messageHandlers.loginComplete.postMessage(message);
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.loginComplete(gno, name, pushRecvYn, marktRecvYn, memberType, autoLoginYn);
+			}
+		}
+	},
+	
+
+/***************************************************************************************************************/
+	/** 푸시 설정 및 수신동의 : ReturnType - void / String */
+	getPushNotiPermit: function() {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				/** 푸시 설정 및 수신동의 : 호출용 */
+				window.webkit.messageHandlers.getPushNotiPermit.postMessage("");
+
+				/** 푸시 설정 및 수신동의 : 리턴용 (APP에서 콜백 : pushNotiPermit(val) 참고) */
+
+			}else if(deviceCd == "AND"){
+				/** 푸시 설정 및 수신동의 : ReturnType - String */
+				var returnValue = window.lotteGrs.getPushNotiPermit();
+				pushNotiPermit(returnValue);
+			}
+		}
+	},
+
+/***************************************************************************************************************/
+	/** 푸시 마케팅 수신 설정 동의 : ReturnType - void / String */
+	getPushMarketingPermit: function() {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				/** 푸시 마케팅 수신 설정 동의 : 호출용 */
+				window.webkit.messageHandlers.getPushMarketingPermit.postMessage("");
+
+				/** 푸시 마케팅 수신 설정 동의 : 리턴용 (APP에서 콜백 : pushMarketingPermit(val) 참고) */
+
+			}else if(deviceCd == "AND"){
+				/** 푸시 마케팅 수신 설정 동의 : ReturnType - String */
+				var returnValue = window.lotteGrs.getPushMarketingPermit();
+				pushMarketingPermit(returnValue);
+			}
+		}
+	},
+
+/***************************************************************************************************************/
+	/** 푸시 설정 및 수신동의 : ReturnType - void */
+	setPushNotiPermit: function(setValue) {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.setPushNotiPermit.postMessage(setValue);
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.setPushNotiPermit(setValue);
+			}
+		}
+	},
+
+/***************************************************************************************************************/
+	/** 푸시 마케팅 수신 설정 동의 : ReturnType - void */
+	setPushMarketingPermit: function(setValue) {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.setPushMarketingPermit.postMessage(setValue);
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.setPushMarketingPermit(setValue);
+			}
+		}
+	},
+
+/***************************************************************************************************************/
+	/** 인스타그램 공유 사용 X */
+	shareInstagram : function(imgUrl){
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.shareInstagram.postMessage(imgUrl);
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.shareInstagram(imgUrl);
+			}
+		}
+	},
+
+/***************************************************************************************************************/
+	/** 진동 : ReturnType - void */
+	vibrate: function() {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.vibrate.postMessage("");
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.vibrate();
+			}
+		}
+	},
+
+/***************************************************************************************************************/
+	/** 주소록 열기 : ReturnType - void */
+	openContacts: function() {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				/** 주소록 열기 */
+				window.webkit.messageHandlers.openContacts.postMessage("");
+
+				/** APP에서 콜백 : 선택한 연락처 리턴 */
+				/** APP에서 콜백 : selectContact(name, number) 참고 */
+
+			}else if(deviceCd == "AND"){
+				/** 주소록 열기 */
+				window.lotteGrs.openContacts();
+
+				/** APP에서 콜백 : 선택한 연락처 리턴 */
+				/** APP에서 콜백 : selectContact(name, number) 참고 */
+			}
+		}
+	},
+
+/***************************************************************************************************************/
+	/** 업데이트 여부 : ReturnType - void */
+	/** String value (강제 : F / 선택 : S / 업데이트 없음 : N) */
+	appUpdate: function(value) {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.appUpdate.postMessage(value);
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.appUpdate(value);
+			}
+		}
+	},
+
+/***************************************************************************************************************/
+	/** 앱 위치권한 요청 : ReturnType - void */
+	requestLocationPermit: function() {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.requestLocationPermit.postMessage('');
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.requestLocationPermit();
+			}
+		}
+	},
+/***************************************************************************************************************/
+	/** 앱 설정 위치권한 확인 (OFF > 설정창으로 이동)  : ReturnType - void */
+	setLocationPermit: function() {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.setLocationPermit.postMessage('');
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.setLocationPermit();
+			}
+		}
+	},
+/***************************************************************************************************************/
+	/** 디바이스 UUID : ReturnType - void */
+	getDeviceUUID: function() {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				/** 디바이스 UUID 호출 */
+				window.webkit.messageHandlers.getDeviceUUID.postMessage('');
+
+				/** APP에서 콜백 : 디바이스 UUID 리턴 */
+				/** APP에서 콜백 : deviceUUID(value) 참고 */
+
+			}else if(deviceCd == "AND"){
+				/** 디바이스 UUID 호출 */
+				window.lotteGrs.getDeviceUUID();
+
+				/** APP에서 콜백 : 디바이스 UUID 리턴 */
+				/** APP에서 콜백 : deviceUUID(value) 참고 */
+			}
+		}
+	},
+/***************************************************************************************************************/
+	/** 디바이스 위치정보  : ReturnType - void */
+	getLocation: function() {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				/** 디바이스 UUID 호출 */
+				window.webkit.messageHandlers.getLocation.postMessage('');
+
+			}else if(deviceCd == "AND"){
+				/** 디바이스 UUID 호출 */
+				window.lotteGrs.getLocation();
+
+			}
+		}
+	},
+/***************************************************************************************************************/
+	/** open URL ReturnType - void */
+	openBrowser : function(url) {
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				/** 디바이스 UUID 호출 */
+				window.webkit.messageHandlers.openBrowser.postMessage(url);
+
+				/** APP에서 콜백 : 디바이스 UUID 리턴 */
+				/** APP에서 콜백 : deviceUUID(value) 참고 */
+			}else if(deviceCd == "AND"){
+
+				/** 디바이스 UUID 호출 */
+				window.lotteGrs.openBrowser(url);
+
+				/** APP에서 콜백 : 디바이스 UUID 리턴 */
+				/** APP에서 콜백 : deviceUUID(value) 참고 */
+			}
+		}
+	},
+/***************************************************************************************************************/
+	/** 블루투스 설정 페이지로 이동 ReturnType - void */
+	callBluetoothSetting : function(){
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.callBluetoothSetting.postMessage("");
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.callBluetoothSetting();
+			}
+		}
+	},
+/***************************************************************************************************************/
+	/** 블루투스 설정 ON OFF 여부 확인  콜백 함수 : confirmBluetoothSetting(Yn)*/
+	  getBluetoothSetting : function(){
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.getBluetoothSetting.postMessage("");
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.getBluetoothSetting();
+			}
+		}
+	},
+/***************************************************************************************************************/
+	/** 비콘관련 설정 페이지 진입 시 ON OFF 여부 호출  콜백 함수 : settingBeaconToggle(Yn) */
+	getBeaconSetting : function(){
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.getBeaconSetting.postMessage("");
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.getBeaconSetting();
+			}
+		}
+	},
+/***************************************************************************************************************/
+	/** 비콘관련 기능  ReturnType - void */
+	setBeaconSetting : function(Yn){
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.setBeaconSetting.postMessage(Yn);
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.setBeaconSetting(Yn);
+			}
+		}
+	},
+/***************************************************************************************************************/
+	/** 앱 위치정보 제공 동의 체크  콜백 함수 : checkLocationPermission(Yn)*/
+	getLocationPermission : function(){
+		if(deviceCd == "IOS" || deviceCd == "AND") {
+			if(deviceCd == "IOS"){
+				window.webkit.messageHandlers.getLocationPermission.postMessage("");
+			}else if(deviceCd == "AND"){
+				window.lotteGrs.getLocationPermission();
+			}
+		}
+	}
+};
+
+/********************************************************************************************************************************************************/
+/********************************************************************************************************************************************************/
+/** 앱에서 호출하는 메소드 : APP -> app.js */
+
+/*********************************************************************************************/
+/** APP에서 콜백 : 콜백 리턴을 전역변수에 담아서 세팅 */
+var returnCallEasyLoginManagement;
+var returnselectContactName;
+var returnselectContactNumber;
+var appUUID;
+/*********************************************************************************************/
+/** APP에서 콜백 : 푸시 마케팅 동의 여부 / YN */
+function pushMarketingPermit(val){
+	
+	var thisId = "marktRecvYn";
+
+	if(val != "N" && val != "Y"){
+		val = "N";
+	}
+	
+	ajaxNotiSetting(thisId, val);
+	
+}
+
+
+/*********************************************************************************************/
+/** APP에서 콜백 : 디바이스 UUID 값 리턴 */
+function deviceUUID(val){
+	
+	$.ajax({
+		url: "/member/setUUIDAjax",
+		type: "POST",
+		data : { setValue : val }
+	});
+	
+	appUUID = val;
+	
+	console.log("deviceUUID(val) : "+ val );
+	
+	sessionStorage.setItem('deviceUUID', val);
+}
+
+
+/*********************************************************************************************/
+/** APP 호출 : 로그인 여부 리턴 */
+function applogincheck(){
+	return (isLoggedIn  !== null && isLoggedIn !== undefined )? isLoggedIn : 'N'
+}
+
+function appMemberTypecheck(){
+	return (mberType  !== null && mberType !== undefined )? mberType : 'NONE'
+}
+
+function callSessionVal(key){
+	let callVal = '';
+	if(key){
+		if('mberType' == key){
+			callVal =  mberType;
+		}
+	}
+	return (callVal  !== null && callVal !== undefined )? callVal : ''
+}
+
+async function requestMarktRecvYn(){
+	setExpiringLocalStorageItem("noShowWeek");
+	if(grsMarktUseYn == 'Y'){
+		$.ajax({
+			type : "POST",
+			url : "/member/marktRecvYn",
+			data : { setValue : 'Y' }
+		}).done (async function(data, status, xhr) {
+			if(data) {
+				let date = new Date();
+				let agreDate = dateFormat(date, '.');
+				eatzPub.front.toastPopupActive('LOTTE EATZ 광고성 앱 푸시 마케팅 알림이 수신처리 되었습니다. ('+ agreDate +')');
+			}
+		})
+	}else{
+		const confirm = await createConfirm("마케팅 활용에 동의하셔야</br>혜택 알림을 받을 수 있습니다.</br>마케팅 활용에 동의하시겠습니까?", "", "" , ["확인" ,"취소"]);
+		if(confirm){
+			$.ajax({
+				type : "POST",
+				url : "/member/marktRecvYn",
+				data : { setValue : 'Y' }
+			}).done (async function(data, status, xhr) {
+				if(data) {
+					let date = new Date();
+					let agreDate = dateFormat(date, '.');
+					eatzPub.front.toastPopupActive('LOTTE EATZ 마케팅 활용 개인정보 수집 및 광고성 앱 푸시 수신에 동의되었습니다. ('+ agreDate +')');
+				}
+			}).fail(async function (jqXHR, textStatus, error) {
+				/*await createAlert("해당 작업에 실패하였습니다 : " + error);*/
+			});
+			return false;
+		}else{
+			return false;
+		}
+	}	
+}
+
+function refuseMarktRecvYn(){
+	let date = new Date();
+	let agreDate = dateFormat(date, '.');
+	eatzPub.front.toastPopupActive('LOTTE EATZ 광고성 앱 푸시 마케팅 알림이 미수신처리 되었습니다. ('+ agreDate +')');
+	setExpiringLocalStorageItem("noShowWeek");
+}
+
+function callAppGuidePopup(){
+	/*eatzPub.front.dialogOnOff().popOpen('#popAppGuideIntro');*/
+}
+
+function callScreenViewByApp(){
+	
+	var  gaOnlCno = onlCno;
+	if(gaOnlCno){
+		gaOnlCno = GA_SHA512(gaOnlCno);
+	}else{
+		gaOnlCno = "";
+	}
+	setUserProperty("user_id",gaOnlCno);// 없을 시 빈값 ''
+	var  gaGno = gno;
+	if(!gaGno){ gaGno = "";}
+	setUserProperty("user_gno",gaGno);// 없을 시 빈값 ''
+	setUserProperty("user_device_type","APP");
+	var user_age_app_val =  custAge;
+	user_age_app_val += "";
+	setUserProperty("user_age",user_age_app_val);
+	setUserProperty("user_gender",genCd);
+	if(isLoggedIn){
+		if(isLoggedIn === 'Y' && mberType !== 'NMBR'){
+			setUserProperty("user_login_yn","Y");
+		}else{
+			setUserProperty("user_login_yn","N");
+		}
+	}else{
+		setUserProperty("user_login_yn","N");
+	}
+	setUserProperty("user_ria_grade_nm",riaGradeNm);
+	setUserProperty("user_angel_grade_nm",angelGradeNm);
+	setUserProperty("user_kkd_grade_nm",kkdGradeNm);
+	setUserProperty("user_ria_grade_cd",riaGradeCd);
+	setUserProperty("user_angel_grade_cd",angelGradeCd);
+	setUserProperty("user_kkd_grade_cd",kkdGradeCd);
+	setUserProperty("user_ria_my_store",riaMyStore);
+	setUserProperty("user_angel_my_store",angelMyStore);
+	setUserProperty("user_kkd_my_store",kkdMyStore);
+	
+	var json_custom_params = new Object();
+	json_custom_params.user_eid = user_eid;
+	json_custom_params.site_type = site_type;
+	
+	GA_Screenview(document.title, document.location.href, json_custom_params);
+}
+
+function checkMkPushPopUpShow() {
+	try{
+		var item = JSON.parse(localStorage.getItem('noShowWeek'));
+		if (!item) { return 'Y'; }
+		if (new Date(item.expires) < new Date()) {
+	  		localStorage.removeItem(key);
+	  	return 'Y';
+		}
+		return 'N'; 
+	}catch(e) {
+	}
+}
+
+function setExpiringLocalStorageItem(key) {
+	try{
+		var expires = new Date();
+		expires.setDate(expires.getDate() + 7);
+		localStorage.setItem(key, JSON.stringify({
+	  		expires: expires.toISOString()
+		}));
+	}catch(e) {
+	}
+}

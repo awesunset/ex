@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+/* 08hyundaiLC m */
+
+h1{ font-size: 50px; }
+.sec01 .inner h2{ line-height: 1; }
+
+.sec02{ height: 780px; }
+.sec02 > .left{ flex: 0 0 250px; }
+.sec02 > .left .inner600{
+    overflow: hidden;
+    gap: 50px;
+    padding: 50px 0 0 0;
+}
+.sec02 .inner600 h2{
+    font-size: 30px;
+    line-height: 1;
+}
+.sec02 .inner600 h3{ font-size: 24px; }
+.sec02 > .left .inner600 img{ height: 120px; }
+
+.sec03{ height: 520px; }
+.sec03 .inner600 > div{
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0 0 0;
+    gap: 92px;
+}
+.sec03 .inner600 h3{
+    font-size: 24px;
+    padding: 0;
+}
+.sec03 .inner600 a{ align-self: unset; }
+
+.sec04{ height: auto; }
+.sec04 .inner{
+    padding: 80px 40px 0;
+    gap: 100px;
+}
+.sec04 .inner h2{
+    font-size: 30px;
+    line-height: 1;
+}
+.sec04 .inner p{ display: none; }
+.sec04 .inner a{ height: 80px; }

@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+/* 08dailyFinance m */
+
+.sec01 { padding: 50px 20px; }
+.sec01 .copy::before,
+.sec01 .copy::after { display: none; }
+
+.sec02 > .box { flex: 1 1 100%; }
+.sec02 > .box.b01 { order: 2; }
+.sec02 > .box.b02 { order: 1; }
+.sec02 > .box.b03 {
+    order: 3;
+    margin: 0;
+}
+.sec02 > .box.b04 { order: 4; }
+
+.sec02 > .box.b05 { order: 5; }
+.sec02 > .box.b06 { order: 6; }
+.sec02 > .box.b07 { order: 8; }
+.sec02 > .box.b08 { order: 7; }
+.sec02 > .box.b09 { order: 9; }
+.sec02 > .box.b10 {
+    order: 10;
+    margin: 0;
+    flex: 1 1 50%;
+}
+.sec02 > .box.b11 {
+    flex: 1 1 50%;
+    order: 11;
+}

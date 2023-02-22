@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>스크롤 관련 메서드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #wrap {
+            height: 5000px;
+        }
+
+        #up {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            transition: all 0.5s ease;
+            opacity: 0;
+            visibility: hidden;
+            display: block;
+            padding: 20px;
+            text-align: center;
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #up.on {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* #up a {
+            display: block;
+            padding: 20px;
+            text-align: center;
+            background: #333;
+            text-decoration: none;
+            color: #fff;
+        } */
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>
+        $(function() {
+            // var isOn = false;
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 3000) {
+                    // if (!isOn) {
+                        $("#up").addClass("on");
+                        // isOn = true;
+                    // }
+                } else {
+                    // if (isOn) {
+                        $("#up").removeClass("on");
+                        // isOn = false;
+                    // }
+                }
+            });
+            $("#up").click(function() {
+                // $(window).scrollTop(0);
+                $("html, body").animate({
+                    scrollTop: 0
+                },500);
+                // return false;
+                // event.preventDefault()
+            });
+        });
+    </script>   
+</head>
+
+<body>
+    <div id="wrap">111111</div>
+    <!-- 군더더기 없이 쓰기 -->
+    <div id="up" tabindex="0" role="button">TOP</div>
+    <!-- <button>TOP</button> -->
+    <!-- 기존소스 -->
+    <!-- <div id="up"><a href="javascript:;">TOP</a></div> -->
+    <!-- <div id="up"><a href="#">TOP</a></div> -->
+</body>
+
+</html>

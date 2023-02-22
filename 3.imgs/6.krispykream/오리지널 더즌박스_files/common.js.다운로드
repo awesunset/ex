@@ -1,0 +1,313 @@
+/**
+ * 새창 또는 페이지 이동
+ */
+const goLinkPop = function(url, linkPop, broPop) {
+	if(linkPop == 'Y') {
+		if(broPop != 'Y' || isApp.ok() == "WEB") {
+			window.open(url, '_blank'); 
+		} else {
+			isApp.openBrowser(url);
+		}
+	} else if(linkPop == 'N' || linkPop == '' || linkPop === undefined) {
+		location.href = url;
+	}
+}
+
+// go login with current url
+const goLoginWithUrl = function() {
+	var url = '/member/login?returnUrl=' + location.href;
+	
+	goLinkPop(url);
+}
+
+
+ /**
+ * 현재 윈도우의 문서가 위치하는 url을 String으로 반환한다.
+ */
+const getCurrentScreenId = function() {
+	const currentUrl = location.href; 
+	return currentUrl.substring(currentUrl.lastIndexOf('/') + 1, currentUrl.indexOf('.dev'));  
+}
+
+ /**
+ *  브라우저 종류 반환 
+ */
+ const getBrowser = function(){ 
+
+    const userAgent=navigator.userAgent.toLowerCase();
+
+    if (
+        userAgent.indexOf('edge')>-1){return 'edge';
+    } else if(userAgent.indexOf('whale')>-1){return 'whale';}
+    else if(userAgent.indexOf('chrome')>-1){return 'chrome';}
+    else if(userAgent.indexOf('firefox')>-1){return 'firefox';}
+    else{return 'msie';}
+        
+}
+
+/**
+ * 주소 설정 스크립트 호출
+ */
+const openAddrSetScriptLoad = function(callback) {
+	let param = {
+		addrReload: $("#addrViewScriptSection").length > 0 ? "Y" : "N"
+	}
+	$.ajax({
+		url: "/addr/addrScript",
+		type: "POST",
+		data: param,
+		success: function(fragment) {
+			if (fragment) $("#container").append(fragment);
+		}
+	}).done(function () {
+		eatzPub.front.setUIDialog();
+	});
+	
+	$('[data-addr-set-popup]').on("click", function() {
+		addrViewUiManager.openPopup(callback);
+	});
+}
+
+/**
+ * 공통 Confirm , Alert 팝업
+ */
+const layer = {
+	alert: async (message, param1, param2) => createAlert(message, param1, param2),
+	confirm: async (message, param1, param2, btnArr) => createConfirm(message, param1, param2, btnArr),
+	confirmNoDimClose: async (message, param1, param2, btnArr) => createConfirmNoDimClose(message, param1, param2, btnArr),
+	basic: async (title, message) => createBasic(title, message)
+}
+
+const createConfirm = (message, param1 = '', param2 = '', btnArr = []) => {
+	return new Promise(function (resolve, reject) {
+		function setDeferredControl(id, resolve) {
+			$(id).find("button:eq(0)").on('click', function() {
+				resolve(false);
+				eatzPub.front.dialogOnOff().popClose(id);
+			});
+			$(id).find("button:eq(1)").on('click', function() {
+				resolve(true);
+				eatzPub.front.dialogOnOff().popClose(id);
+			});
+		}
+		
+		let msg = message;
+		if(msg.indexOf('$param1') > -1) msg = msg.replace('$param1', param1);
+		if(msg.indexOf('$param2') > -1) msg = msg.replace('$param2', param2);
+		
+		$("#confirmMsg").html(msg);
+		
+		if(btnArr.length > 0){
+			if(btnArr[0]) $("#confirmConfirmBtnTxt").text(btnArr[0]);
+			if(btnArr[1]) $("#confirmCancelBtnTxt").text(btnArr[1]);
+		}
+		eatzPub.front.dialogOnOff().popOpen("#layerPopupConfirm", setDeferredControl, resolve);
+	});
+}
+
+const createConfirmNoDimClose = (message, param1 = '', param2 = '', btnArr = []) => {
+	return new Promise(function (resolve, reject) {
+		function setDeferredControl(id, resolve) {
+			$(id).find("button:eq(0)").on('click', function() {
+				resolve(false);
+				eatzPub.front.dialogOnOff().popClose(id);
+			});
+			$(id).find("button:eq(1)").on('click', function() {
+				resolve(true);
+				eatzPub.front.dialogOnOff().popClose(id);
+			});
+		}
+		
+		let msg = message;
+		if(msg.indexOf('$param1') > -1) msg = msg.replace('$param1', param1);
+		if(msg.indexOf('$param2') > -1) msg = msg.replace('$param2', param2);
+		
+		$("#confirmNoDimCloseMsg").html(msg);
+		
+		if(btnArr.length > 0){
+			if(btnArr[0]) $("#confirmNoDimCloseConfirmBtnTxt").text(btnArr[0]);
+			if(btnArr[1]) $("#confirmNoDimCloseCancelBtnTxt").text(btnArr[1]);
+		}
+		eatzPub.front.dialogOnOff().popOpen("#layerPopupConfirmNoDimClose", setDeferredControl, resolve);
+	});
+}
+
+const createAlert = (message, param1 = '', param2 = '') => {
+	return new Promise(function (resolve, reject) {
+		function setDeferredControl(id, resolve) {
+			$(id).find("button:eq(0)").on('click', function() {
+				resolve(true);
+				eatzPub.front.dialogOnOff().popClose(id);
+			});
+		}
+		
+		let msg = message;
+		if(msg.indexOf('$param1') > -1) msg = msg.replace('$param1', param1);
+		if(msg.indexOf('$param2') > -1) msg = msg.replace('$param2', param2);
+		
+		$("#alertMsg").html(msg);
+		eatzPub.front.dialogOnOff().popOpen("#layerPopupAlert", setDeferredControl, resolve);
+	});
+}
+
+const createBasic = (title, message) => {
+	return new Promise(function (resolve, reject) {
+		function setDeferredControl(id, resolve) {
+			$(id).find("button:eq(0)").on('click', function() {
+				resolve(false);
+				eatzPub.front.dialogOnOff().popClose(id);
+			});
+			$(id).find("button:eq(1)").on('click', function() {
+				resolve(true);
+				eatzPub.front.dialogOnOff().popClose(id);
+			});
+		}
+		
+		$("#basicTit").html(title);
+		$("#basicMsg").html(message);
+		
+		eatzPub.front.dialogOnOff().popOpen("#layerPopupBasic", setDeferredControl, resolve);
+	});
+}
+
+const getServerDatetime = () => {
+	let xmlHttpRequest;
+	if(window.XMLHttpRequest) { // code for Firefox, Mozilla, IE7, etc.
+		xmlHttpRequest = new XMLHttpRequest();
+	} else if(window.ActiveXObject) { // code for IE5, IE6
+		xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+	} else {
+		return;
+	}
+	
+	xmlHttpRequest.open('HEAD', "/getServerTime", false);
+	xmlHttpRequest.setRequestHeader("ContentType", "text/html");
+	xmlHttpRequest.send('');
+	
+	var serverDate = xmlHttpRequest.getResponseHeader("Date");
+	return serverDate;
+}
+
+const dateFormat = (date, delimiter = '-') => {
+	const year = date.getFullYear();
+	const month = $.trim(date.getMonth() + 1);
+	const day = $.trim(date.getDate());
+
+	return [year, month, day].join(delimiter);
+}
+
+
+const timeFormat = (date, secYn, delimiter = ':') => {
+	function lpad(s, padLength , padString){
+		while(s.length < padLength) {
+			s = padString + s;
+		}
+			
+		return s;
+	}
+	const hours = lpad(String(date.getHours()), 2, '0');
+	const minutes = lpad(String(date.getMinutes()), 2, '0');
+	const seconds = lpad(String(date.getSeconds()), 2, '0');
+	
+	let time;
+	if(secYn) time = [hours, minutes, seconds].join(delimiter);
+	else time = [hours, minutes].join(delimiter);
+
+	return time;
+}
+
+function getParam(key) {
+	var query = window.location.search.substring(1);
+	var vars = query.split("&");
+	var value = null;
+	for (var i=0;i<vars.length;i++) {
+		var pair = vars[i].split("=");
+		if (pair[0] == key) {
+			value = pair[1];
+		}
+	}
+	return value;
+}
+
+function setCookie(cName, cValue, cDay){
+	var expire = new Date();
+	expire.setDate(expire.getDate() + cDay);
+	cookies = cName + '=' + escape(cValue) + '; path=/ ';
+	if(typeof cDay != 'undefined') cookies += ';expires=' + expire.toGMTString() + ';';
+	document.cookie = cookies;
+}
+
+function setCookieTimeZero(cName, cValue, cDay){
+	var expire = new Date();
+	expire = new Date(expire.getFullYear() + '-' + (expire.getMonth()+1) + '-' + (expire.getDate()+cDay) + ' ');
+	cookies = cName + '=' + escape(cValue) + '; path=/ ';
+	if(typeof cDay != 'undefined') cookies += ';expires=' + expire.toGMTString() + ';';
+	document.cookie = cookies;
+}
+
+function getCookie(cName) {
+	cName = cName + '=';
+	var cookieData = document.cookie;
+ 	var start = cookieData.indexOf(cName);
+ 	var cValue = '';
+ 	if(start != -1){
+		start += cName.length;
+		var end = cookieData.indexOf(';', start);
+		if(end == -1)end = cookieData.length;
+		cValue = cookieData.substring(start, end);
+	}
+	return unescape(cValue);
+}
+
+function clipUrl() {
+	var clipUrl = '';
+	var textarea = document.createElement("textarea");
+	document.body.appendChild(textarea);
+	clipUrl = window.document.location.href;
+	textarea.value = clipUrl;
+	textarea.select();
+	textarea.setSelectionRange(0, 9999);
+	document.execCommand("copy");
+	document.body.removeChild(textarea);
+}
+
+function clipText(text) {
+	var textarea = document.createElement("textarea");
+	document.body.appendChild(textarea);
+	textarea.value = text;
+	textarea.select();
+	textarea.setSelectionRange(0, 9999);
+	document.execCommand('copy');
+	document.body.removeChild(textarea);
+}
+
+/** 넷퍼넬 추가 */
+function netfunnelChk(url,skinid) {
+	NetFunnel_Action({action_id:"act_1", skin_id:skinid}, 
+		function(ev, ret){
+			$.ajax({
+				type: "POST",
+				url: "/member/netfunnelKeyChk",
+				data: { netfunnelKey: ret.data.key },
+				dataType: "json",
+				success: function(data){
+					location.href  = url;
+				},
+				error: function(){
+					alert("서버에서 처리중 오류가 발생했습니다. 문제가 계속 발생하면 관리자에게 문의하시기 바랍니다.");
+				}
+			});
+		}
+		
+	);
+}
+
+function updateMetaContent(key, content) {
+	let metaTags = document.getElementsByTagName('meta');
+	for (let i = 0; i < metaTags.length; i++) {
+	if (metaTags[i].getAttribute('property') === key) {
+		metaTags[i].setAttribute('content', content);
+	}
+}
+
+}
