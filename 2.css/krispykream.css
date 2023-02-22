@@ -92,7 +92,7 @@ header .inner {
     width: 160px;
     height: 64px;
     text-indent: -400px;
-    background: url(/3.imgs/6.krispykream/logo.svg)no-repeat 50% 50%/100%;
+    background: url(/ex/3.imgs/6.krispykream/logo.svg)no-repeat 50% 50%/100%;
     overflow: hidden;
 }
 
@@ -390,19 +390,19 @@ body {
 }
 
 .sec03 .KateBox>.kategorie:nth-of-type(1) {
-    background: url(/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat 50% 0
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat 50% 0
 }
 
 .sec03 .KateBox>.kategorie:nth-of-type(2) {
-    background: url(/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat 50% 0
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat 50% 0
 }
 
 .sec03 .KateBox>.kategorie:nth-of-type(3) {
-    background: url(/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat 50% 0
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat 50% 0
 }
 
 .sec03 .KateBox>.kategorie:nth-of-type(4) {
-    background: url(/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat 50% 0
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat 50% 0
 }
 
 .sec03 .KateBox>.kategorie>div {
@@ -626,42 +626,42 @@ gap: 8px;}
 
 .sec05 .instapic:nth-of-type(1){
     /* width: 232px; height: 232px; */
-    background: url(/3.imgs/6.krispykream/20230215_014520_1.png) no-repeat 50% 50% / cover; 
+    background: url(/ex/3.imgs/6.krispykream/20230215_014520_1.png) no-repeat 50% 50% / cover; 
 }
 
 .sec05 .instapic:nth-of-type(2){
     /* width: 232px; height: 232px; */
-    background: url(/3.imgs/6.krispykream/20230215_014520_2.png) no-repeat 50% 50% / cover; 
+    background: url(/ex/3.imgs/6.krispykream/20230215_014520_2.png) no-repeat 50% 50% / cover; 
 }
 
 .sec05 .instapic:nth-of-type(3){
     /* width: 232px; height: 232px; */
-    background: url(/3.imgs/6.krispykream/20230215_014520_3.png) no-repeat 50% 50% / cover; 
+    background: url(/ex/3.imgs/6.krispykream/20230215_014520_3.png) no-repeat 50% 50% / cover; 
 }
 
 .sec05 .instapic:nth-of-type(4){
     /* width: 232px; height: 232px; */
-    background: url(/3.imgs/6.krispykream/20230215_014520_4.png) no-repeat 50% 50% / cover; 
+    background: url(/ex/3.imgs/6.krispykream/20230215_014520_4.png) no-repeat 50% 50% / cover; 
 }
 
 .sec05 .instapic:nth-of-type(5){
     /* width: 232px; height: 232px; */
-    background: url(/3.imgs/6.krispykream/20230215_014520_5.png) no-repeat 50% 50% / cover;
+    background: url(/ex/3.imgs/6.krispykream/20230215_014520_5.png) no-repeat 50% 50% / cover;
 }
 
 .sec05 .instapic:nth-of-type(6){
     /* width: 232px; height: 232px; */
-    background: url(/3.imgs/6.krispykream/20230215_014520_6.png) no-repeat 50% 50% / cover; 
+    background: url(/ex/3.imgs/6.krispykream/20230215_014520_6.png) no-repeat 50% 50% / cover; 
 }
 
 .sec05 .instapic:nth-of-type(7){
     /* width: 232px; height: 232px; */
-    background: url(/3.imgs/6.krispykream/20230215_014520_7.png) no-repeat 50% 50% / cover; 
+    background: url(/ex/3.imgs/6.krispykream/20230215_014520_7.png) no-repeat 50% 50% / cover; 
 }
 
 .sec05 .instapic:nth-of-type(8){
     /* width: 232px; height: 232px; */
-    background: url(/3.imgs/6.krispykream/20230215_014520_8.png) no-repeat 50% 50% / cover; 
+    background: url(/ex/3.imgs/6.krispykream/20230215_014520_8.png) no-repeat 50% 50% / cover; 
 }
 
 
