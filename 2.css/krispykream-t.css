@@ -5,7 +5,7 @@
 
 html,
 body {
-    min-width: 640px;
+    min-width: 641px;
     width: 100%;
     overflow-x: hidden;
 }
@@ -15,14 +15,14 @@ div.inner {
 }
 
 h1 {
-    line-height: 4rem;
+    line-height: 1.4;
 }
 
 
 /* 헤더 */
 
 header {
-    min-width: 640px;
+    width: 100%;
     width: 100%;
     height: 80px;
 }
@@ -63,9 +63,9 @@ nav .gnb {
 
 .sec01 > .inner {
     max-width: 1024px;
-    min-width: 640px;
+    min-width: 641px;
     width: 100%;
-    height: 500px;
+    height: auto;
     margin: 0 auto;
     overflow: hidden;
 
@@ -96,7 +96,6 @@ nav .gnb {
 
 .sec02 .inner {
     width: 100%;
-    width: 100%;
     align-items: center;
 }
 
@@ -122,7 +121,25 @@ nav .gnb {
 
 /* 메뉴텍스트 */
 
+.sec02 .menus>div:first-child div{
+    position: absolute;
+    left:160px; top:20px;
+   }
 
+   .sec02 .menus>div:nth-child(2) div{
+    position: absolute;
+    left: 180px; top:80px;
+   }
+
+   .sec02 .menus>div:nth-child(3) div{
+    position: absolute;
+    left:0px; top:140px;
+   }
+
+   .sec02 .menus>div:nth-child(4) div{
+    position: absolute;
+    left: -40px; top:180px;
+   }
 
 
 /* 메뉴이미지 */
@@ -130,26 +147,26 @@ nav .gnb {
 
 .sec02 .menus>div:first-of-type {
     z-index: 10;
-    left: 40px;
-    top: 0px;
+    left: 80px;
+    top: 80px;
 }
 
 .sec02 .menus>div:nth-of-type(2){
     z-index: 10;
-    left: 140px;
+    left: 80px;
     bottom: 120px;
 }
 
 .sec02 .menus>div:nth-of-type(3) {
     z-index: 10;
-    right: 40px;
+    right: 80px;
     bottom: 48px;
 }
 
 .sec02 .menus>div:nth-of-type(4) {
     z-index: 10;
-    right: 0px;
-    top: 0px;
+    right: 80px;
+    top: 120px;
 }
 
 
@@ -159,15 +176,25 @@ nav .gnb {
 }
 
 .sec03 .inner {
+    width: 100%;
+    height: 100%;
+    padding: 120px 0 90px 0;
     align-items: center;
 }
 
-.sec03 .title {
-    padding: 0 0 0 16px;
+.sec03 .inner .title {
+    justify-content: center;
+}
+
+.sec03 .KateBox {
+    padding: 0 16px 0 16px;
+    width: 100%;
+    gap: 16px;
 }
 
 .sec03 .KateBox > .kategorie span {
-    line-height: 0.75em;
+    font-size: 0.625rem;
+    line-height: 1;
 }
 
 .sec03 .title > div > span,
@@ -180,17 +207,18 @@ nav .gnb {
     display: none;
 }
 
-.sec03 .KateBox {
-    padding: 0 32px;
-    width: 100%;
+.sec03 button {display: block;
+    width: 104px; height: 40px;
+    color: #FFFFFF;
+    border:  1px solid #FFFFFF;
+    background-color: var(--colorGreen);
+    border-radius: 20px;
 }
+
+
 
 
 /* 섹션4 */
-
-.sec04 {
-    width: 100%;
-}
 
 .sec04 > div {
     padding: 0 34px;
@@ -200,38 +228,84 @@ nav .gnb {
     width: 100%;
 }
 
+
+.sec04 .left_over,
+.sec04 .right_over {
+    padding: unset;
+}
+
+.sec04 .inner .right_over{
+    padding: 213px 0 0 0;
+}
+
 .sec04 .left_over h1 {
     padding: 80px 0 0 0;
 }
 
 .sec04 > div > .left img {
-    position: unset;
-    padding: 160px 0 0 0;
+    right: 24px;
 }
+
+.sec04 > div > .right img {
+    left: 24px;
+}
+
 
 
 /* 섹션5 */
 
+
+.sec05 {
+    max-width:1024px;
+    height:865px;}
+
+    .sec05 .inner {gap: unset;}
 
 .sec05 .inner .twitter {
     display: none;
 }
 
 .sec05 .inner h1 {
-    padding: 70px 0 0 0;
+    padding: 70px 0 78px 0;
 }
 
 .sec05 .inner > div {
     width: 100%;}
 
     .sec05 .inner .insta{
-        width: 100%;
-        height: 502px;
+        width: 100%;    }
+
+    .sec05 .inner > div > div >div {align-items: center;
+    justify-content: center;
+}
+
+.sec05 .inner .insta > div + div {
+    height:100%;
+    align-content:center
+
+}
+
+    .sec05 .instapic{
+        flex: 1 1 25%;
+    }
+
+    .sec05 .instapic:nth-of-type(8),
+    .sec05 .instapic:nth-of-type(7) {
+        display: none;
     }
 
 
-    /* .sec05 .inner > .insta >div:nth-child(2)>.instapic{display: flex;} */
+/* 푸터 */
+footer {
+    padding: 32px 0;
+    height: auto;
+}
 
-    .sec05 .inner > div > div >div {    justify-content: center;}
+footer .inner {
+    width: 100%;
+}
 
-/* 섹션6 */
+footer .footer_bottom {
+    padding: 32px 0 0 0;
+    height: auto;
+}
