@@ -23,3 +23,9 @@ var swiper = new Swiper(".mySwiper", {
     //   slidesPerView: 2,  //레이아웃 2 },
       
     //   768: { slidesPerView: 3, }, 1024: { slidesPerView: 4, }, } }});
+
+    // 나브 아코디언
+$(".gnb").unbind("hover").hover(function(){
+$("header").toggleClass("on")
+ $(".submenu").stop().slideToggle(500)
+});

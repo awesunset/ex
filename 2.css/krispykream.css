@@ -37,7 +37,6 @@ li {
 h1 {
     width: 100%;
     font-size: 3rem;
-    /* font-weight: 400; */
 }
 
 h3 {
@@ -69,6 +68,23 @@ header {
     left: 0px;
     background: var(--colorWhite);
     z-index: 100;
+}
+
+header::after {
+width: 100%;
+/* height: 300px; */
+height: 0;
+background: var(--colorWhite);
+position: absolute;
+top:104px;
+left:0;
+display: block;
+content: "";
+transition: height 0.5s;
+}
+
+header.on::after {
+height: 300px;
 }
 
 header .inner {
@@ -105,10 +121,6 @@ nav {
     color: var(--colorDarkGrey);
 }
 
-/* nav .submenu>li {
-    display: none;
-} */
-
 nav .gnb {
     display: inherit;
     align-items: center;
@@ -132,8 +144,8 @@ nav .gnb > li {
 .global {
     display: flex;
     align-items: flex-end;
-    gap: 21px;
-    padding: 0 0 16px;
+    gap: 8px;
+    padding: 0 16px;
 }
 
 nav .gnb>li>a {
@@ -142,7 +154,7 @@ nav .gnb>li>a {
     align-items: center;
     flex-direction: column;
     justify-content: flex-end;
-    gap: 6px;
+    gap: 8px;
 }
 
 nav .gnb>li:hover {
@@ -171,16 +183,16 @@ nav ul.gnb > li > ul.submenu {
     flex-direction: column;
     position: absolute;
     left: 0px;
-    margin: 12px 0 0 0px;
-    gap: 42px;
+    top: 52px;
 }
-
+nav ul.gnb > li > ul.submenu {
+    display: none;
+}
 nav ul.gnb > li > ul.submenu > li {
+    padding: 0 0 20px 0;
     position: relative;
     z-index: 100;
-    height: 0px;
     font-size: 16px;
-    overflow: hidden;
 }
 
 nav ul.gnb > li > ul.submenu > li:hover{
@@ -488,13 +500,12 @@ body {
     height: 100%;
     margin: 0 auto;
     display: flex;
-    position: relative;
-}
+    position: relative;}
 
 .sec04>div>.left img {
     position: absolute;
-    right: 200px;
-    bottom: 76px;
+    right: 340px;
+    bottom: 188px;
 }
 
 .sec04>div>.right {
@@ -509,8 +520,8 @@ body {
 
 .sec04>div>.right img {
     position: absolute;
-    left: 200px;
-    top: 76px;
+    left: 340px;
+    top: 188px;
 }
 
 .text-stroke {
@@ -529,10 +540,11 @@ body {
     display: flex;
     flex-direction: column;
     gap: 43px;
+    /* z-index: 10; */
 }
 
 .sec04 .left_over {
-    padding: 0 0 0 108px;
+    padding: 0;
 }
 
 .sec04 .left_over h1 {
@@ -553,7 +565,7 @@ body {
     text-align: right;
     display: flex;
     flex-direction:column;
-    padding: 213px 108px 0 0;
+    padding: 213px 0 0 0;
 }
 
 .sec04 .inner .right_over h1 {
