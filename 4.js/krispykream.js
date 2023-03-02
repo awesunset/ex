@@ -25,7 +25,24 @@ var swiper = new Swiper(".mySwiper", {
     //   768: { slidesPerView: 3, }, 1024: { slidesPerView: 4, }, } }});
 
     // 나브 아코디언
+// $(".gnb").unbind("hover").hover(function(){
+// $("header").toggleClass("on")
+//  $(".submenu").stop().slideToggle(500)
+// });
+
 $(".gnb").unbind("hover").hover(function(){
-$("header").toggleClass("on")
- $(".submenu").stop().slideToggle(500)
-});
+  $("header").toggleClass("on")
+   $(".submenu").stop().slideToggle(380)
+  });
+  
+
+// 섹션4카테고리
+
+//   $(".kategorie").hover(function(){
+//     $(".KateBox>.kategorie>div")
+//     .css("backgroundColor","#00704A");
+// },
+// function(){
+//   $(".KateBox>.kategorie>div")
+//   .css("backgroundColor","#E8E8E8");
+// })

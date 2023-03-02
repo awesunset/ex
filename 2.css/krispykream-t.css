@@ -58,6 +58,36 @@ nav .gnb {
     display: none
 }
 
+.btn.menu-toggle{
+    display: flex;
+position: absolute;
+top: 0; right: 10px;
+padding: 0;
+width: 56px; height: 56px;
+z-index: 2;
+align-items: center;
+overflow: visible;
+margin: 0;
+background-color: transparent;
+}
+
+.btn{
+    text-align: center;
+    cursor: pointer;
+    border: unset;
+}
+
+button{
+    font-family: inherit;
+}
+
+.material-symbols-outlined{
+    padding: 25px 0 0 0;
+    font-size: 40px;
+    font-weight: 400;
+    color: var(--colorMarjenta);
+}
+
 
 /* 섹션1 */
 
@@ -192,6 +222,39 @@ nav .gnb {
     gap: 16px;
 }
 
+.sec03 .KateBox>.kategorie:first-of-type {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat center / cover;}
+
+.sec03 .KateBox>.kategorie:first-of-type:hover {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat center / cover;}
+
+
+.sec03 .KateBox>.kategorie:nth-of-type(2) {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat center / cover;}
+
+.sec03 .KateBox>.kategorie:nth-of-type(2):hover {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat center / cover;}
+
+
+.sec03 .KateBox>.kategorie:nth-of-type(3) {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat center / cover;}
+
+    .sec03 .KateBox>.kategorie:nth-of-type(3):hover {
+        background: url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat center / cover;}
+
+
+.sec03 .KateBox>.kategorie:nth-of-type(4) {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat center / cover;}
+
+    .sec03 .KateBox>.kategorie:nth-of-type(4):hover {
+        background: url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat center / cover;}
+
+
+      .sec03 .KateBox>.kategorie:hover{
+        transition: all 0.5s;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      }
+
 .sec03 .KateBox > .kategorie span {
     font-size: 0.625rem;
     line-height: 1;
@@ -213,6 +276,12 @@ nav .gnb {
     border:  1px solid #FFFFFF;
     background-color: var(--colorGreen);
     border-radius: 20px;
+}
+
+.sec03 button:hover {
+    background-color: var(--colorGreen);
+    filter: brightness(80%);
+    transition: all 0.3s;
 }
 
 

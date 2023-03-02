@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,200,0,0');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css');
+@import url('https://unpkg.com/aos@2.3.1/dist/aos.css');
 
 * {
     box-sizing: border-box;
@@ -68,6 +69,7 @@ header {
     left: 0px;
     background: var(--colorWhite);
     z-index: 100;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 }
 
 header::after {
@@ -81,10 +83,11 @@ left:0;
 display: block;
 content: "";
 transition: height 0.5s;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 }
 
 header.on::after {
-height: 300px;
+height: 240px;
 }
 
 header .inner {
@@ -127,7 +130,7 @@ nav .gnb {
     gap: 88px;
     font-size: 20px;
     font-weight: bold;
-    padding: 0 0 8px 0;
+    padding: 0 0 16px 0;
 }
 
 nav .gnb > li {
@@ -144,8 +147,13 @@ nav .gnb > li {
 .global {
     display: flex;
     align-items: flex-end;
-    gap: 8px;
-    padding: 0 16px;
+    gap: 21px;
+    padding: 0 0 12px 0;
+}
+
+.global a {
+    font-size:14px;
+    font-weight: 500;
 }
 
 nav .gnb>li>a {
@@ -173,11 +181,6 @@ nav .gnb>li:hover>a::after {
     background: var(--colorGreen)
 }
 
-
-
-
-
-/* 0217 */
 nav ul.gnb > li > ul.submenu {
     display: flex;
     flex-direction: column;
@@ -189,6 +192,7 @@ nav ul.gnb > li > ul.submenu {
     display: none;
 }
 nav ul.gnb > li > ul.submenu > li {
+width: 160px;
     padding: 0 0 20px 0;
     position: relative;
     z-index: 100;
@@ -198,6 +202,15 @@ nav ul.gnb > li > ul.submenu > li {
 nav ul.gnb > li > ul.submenu > li:hover{
     color: var(--colorGreen)
 }
+
+nav ul.gnb > li > ul.submenu > li:last-child li:last-child
+{height: 100%;}
+
+
+.btn.menu-toggle{
+    display: none;
+}
+
 
 html,
 body {width: 100%;
@@ -286,6 +299,7 @@ body {
    animation-duration:0.8s;
    -webkit-animation-duration:0.8s;
    -webkit-animation-iteration-count:infinite;}
+
 
    .sec02 .menus>div:first-child div{
     position: absolute;
@@ -391,7 +405,6 @@ body {
     align-items: center;
     gap: 32px;
     height: 532px;
-
 }
 
 .sec03 .KateBox>.kategorie {
@@ -399,23 +412,46 @@ body {
     height: 100%;
     overflow: hidden;
     position: relative;
+    box-sizing: border-box;
+    border: 1px solid var(--colorRightGrey);
 }
 
-.sec03 .KateBox>.kategorie:nth-of-type(1) {
-    background: url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat 50% 0
-}
+.sec03 .KateBox>.kategorie:first-of-type {
+    background: #FCEDD8 url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat 50% 30% / 100%;}
+
+.sec03 .KateBox>.kategorie:first-of-type:hover {
+  background:#FCEDD8 url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg) 50% 30% / 120% no-repeat;
+transition: all 0.5s;}
+
 
 .sec03 .KateBox>.kategorie:nth-of-type(2) {
-    background: url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat 50% 0
-}
+    background: #FCEDD8 url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat 50% 30% / 100%;}
+
+.sec03 .KateBox>.kategorie:nth-of-type(2):hover {
+    background: #FCEDD8 url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg) 50% 30% / 120% no-repeat;
+  transition: all 0.5s;}
+
 
 .sec03 .KateBox>.kategorie:nth-of-type(3) {
-    background: url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat 50% 0
-}
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat center / cover;}
+
+    .sec03 .KateBox>.kategorie:nth-of-type(3):hover {
+        background:url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg) 50% / 300% no-repeat;
+      transition: all 0.5s;}
+
 
 .sec03 .KateBox>.kategorie:nth-of-type(4) {
-    background: url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat 50% 0
-}
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat center / cover;}
+
+    .sec03 .KateBox>.kategorie:nth-of-type(4):hover {
+        background:url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg) 50% / 300% no-repeat;
+      transition: all 0.5s;}
+
+      .sec03 .KateBox>.kategorie:hover{
+        transition: all 0.5s;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      }
+
 
 .sec03 .KateBox>.kategorie>div {
     width: 100%;
@@ -426,6 +462,12 @@ body {
     bottom: 0;
     padding: 28px;
 }
+
+.sec03 .KateBox>.kategorie:hover>div{
+    background: var(--colorGreen);
+    transition: all 0.5s;
+}
+
 
 .sec03 .KateBox>.kategorie h3 {
     width: 100%;
@@ -459,6 +501,15 @@ body {
 
 .sec03 button {display: none;}
 
+.sec03 .KateBox>.kategorie:hover h3,
+.sec03 .KateBox>.kategorie:hover p,
+.sec03 .KateBox>.kategorie:hover span{
+    color: var(--colorWhite);
+    transition: all 0.5s;
+}
+
+
+
 /* 섹션4 */
 .sec04 h1 {
     font-size: 90px;
@@ -479,49 +530,51 @@ body {
 
 .sec04 {
     width: 100%;
-    height: auto;
+    height: 752px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+.sec04>.inner{
+    flex:1 1 50%;
+    overflow: hidden;
+}
+.sec04>.inner:first-child {
+    height: 100%;
+    background:#FAF6EE;
+    align-items: unset;
+    padding-left: 240px;
 }
 
-/* 임시로가려놓음 */
-.sec04>.inner:first-child {
-    /* display: none; */
-    height: 752px;
-    background:#FAF6EE
-}
+.sec04>.inner:first-child:hover {
+    flex:3 1 90%;
+transition: flex 0.5s;}
+
 .sec04>.inner:last-child {
-    /* display: none; */
-    height: 752px;
-    flex-direction: row;
-    background:#D7FCEA
+    height: 100%;
+    background:#D7FCEA;
+    align-items: unset;
+    padding-right: 240px;
 }
+
+.sec04>.inner:last-child:hover {
+    flex:3 1 90%;
+    transition: flex 0.5s;}
+
 
 .sec04>div>.left {
-    width: 1440px;
-    height: 100%;
-    margin: 0 auto;
+    width: 100%;
+    height: 752px;
     display: flex;
-    position: relative;}
-
-.sec04>div>.left img {
-    position: absolute;
-    right: 340px;
-    bottom: 188px;
+    background:url(/ex/3.imgs/6.krispykream/sec4/크리스피크림아이콘.svg) no-repeat 400px 50% / 531px 366px;
 }
 
 .sec04>div>.right {
-    width: 1440px;
-    height: 100%;
-    margin: 0 auto;
+    width: 100%;
+    height: 752px;
     display: flex;
-    justify-content: flex-end;
-    align-items: end;
-    position: relative;
-}
-
-.sec04>div>.right img {
-    position: absolute;
-    left: 340px;
-    top: 188px;
+    background:url(/ex/3.imgs/6.krispykream/sec4/롯데잇츠logo.svg) no-repeat right 400px top 50% / 531px 366px;
+    justify-content:flex-end;
 }
 
 .text-stroke {
@@ -535,29 +588,26 @@ body {
 
 .sec04 .left_over,
 .sec04 .right_over {
-    width: auto;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     gap: 43px;
-    /* z-index: 10; */
 }
 
-.sec04 .left_over {
-    padding: 0;
-}
 
 .sec04 .left_over h1 {
     padding: 109px 0 0 0;
     color: var(--colorGreen);
     font-size: 90px;
     font-weight:700;
-
+    z-index: 20;
 }
 
 .sec04 .inner .morebt {
     display: flex;
     align-items: center;
+    z-index: 20;
 }
 
 
@@ -565,24 +615,23 @@ body {
     text-align: right;
     display: flex;
     flex-direction:column;
-    padding: 213px 0 0 0;
+    justify-content:flex-end
 }
 
 .sec04 .inner .right_over h1 {
     order: 4;
+    z-index: 20;
+    padding: 0 0 109px 0;
 }
 
 .sec04 .inner .right_over p {
     order: 3;
+    z-index: 20;
 }
 
 .sec04 .inner .right_over .morebt {
-    justify-content: flex-end;}
-
-.sec04 .inner img {
-    width: 50%;
-    height: 50%;
-}
+    justify-content: flex-end;
+    z-index: 20;}
 
 
 /* 섹션5 */
@@ -648,6 +697,10 @@ gap: 8px;}
 justify-items: flex-start;}
 
     .sec05 .instapic{width: 250px; height:250px;}
+
+    .sec05 .instapic:hover{
+filter: brightness(50%);
+transition: all 0.3s;}
 
 
 .sec05 .instapic:nth-of-type(1){
@@ -776,4 +829,28 @@ footer .footer_bottom > .footer_right a{
 footer .fa-brands {
     font-size: 35px;
     color: rgba(255, 255, 255, 0.5);
+}
+
+select{
+    width: 216px; height: 48px;
+  appearance: none;
+  background: url(/ex/3.imgs/6.krispykream/footer/화살표.svg) no-repeat 95% 50%;
+background-size: 20px 20px;
+    background-color: transparent;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0 20px;
+    filter: invert(75%);
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+option {
+    font-weight: normal;
+    font-family: 'Noto Sans KR', sans-serif;
+    display: block;
+    white-space: nowrap;
+    min-height: 1.2em;
+    padding: 0px 2px 1px;
+    font-size: 14px;
+    font-weight: 700;
 }
