@@ -1,0 +1,22 @@
+@charset "utf-8";
+
+/* 크리스피크림도넛 1440pc */
+
+html,
+body {
+    min-width: 1025px;
+    width: 100%;
+}
+
+.sec04>.inner:first-child {
+    padding-left: 36px;
+}
+
+.sec04>.inner:last-child {
+    padding-right:36px;
+}
+
+.sec04>div>.left {background:url(/ex/3.imgs/6.krispykream/sec4/크리스피크림아이콘.svg) no-repeat 400px 50% / 400px auto;}
+
+.sec04>div>.right {
+    background:url(/ex/3.imgs/6.krispykream/sec4/롯데잇츠logo.svg) no-repeat right 400px top 50% / 400px auto;}

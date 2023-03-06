@@ -9,19 +9,19 @@ var swiper = new Swiper(".mySwiper", {
 });
 
 // 섹션
-
+window.addEventListener('resize', () => {
+  let wiw = window.innerWidth;
+if (wiw > 1024) {
 $(".gnb").unbind("hover").hover(function () {
   $("header").toggleClass("on");
   $(".submenu").stop().slideToggle(280);
 
+else (wiw < 1025){
+ }}); 
+}
+
+
 });
-
-
-window.addEventListener('resize', () => {
-  let wiw = window.innerWidth;
-if (wiw < 1025) {
-  $("header.on").removClass("on");
-}});
 
 console.log("click");
 
@@ -40,15 +40,15 @@ window.onload = () => {
   const btn = document.querySelector(".btn");
 
 
-  // // 2차 메뉴 열기 제이쿼리
-  // $(".gnb > li > a").unbind("click").click(function () {
-  //   $(this).next().stop(true).slideToggle(300);
-  //   // this 다음 요소를 슬라이드토글
-  //   $(".gnb > li > a").not(this).next().slideUp(300);
-  //   // this가 아니라면 다음 요소는 슬라이드업
-  //   return false;
-  //   // a href="#"을 클릭했을때 목적지가 없어서 리프레시 되는것을 막음
-  // });
+  // 2차 메뉴 열기 제이쿼리
+  $(".gnb > li > a").unbind("click").click(function () {
+    $(this).next().stop(true).slideToggle(300);
+    // this 다음 요소를 슬라이드토글
+    $(".gnb > li > a").not(this).next().slideUp(300);
+    // this가 아니라면 다음 요소는 슬라이드업
+    return false;
+    // a href="#"을 클릭했을때 목적지가 없어서 리프레시 되는것을 막음
+  });
 
   btn.addEventListener('click', addOn)
   bt.addEventListener('click', removeOn);

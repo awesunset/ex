@@ -3,7 +3,6 @@
 html,
 body {
     min-width: 320px;
-    /* overflow-x: hidden; */
 }
 
 h1 {
@@ -18,6 +17,12 @@ header {
 .logo, .footer_logo {
     width: 80px;
     height: 60px;
+}
+
+
+nav ul.gnb li.bt {
+    top:3px;
+    right: 9px;
 }
 
 .material-symbols-outlined{
@@ -89,21 +94,36 @@ width:100%;}
     flex-direction: column;
    justify-content: center;}
 
+   
    .sec03 {height: 800px;}
 
    .sec03 .inner{width: 100%;
 height:100%;
-padding: 80px 0 0 0;}
+gap: 64px;
+padding: 72px 0 0 0;}
 
 .sec03 .KateBox {
-    height: 480px;
+    height: 440px;
+}
+
+.sec03 .KateBox > .kategorie:nth-of-type(3) {
+    display: none;
+}
+
+.sec03 .KateBox>.kategorie p
+.sec03 .KateBox>.kategorie h3 {
+    font-size:1rem;
+    line-height:1
 }
 
 .sec04 {
     height: 800px;
     display: flex;
     flex-direction: column;
-    order:unset
+}
+
+.sec04>.inner{
+flex-direction: column;
 }
 
 .sec04 .inner .morebt {
@@ -119,20 +139,21 @@ text-align: left;}
     text-align: left;
 }
 
-.sec04 p br{display: none;}
-
 .sec04 > div {padding: 40px 16px;
 height: 100%;}
 
-.sec04>.inner:first-child,
+.sec04>.inner:first-child
+{height: 752px;}
+
 .sec04>.inner:last-child {
-    height: 400px;
+    height: 752px;
 }
 
 .sec04 > div > .left,
 .sec04 > div > .right {
     height: 100%;
     position: unset;
+    background-image: none;
 }
 
 .sec04 .left_over h1{
@@ -143,10 +164,6 @@ height: 100%;}
 .sec04 .inner .right_over h1 {
     padding: 0;
 }
-
-
-.sec04 > div > .left img,
-.sec04>div>.right img{display: none;}
 
 .sec04 .left_over, .sec04 .right_over {
     width:100%;height: 100%;
@@ -163,6 +180,11 @@ justify-content: flex-end;}
     width: 100%;
     justify-content: flex-start;
 }
+
+.sec04 .inner .right_over .morebt,
+.sec04 .inner .left_over .morebt
+{padding-top: 40px;}
+
 
 
 .sec05 {

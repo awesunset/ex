@@ -166,7 +166,8 @@ nav .gnb>li>a {
 }
 
 nav .gnb>li:hover {
-    color: var(--colorGreen)
+    color: var(--colorGreen);
+    transition: all 0.5s;
 }
 
 nav .gnb>li>a::after {
@@ -178,7 +179,8 @@ nav .gnb>li>a::after {
 }
 
 nav .gnb>li:hover>a::after {
-    background: var(--colorGreen)
+    background: var(--colorGreen);
+    transition: all 0.5s;
 }
 
 nav ul.gnb > li > ul.submenu {
@@ -210,6 +212,8 @@ nav ul.gnb > li > ul.submenu > li:last-child li:last-child
 .btn.menu-toggle{
     display: none;
 }
+
+nav .gnb > li.bt{ display: none;}
 
 
 html,
@@ -292,14 +296,19 @@ body {
 .sec02 .menus>div>a {
     display: flex;
     cursor: pointer;
+    filter: drop-shadow(0px 0px 5px rgba(0, 0, 3, 0.1));
 }
 
 .sec02 .menus>div:hover {
    animation-name:wiggle;-webkit-animation-name:wiggle;
    animation-duration:0.8s;
    -webkit-animation-duration:0.8s;
-   -webkit-animation-iteration-count:infinite;}
+   -webkit-animation-iteration-count:infinite;
+  
 
+}
+
+.sec02 .menus>div:hover>a{ transform: scale( 1.1 );}
 
    .sec02 .menus>div:first-child div{
     position: absolute;
@@ -327,6 +336,12 @@ body {
 .sec02 .menus>div h2 {
     font-size: 28px;
     font-weight: 700;}
+
+    .sec02 .menus>div:hover div h2,
+    .sec02 .menus>div:hover div p{
+        color: var(--colorGreen);
+        transition: all 0.8s;
+    }
     
 .sec02 .menus>div p {
     color: #969696;
@@ -417,39 +432,45 @@ body {
 }
 
 .sec03 .KateBox>.kategorie:first-of-type {
-    background: #FCEDD8 url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat 50% 30% / 100%;}
+    background: #FCEDD8 url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat 50% 27% / 100%;
+}
 
 .sec03 .KateBox>.kategorie:first-of-type:hover {
-  background:#FCEDD8 url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg) 50% 30% / 120% no-repeat;
-transition: all 0.5s;}
+  background:#FCEDD8 url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg) 50% 27% / 120% no-repeat;
+transition: all 0.5s;
+}
+
 
 
 .sec03 .KateBox>.kategorie:nth-of-type(2) {
-    background: #FCEDD8 url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat 50% 30% / 100%;}
+    background: #FBEFE3 url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat 50% 27% / 100%;}
 
 .sec03 .KateBox>.kategorie:nth-of-type(2):hover {
-    background: #FCEDD8 url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg) 50% 30% / 120% no-repeat;
+    background: #FBEFE3 url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg) 50% 27% / 120% no-repeat;
   transition: all 0.5s;}
 
 
+
+
 .sec03 .KateBox>.kategorie:nth-of-type(3) {
-    background: url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat center / cover;}
+    background: #FBEFE3 url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat 50% 27% / 100%;}
 
     .sec03 .KateBox>.kategorie:nth-of-type(3):hover {
-        background:url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg) 50% / 300% no-repeat;
-      transition: all 0.5s;}
+        background: #FBEFE3 url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg) 50% 27% / 120% no-repeat;
+  transition: all 0.5s;}
 
 
 .sec03 .KateBox>.kategorie:nth-of-type(4) {
-    background: url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat center / cover;}
+    background: #00704A url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat 50% 27% / 100%;}
 
     .sec03 .KateBox>.kategorie:nth-of-type(4):hover {
-        background:url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg) 50% / 300% no-repeat;
-      transition: all 0.5s;}
+        background: #00704A url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg) 50% 27% / 120% no-repeat;
+        transition: all 0.5s;}
 
       .sec03 .KateBox>.kategorie:hover{
         transition: all 0.5s;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border : 1px solid var(--colorWhite);
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.4);
       }
 
 
@@ -461,11 +482,24 @@ transition: all 0.5s;}
     left: 0;
     bottom: 0;
     padding: 28px;
+    z-index: 5;
+    
 }
 
-.sec03 .KateBox>.kategorie:hover>div{
-    background: var(--colorGreen);
-    transition: all 0.5s;
+.sec03 .KateBox>.kategorie>div::before {
+    content:'';
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:100%;
+    height: 99%;
+    transform: translate(-50%, -50%);
+    transition: all .8s;
+    border-top:2px solid var(--colorRightGrey);
+}
+
+.sec03 .KateBox>.kategorie:hover>div::before {
+    border-top:2px solid var(--colorMarjenta);
 }
 
 
@@ -493,19 +527,14 @@ transition: all 0.5s;}
     color: var(--colorDarkGrey);
 }
 
-.sec03 .KateBox>.kategorie span {
-    font-size: 0.75rem;
-    line-height: 27px;
-    color: var(--colorDarkGrey);
-}
-
 .sec03 button {display: none;}
 
 .sec03 .KateBox>.kategorie:hover h3,
 .sec03 .KateBox>.kategorie:hover p,
 .sec03 .KateBox>.kategorie:hover span{
-    color: var(--colorWhite);
+    color: var(--colorMarjenta);
     transition: all 0.5s;
+    transform: scale(1.03);
 }
 
 
@@ -536,7 +565,7 @@ transition: all 0.5s;}
     position: relative;
 }
 .sec04>.inner{
-    flex:1 1 50%;
+    flex:1 1 30%;
     overflow: hidden;
 }
 .sec04>.inner:first-child {
@@ -547,7 +576,7 @@ transition: all 0.5s;}
 }
 
 .sec04>.inner:first-child:hover {
-    flex:3 1 90%;
+    flex:3 1 70%;
 transition: flex 0.5s;}
 
 .sec04>.inner:last-child {
@@ -558,7 +587,7 @@ transition: flex 0.5s;}
 }
 
 .sec04>.inner:last-child:hover {
-    flex:3 1 90%;
+    flex:3 1 70%;
     transition: flex 0.5s;}
 
 

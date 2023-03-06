@@ -3,6 +3,7 @@
 /* 크리스피크림도넛 태블릿 */
 
 
+
 html,
 body {
     min-width: 641px;
@@ -23,9 +24,11 @@ h1 {
 
 header {
     width: 100%;
-    width: 100%;
     height: 80px;
 }
+
+header.on::after
+{display: none;}
 
 header .inner {
     width: 100%;
@@ -36,14 +39,117 @@ div.innerLogo {
     width: auto;
 }
 
-.innerLogo, .innerMenu {
-    flex: unset;
-}
 
 ul {
-    display: none;
+    display: flex;
+flex-direction: column;
+overflow: hidden;}
+
+.global, .gnb{flex:unset;
 }
 
+div.global {display: flex;
+order: 2;
+width: 80%;
+margin-top: 40px;
+padding: 0;
+gap: 16px;}
+
+div.global a {
+    font-size: 12px;
+    color: var(--colorGreen)
+}
+
+nav ul.gnb > li > ul.submenu {
+    flex-direction: column;
+}
+
+nav ul.gnb > li.bt {display: flex;}
+
+
+.innerMenu {display: flex;
+    flex-direction: column;
+    position:fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height:100vh;
+    z-index: 999;
+    background: #fff;
+    transform:translateX(200%);
+    padding:80px 40px 0 40px;
+flex: unset;
+gap: 20px;
+align-items:flex-start;}
+
+.innerMenu.on{
+    transform:translateX(0%);
+    box-shadow : rgba(0,0,0,0.5) 0 0 0 9999px;
+    transition: all 0.5s;
+}
+
+/* .innerMenu {display: flex;
+    flex-direction: column;
+    position:fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height:100vh;
+    z-index: 999;
+    background: #fff;
+    transform:translateX(0%);
+    box-shadow : rgba(0,0,0,0.5) 0 0 0 9999px;
+    padding:72px 40px;
+flex: unset;
+gap: 20px;
+align-items:flex-start} */
+
+
+nav>ul.gnb {display: flex;
+    flex-direction: column;
+    gap:40px;
+    width: 100%;
+    height:auto;}
+
+nav .gnb>li>a {
+    align-items:flex-start;
+    font-weight: 500;
+    height:auto;}
+
+nav ul.gnb > li > ul.submenu {
+    top: 56px;
+    height:auto;
+position: unset;}
+
+
+nav ul.gnb > li > ul.submenu > li {
+ padding-bottom:16px;
+ height: auto;  
+}
+
+nav ul.gnb > li > ul.submenu a{
+position: relative;
+top: 0; left: 0;
+display: flex;
+flex-direction: column;
+padding: 0;
+font-size: 12px;
+}
+
+nav ul.gnb li.bt {position: fixed;
+top: 13px; right: 10px;
+width: 56px; height: 56px;
+cursor: pointer;}
+
+nav ul.gnb li.bt span{
+    color: var(--colorGreen);
+    font-weight: 500;
+    line-height: 56px;
+}
+
+nav ul.gnb li.bt .material-symbols-outlined {
+    padding: 0;
+}
 
 div.section > .sec01 {
     width: 100%;
@@ -55,8 +161,15 @@ div.section > .sec01 {
 
 nav .gnb {
     padding: unset;
-    display: none
+    /* display: none */
 }
+
+nav .gnb > li {
+    height: 100%;
+}
+
+nav ul.gnb > li > ul.submenu>li{display: none;}
+
 
 .btn.menu-toggle{
     display: flex;
@@ -288,6 +401,26 @@ button{
 
 
 /* 섹션4 */
+.sec04{
+    height: 1504px;
+    flex-direction: column;
+}
+
+.morebt>.material-symbols-outlined{
+    padding: 0;
+}
+
+.sec04>.inner{
+    flex:1 1 50%;
+    overflow: hidden;
+}
+
+.sec04>.inner:first-child,
+.sec04>.inner:last-child {
+    width: 100%;
+    height: 100%;
+    padding: 32px;
+}
 
 .sec04 > div {
     padding: 0 34px;
@@ -297,28 +430,24 @@ button{
     width: 100%;
 }
 
+.sec04>div>.left {
+    background:url(/ex/3.imgs/6.krispykream/sec4/크리스피크림아이콘.svg) no-repeat right 16px top 50% / 500px auto;}
+
+.sec04>div>.right {background:url(/ex/3.imgs/6.krispykream/sec4/롯데잇츠logo.svg) no-repeat left 16px top 50% / 500px auto;}
 
 .sec04 .left_over,
 .sec04 .right_over {
     padding: unset;
 }
 
-.sec04 .inner .right_over{
-    padding: 213px 0 0 0;
-}
-
 .sec04 .left_over h1 {
     padding: 80px 0 0 0;
 }
 
-.sec04 > div > .left img {
-    right: 24px;
-}
-
-.sec04 > div > .right img {
-    left: 24px;
-}
-
+.sec04>.inner:first-child:hover {
+   flex:1 1 50%;}
+.sec04>.inner:last-child:hover {
+    flex:1 1 50%;}
 
 
 /* 섹션5 */
