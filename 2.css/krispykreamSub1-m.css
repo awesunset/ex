@@ -1,0 +1,29 @@
+@charset "utf-8";
+
+html,
+body {
+    min-width: 320px;
+}
+
+.sec01>h1 {
+    font-size:1.875rem;
+}
+
+.sec01>ul {
+    justify-content:space-around;
+    padding: 0 32px;
+gap: 8px;
+    }
+
+    .sec01>ul>li>a {
+        font-size: 1.25rem;
+    }
+
+    .sec03 h1 {
+        font-size:1.875rem;
+    }
+
+    .box {
+        width:50%;
+    }
+    
