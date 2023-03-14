@@ -20,10 +20,8 @@ gap: unset;
     padding: 104px 0 104px 16px;
 }
 
-.sec02 h2 {font-size: 3rem;}
-.sec02 h3 {font-size: 1.5rem;}
-.sec02 p {font-size: 1rem;
-line-height: 1.4;}
+.sec02 h2 {
+    font-size: 3rem;}
 
 
 
@@ -51,4 +49,8 @@ line-height: 1.4;}
 
 .box>p {
     font-size: 1rem;
+}
+
+.popup-wrap {
+    transform:translate(-50%, -50%) scale(0.8);
 }

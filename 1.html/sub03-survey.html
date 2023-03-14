@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
     <link rel="stylesheet" type="text/css" href="/ex/2.css/krispykreamSub3.css">
-    <link rel="stylesheet" media="all and (max-width:1024px)" href="/ex/2.css/krispykreamSub3-t.css">
     <link rel="stylesheet" media="all and (max-width:640px)" href="/ex/2.css/krispykreamSub3-m.css">
     <title>설문조사-크리스피크림도넛</title>
 </head>
@@ -15,7 +14,9 @@
 <body>
     <section class="inner">
         <div class="sec01">
-            <h1>GUEST SATISFACTION SURVEY</h1>
+            <h1>GUEST SATISFACTION
+                <br>SURVEY
+            </h1>
         </div>
         <div class="sec02">
             <div class="title">
@@ -31,8 +32,8 @@
                         <fieldset>
                             <div>
                                 <h3>①점포코드(매장번호) :</h3>
-                                <input type="number" placeholder="점포코드를 입력하세요." min="100" max="100000" name="shop_number"
-                                    class="num" autofocus required>
+                                <input type="number" placeholder="점포코드를 입력하세요." min="100" max="100000"
+                                    name="shop_number" class="num" autofocus required>
                                 <p class="mg1">점포코드를 입력하세요!</p>
                             </div>
                             <div>
@@ -43,16 +44,43 @@
                             <div>
                                 <h3>③시간 :</h3>
                                 <input type="time" name="birthtime" class="time">
-                               <p class="mg3">시간을 입력하세요!</p>
+                                <p class="mg3">시간을 입력하세요!</p>
                             </div>
                             <input type="submit" value="다음">
+                            <div>
+                                <span>진행률 50%</span>
+                                <div><span>0%</span>
+                                    <progress value="50" max="100"></progress>
+                                    <span>100%</span>
+                                </div>
+                            </div>
                         </fieldset>
                     </form>
                 </div>
             </div>
+            <form action="#" class="frm2">
+                <fieldset>
+                <div class="txtarea">
+                    <div>
+                        <h3>④Krispy Kream에서의 경험이 아주 만족스러웠던 이유를 알려주십시오.</h3>
+                        <h3>가능한 구체적으로 답변해주시길 바랍니다</h3>
+                    </div>
+                    <textarea id="comment" minlength="30" placeholder="텍스트를 입력하세요. (30자 이상)"></textarea>
+                    <div id="comment_cnt">(0 / 300)</div>
+                    <input type="submit" value="다음">
+                    <div>
+                        <span>진행률 73%</span>
+                        <div><span>0%</span>
+                            <progress value="73" max="100"></progress>
+                            <span>100%</span>
+                        </div>
+                    </div>
+                </div>
+            </fieldset></form>
         </div>
     </section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="/ex/4.js/krispykreamSub3.js"></script>
+
 
 </body>

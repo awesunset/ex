@@ -1,0 +1,39 @@
+@charset "utf-8";
+
+html,
+body {
+    min-width: 641px;}
+
+.sec01{height: auto;
+padding: 200px 0 32px 0;
+justify-content: flex-start;}
+
+.sec01>ul
+{
+margin: 0 auto;
+justify-content:space-between;
+padding: 0 16%;
+gap: unset;
+}
+
+.sec02 {
+    max-width: 100%;}
+
+    .card {
+        max-width: 48%;
+        max-height: 520px;
+        border: 1px solid var(--colorRightGrey);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card .text{
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    padding: 20px 28px 40px 28px;
+}

@@ -66,10 +66,6 @@ section {
     display: none;
 }
 
-progress:first-of-type {
-    display: none;
-}
-
 .sec01 {
     width: 100%;
     height: auto;
@@ -77,7 +73,7 @@ progress:first-of-type {
     flex-direction: column;
     align-items: center;
     gap: 104px;
-    padding: 200px 0 80px 0;
+    padding: 200px 0 40px 0;
 }
 
 .sec01>h1 {
@@ -101,7 +97,19 @@ progress:first-of-type {
         max-width:1440px;
         padding-top: 120px;
         width:100%;
-    padding: 0 14% 40px 14%;}
+    padding: 0 14% 0 14%;
+display: flex;
+flex-direction: column;
+align-items: center;}
+
+    .sec02>.title progress {
+        width: 60%;
+    }
+
+.sec02>.title span {
+    font-size: 1rem;
+    color:rgb(0,0,0,0.5);
+}
 
     .sec02 h1 {
         width: 100%;
@@ -113,13 +121,15 @@ progress:first-of-type {
     .sec02 p {
         text-align: center;
         font-size: 1rem;
-        padding-top: 10px;
         font-weight: 600;
-        color:rgb(0,0,0,0.5)
+        color:rgb(0,0,0,0.5);
+        font-weight: 400;
     }
 
     .sec02 p:last-child {
-        color:rgb(0,0,0,0.8)
+        padding: 0 0 30px 0;
+        border-bottom:2px solid rgba(0,0,0,0.2);
+        font-weight: 600;
     }
 
     .sec02 .inner {
@@ -129,12 +139,6 @@ progress:first-of-type {
         gap: 30px;
         justify-content: center;
     }
-
-    .sec02 .title{
-        content: "";
-        width: 60%;
-        border-bottom:2px solid rgb(0,0,0,0.5);
-    }
         
 
     .sec02 div:first-child img {
@@ -142,9 +146,13 @@ progress:first-of-type {
     }
 
     .sec02 .inner>div:first-child{
+     width:50%;
      display: flex;
-        justify-content: flex-end;}
+     flex-direction: column;
+      align-items: flex-end}
 
+      .sec02 .inner>div:last-child{
+        width:50%;}
     fieldset {
         height: 100%;
         display: flex;
@@ -157,23 +165,121 @@ fieldset input{
 height: 40px;
     border-radius:8px;
     border: 2px solid #D1D1D1;
-padding:0 12px;}
+padding:0 12px;
+font-family: inherit;
+color:rgb(0,0,0,0.6);}
+
+fieldset>input{
+    margin: 20px 0 0 0;
+    font-weight: 600;
+    color:rgb(0,0,0,0.6);
+}
 
 fieldset>input h3 {
     font-size: 1.125rem;
     font-weight: 500;
 }
+
+fieldset>input:hover {
+    background: var(--colorGreen);
+    transition: all 0.5s;
+    cursor: pointer;
+    color: var(--colorWhite);
+}
+
+fieldset>div:last-child{
+    width: 100%;
+    align-items: center;
+margin: 12px 0 0 0;
+display: flex;
+gap:10px
+}
+
+fieldset>div:last-child>span{
+    font-weight:700;
+    color:rgb(0,0,0,0.6);
+}
+
+fieldset>div:last-child>span:first-child{
+    font-size:1.14rem;
+    color:var(--colorDarkGrey)
+}
+
 .sec02 p:last-child.mg1,
 .sec02 p:last-child.mg2,
 .sec02 p:last-child.mg3
 {color: #d31145;}
 
-/* fieldset>button {
-    width: 120px;
-    height: 40px;
-    background: var(--colorGreen);
-    color: var(--colorWhite);
+
+
+
+.txtarea {
+max-width: 1440px;
+display: flex;
+flex-direction: column;
+gap:20px
+}
+
+
+/* 다음버튼을 눌렀을때 발생*/
+.frm2{
+    padding: 0 16px;
+    /* display: none; */
+}
+
+.txtarea input{
+    width: 100%;
+height: 40px;
+    border-radius:8px;
     border: 2px solid #D1D1D1;
-    border-radius:20px;
-    margin: auto auto
-} */
+padding:0 12px;
+font-family: inherit;
+color:rgb(0,0,0,0.6);}
+
+.txtarea>input{
+    margin: 20px 0 0 0;
+    font-weight: 600;
+    color:rgb(0,0,0,0.6);
+}
+
+.txtarea>input h3 {
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+.txtarea>input:hover {
+    background: var(--colorGreen);
+    transition: all 0.5s;
+    cursor: pointer;
+    color: var(--colorWhite);
+}
+
+
+.txtarea>div:last-child{
+    justify-content: center;
+    align-items: center;
+margin: 12px 0 0 0;
+display: flex;
+gap:10px
+}
+
+.txtarea>div:last-child>span{
+    font-weight:700;
+    color:rgb(0,0,0,0.6);
+}
+
+.txtarea>div:last-child>span:first-child{
+    font-size:1.14rem;
+    color:var(--colorDarkGrey)
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    padding: 16px;
+    font-family: inherit;
+    resize: none;
+    border: 2px solid #D1D1D1;
+    font-family: inherit;
+    color:rgb(0,0,0,0.6);
+}

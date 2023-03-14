@@ -799,8 +799,9 @@ align-items: flex-end;}
 
 footer .footer_left{
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 61px;
+    gap: 8px 20px;
 }
 
 footer ul {
@@ -835,7 +836,7 @@ footer .footer_bottom{
     border-top: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-footer .footer_bottom > .footer_left{
+footer .footer_bottom > .footer_left span{
     display: flex;
     flex-wrap: wrap;
     gap: 20px 40px;
@@ -843,6 +844,7 @@ footer .footer_bottom > .footer_left{
     font-weight: 700;
     font-size: 1.25rem;
     color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
 }
 
 footer .footer_bottom > .footer_right{

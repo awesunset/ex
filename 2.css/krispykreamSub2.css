@@ -39,6 +39,7 @@ h1 {
     width: 100%;
     font-size: 3rem;
     text-align: center;
+    color:rgba(0,0,0,0.7);
 }
 
 h3 {
@@ -93,16 +94,20 @@ gap: 80px;
 }
 
 .sec01>ul>li>a {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     font-weight: 600;
+    letter-spacing: -0.2em;
     
 }
 
 .sec02 {
     max-width: 1440px;
     height: auto;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     margin: 0 auto;
+    padding: 0 32px;
 }
 
 .sec02 h1 {
@@ -114,15 +119,18 @@ gap: 80px;
 .sec02>.inner {
     padding-top: 28px;
     width: 100%;
+    height: auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
+    margin: 0 auto;
+    gap: 32px 0;
 }
 
 .card {
-    width: 30%;
-    height: 520px;
+    max-width: 30%;
+    max-height: 520px;
     border: 1px solid var(--colorRightGrey);
     overflow: hidden;
     display: flex;
@@ -130,12 +138,21 @@ gap: 80px;
     align-items: center;
 }
 
-.card>img, .card .text {
+.card:hover img{
+    transform: scale(1.2);
+    transition: all 0.3s;
+}
+
+.card>.imgBox, .card .text {
     flex:1 1 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
 }
 
 .card img {
-width: 130%;
+width: auto;
 height: 100%;
 }
 
@@ -150,11 +167,17 @@ gap: 10%
 }
 
 .card .text>span {
+    width: 100%;
     font-size: 1.25rem;
     font-weight: 600;
 }
 
+.card .text>p {
+    width: 100%;
+}
+
 .card .text>h2 {
+    width: 100%;
     height: 88px;
     font-size: 1.5rem;
     font-weight: 600;
@@ -165,7 +188,14 @@ gap: 10%
     -webkit-box-orient: vertical;
 }
 
+.card:hover .text{
+    background: var(--colorGreen);
+    transition: all 0.3s;
+}
 
-.paging-div {
-    padding-top: 120px;
+.card:hover span,
+.card:hover p,
+.card:hover h2{
+    color: var(--colorWhite);
+    transition: all 0.3s;
 }
