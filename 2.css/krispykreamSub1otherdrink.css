@@ -94,9 +94,9 @@ section {
 gap: 80px;
 }
 
-.sec01>ul>li:nth-child(2) a
+.sec01>ul>li:nth-child(4) a
 {color:rgba(0, 112, 74, 0.8);}
-.sec01>ul>li:nth-child(2) a::after{
+.sec01>ul>li:nth-child(4) a::after{
     display: block;
     content: '';
     width: 96%;
