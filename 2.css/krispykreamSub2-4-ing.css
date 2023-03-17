@@ -57,7 +57,7 @@ body {
 
 body {
     background: #ffffff;
-    font-family: inherit;
+    font-family:inherit;
     font-size: 14px;
     color: #000;
     margin: 0;
@@ -227,7 +227,7 @@ section {
     cursor: pointer;
 }
 
-.card:nth-child(1) {
+.card:nth-child(4) {
     border: 1px solid var(--colorMarjenta);
     box-shadow: 1px 1px 1px #d31145;}
 

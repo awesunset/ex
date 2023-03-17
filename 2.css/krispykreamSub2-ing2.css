@@ -227,7 +227,7 @@ section {
     cursor: pointer;
 }
 
-.card:nth-child(1) {
+.card:nth-child(2){
     border: 1px solid var(--colorMarjenta);
     box-shadow: 1px 1px 1px #d31145;}
 

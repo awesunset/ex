@@ -343,6 +343,10 @@ body {
     top: 180px;
 }
 
+.sec02 .menus > div:nth-child(4) img {
+    width: 300px;
+}
+
 
 .sec02 .menus > div h2 {
     font-size: 28px;
@@ -390,7 +394,7 @@ body {
 .sec02 .menus > div:nth-of-type(4) {
     position: absolute;
     z-index: 10;
-    right: 0px;
+    right: 30px;
     top: 83px;
 }
 
