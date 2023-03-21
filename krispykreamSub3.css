@@ -1,0 +1,280 @@
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css');
+@import url('https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css');
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    word-break: keep-all;
+    /* outline: 1px solid red; */
+    line-height: 1.4;
+    color: var(--colorDarkGrey);
+    font-size: 14px;
+}
+
+:root {
+    font-family: 'Noto Sans KR', sans-serif;
+    --colorGreen: #00704A;
+    --colorMarjenta: #d31145;
+    --colorDarkMarjenta: #B80F3C;
+    --colorRightGrey: #E8E8E8;
+    --colorFontGrey: #C4C4C4;
+    --colorDarkGrey: #252525;
+    --colorWhite: #fff;
+}
+
+a:link,
+a:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
+li {
+    list-style: none;
+}
+
+h1 {
+    width: 100%;
+    font-size: 3rem;
+    text-align: center;
+}
+
+h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+html,
+body {
+    position: relative;
+    height: 100%;
+}
+
+section {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding-bottom: 56px;
+}
+
+.mg1,.mg2,.mg3 {
+    display: none;
+}
+
+.sec01 {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 104px;
+    padding: 200px 0 40px 0;
+}
+
+.sec01>h1 {
+    width: 100%;
+    color: var(--colorGreen);}
+
+
+
+    .sec02 {
+        width:100%;
+        height: auto;
+        align-items: center;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    
+    .sec02>.title {
+        max-width:1440px;
+        padding-top: 120px;
+        width:100%;
+    padding: 0 14% 0 14%;
+display: flex;
+flex-direction: column;
+align-items: center;}
+
+    .sec02>.title progress {
+        width: 60%;
+    }
+
+.sec02>.title span {
+    font-size: 1rem;
+    color:rgb(0,0,0,0.5);
+}
+
+    .sec02 h1 {
+        width: 100%;
+        font-size: 2rem;
+       text-align: center;
+        font-weight: 500;
+    }
+
+    .sec02>p {
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 600;
+        color:rgb(0,0,0,0.5);
+        font-weight: 400;
+    }
+
+
+    .sec02 .inner {
+        width:100%;
+        height: auto;
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+    }
+        
+
+    .sec02 div:first-child img {
+        width: 294px;
+    }
+
+    .sec02 .inner>div:first-child{
+     width:50%;
+     display: flex;
+     flex-direction: column;
+      align-items: flex-end}
+
+      .sec02 .inner>div:last-child{
+        width:50%;}
+    fieldset {
+        height: 100%;
+        display: flex;
+    flex-direction: column;
+gap: 8px;
+border: none;}
+
+fieldset input{
+    width: 300px;
+height: 40px;
+    border-radius:8px;
+    border: 2px solid #D1D1D1;
+padding:0 12px;
+font-family: inherit;
+color:rgb(0,0,0,0.6);}
+
+fieldset>input{
+    margin: 20px 0 0 0;
+    font-weight: 600;
+    color:rgb(0,0,0,0.6);
+}
+
+fieldset>input h3 {
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+fieldset>input:hover {
+    background: var(--colorGreen);
+    transition: all 0.5s;
+    cursor: pointer;
+    color: var(--colorWhite);
+}
+
+fieldset>div:last-child{
+    width: 100%;
+    align-items: center;
+margin: 12px 0 0 0;
+display: flex;
+gap:10px
+}
+
+fieldset>div:last-child>span{
+    font-weight:700;
+    color:rgb(0,0,0,0.6);
+}
+
+fieldset>div:last-child>span:first-child{
+    font-size:1.14rem;
+    color:var(--colorDarkGrey)
+}
+
+.sec02 p:last-child.mg1,
+.sec02 p:last-child.mg2,
+.sec02 p:last-child.mg3
+{color: #d31145;}
+
+
+
+
+.txtarea {
+max-width: 1440px;
+display: flex;
+flex-direction: column;
+gap:20px
+}
+
+
+/* 다음버튼을 눌렀을때 발생*/
+.frm2{
+    padding: 0 16px;
+    /* display: none; */
+}
+
+.txtarea input{
+    width: 100%;
+height: 40px;
+    border-radius:8px;
+    border: 2px solid #D1D1D1;
+padding:0 12px;
+font-family: inherit;
+color:rgb(0,0,0,0.6);}
+
+.txtarea>input{
+    margin: 20px 0 0 0;
+    font-weight: 600;
+    color:rgb(0,0,0,0.6);
+}
+
+.txtarea>input h3 {
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+.txtarea>input:hover {
+    background: var(--colorGreen);
+    transition: all 0.5s;
+    cursor: pointer;
+    color: var(--colorWhite);
+}
+
+
+.txtarea>div:last-child{
+    justify-content: center;
+    align-items: center;
+margin: 12px 0 0 0;
+display: flex;
+gap:10px
+}
+
+.txtarea>div:last-child>span{
+    font-weight:700;
+    color:rgb(0,0,0,0.6);
+}
+
+.txtarea>div:last-child>span:first-child{
+    font-size:1.14rem;
+    color:var(--colorDarkGrey)
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    padding: 16px;
+    font-family: inherit;
+    resize: none;
+    border: 2px solid #D1D1D1;
+    font-family: inherit;
+    color:rgb(0,0,0,0.6);
+}
