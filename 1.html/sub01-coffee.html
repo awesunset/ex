@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
     <link rel="stylesheet" type="text/css" href="/ex/2.css/krispykreamSub1Coffee.css">
     <link rel="stylesheet" media="all and (max-width:1024px)" href="/ex/2.css/krispykreamSub1-t.css">
@@ -165,38 +166,17 @@
         <div class="sec03">
             <div class="inner">
                 <h1>커피</h1>
-                <div class="sDonut wrap">
-                    <div class="box">
-                        <img src="/ex/3.imgs/6.krispykream/서브페이지/추천메뉴-오리지널글레이즈더즌.png" alt="오리지널 글레이즈드 더즌">
-                        <span>오리지널 글레이즈드 더즌</span>
-                        <p>가격</p>
-                    </div>
-                    <div class="box"><img src="/ex/3.imgs/6.krispykream/서브페이지/추천메뉴-오리지널글레이즈더즌.png" alt="오리지널 글레이즈드 더즌">
-                        <span>오리지널 글레이즈드 더즌</span>
-                        <p>가격</p>
-                    </div>
-                    <div class="box"><img src="/ex/3.imgs/6.krispykream/서브페이지/추천메뉴-오리지널글레이즈더즌.png" alt="오리지널 글레이즈드 더즌">
-                        <span>오리지널 글레이즈드 더즌</span>
-                        <p>가격</p>
-                    </div>
-                    <div class="box"><img src="/ex/3.imgs/6.krispykream/서브페이지/추천메뉴-오리지널글레이즈더즌.png" alt="오리지널 글레이즈드 더즌">
-                        <span>오리지널 글레이즈드 더즌</span>
-                        <p>가격</p>
-                    </div>
-                    <div class="box"><img src="/ex/3.imgs/6.krispykream/서브페이지/추천메뉴-오리지널글레이즈더즌.png" alt="오리지널 글레이즈드 더즌">
-                        <span>오리지널 글레이즈드 더즌</span>
-                        <p>가격</p>
-                    </div>
+                <div class="sDonut wrap" data-aos="fade-up"
+                data-aos-duration="1000">
                 </div>
             </div>
             <div>
-
             </div>
         </div>
     </section>
     <div class="popup-wrap">
         <div class="top">
-            <img src="/ex/3.imgs/6.krispykream/더즌박스.png" alt="더즌박스 메뉴소개">
+            <img class="pimg" src="/ex/3.imgs/6.krispykream/더즌박스.png" alt="더즌박스 메뉴소개">
         </div>
         <div class="bottom">
             <div class="cardsec01">
@@ -207,7 +187,7 @@
                     <button><img src="/ex/3.imgs/6.krispykream/lotteeatsicon.svg" alt="롯데잇츠">주문하기</button>
                 </div>
             </div>
-            <button>상세정보<img src="/ex/3.imgs/6.krispykream/아이콘/arrow-down.svg" alt="arrow down"></button>
+            <button class="popbt">상세정보<img src="/ex/3.imgs/6.krispykream/아이콘/arrow-down.svg" alt="arrow down"></button>
             <div class="cardsec02">
                 <h4>영양소 정보</h4>
                 <table class="tbl-row-info">
@@ -221,38 +201,25 @@
                         <tr>
                             <th>총중량</th>
                             <td class="right">
-                                <span class="num">564</span>
+                                <span class="num p01">564</span>
                             </td>
                         </tr>
                         <tr>
                             <th>열량</th>
                             <td class="right">
-                                <span class="num">2412</span>
+                                <span class="num p02">2412</span>
                             </td>
                         </tr>
                         <tr>
                             <th>단백질g(%)</th>
                             <td class="right">
-                                <span class="num">36</span>
+                                <span class="num p03">36</span>
                             </td>
                         </tr>
                         <tr>
-                            <th>나트륨mg(%)</th>
+                            <th>카페인</th>
                             <td class="right">
-                                <span class="num">1440
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>당류g</th>
-                            <td class="right">
-                                <span class="num">108</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>포화지방</th>
-                            <td class="right">
-                                <span class="num">43.2</span>
+                                <span class="num p08">36</span>
                             </td>
                         </tr>
                     </tbody>
@@ -268,15 +235,18 @@
             </div>
             <div class="cardsec03">
                 <h4>알러지 정보 :</h4>
-                <span>밀, 계란, 대두, 우유</span>
+                <span class="p07">밀, 계란, 대두, 우유</span>
             </div>
         </div>
     </div>
     <footer>
 
     </footer>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-    <script src="/ex/4.js/krispykreamSub.js"></script>
+    <script src="/ex/4.js/krispykreamSubcoffee.js"></script>
 </body>
 
 </html>

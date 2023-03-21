@@ -145,6 +145,7 @@ gap: 28px;
 }
 
 .sec02 h1 {
+    width: 1440px;
     padding-top: 120px;
     font-size: 4rem;
     font-weight: 700;

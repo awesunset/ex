@@ -1,0 +1,17 @@
+[
+    {
+       "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/md/도넛플레인블록.png",
+       "name":"도넛 플레인 블록",
+       "price":"35,000원"
+    },
+    {
+       "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/md/워터저그디스펜서딥그린.png",
+       "name":"워터저그 디스펜서 딥그린",
+       "price":"35,000원"
+    },
+    {
+       "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/md/워터저그디스펜서아이보리.png",
+       "name":"워터저그 디스펜서 아이보리",
+       "price":"35,000원"
+    }
+ ]

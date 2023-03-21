@@ -8,20 +8,6 @@ var swiper = new Swiper(".mySwiper", {
   },
 });
 
-// 섹션
-window.addEventListener('resize', () => {
-  let wiw = window.innerWidth;
-if (wiw > 1024) {
-$(".gnb").unbind("hover").hover(function () {
-  $("header").toggleClass("on");
-  $(".submenu").stop().slideToggle(280);
-
-else (wiw < 1025){
- }}); 
-}
-
-
-});
 
 console.log("click");
 

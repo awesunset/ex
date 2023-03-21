@@ -1,0 +1,32 @@
+[
+   {
+      "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/추천메뉴-리얼베리더즌.png",
+      "name":"리얼 베리 더즌",
+      "price":"24,600원"
+   },
+   {
+      "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/추천메뉴-오리지널글레이즈더즌.png",
+      "name":"오리지널 글레이즈드 더즌",
+      "price":"15,000원"
+   },
+   {
+      "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/추천메뉴-리얼-베리-하프더즌.png",
+      "name":"리얼 베리 하프더즌",
+      "price":"16,400원"
+   },
+   {
+      "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/추천메뉴-오리지널글레이즈더즌.png",
+      "name":"오리지널 글레이즈드 하프더즌",
+      "price":"9,600원"
+   },
+   {
+      "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/추천메뉴-어쏘티드-더즌(FIX).png",
+      "name":"어쏘티드 더즌(FIX)",
+      "price":"17,000원"
+   },
+   {
+      "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/추천메뉴-더블-더즌-딜(FIX).png",
+      "name":"더블 더즌 딜(FIX)",
+      "price":"31,000원"
+   }
+]
