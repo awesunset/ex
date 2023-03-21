@@ -1,0 +1,521 @@
+@charset "utf-8";
+
+/* 크리스피크림도넛 태블릿 */
+
+
+
+html,
+body {
+    min-width: 641px;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+div.inner {
+    width: 100%;
+}
+
+h1 {
+    line-height: 1.4;
+}
+
+
+/* 헤더 */
+
+header {
+    width: 100%;
+    height: 80px;
+}
+
+header.on::after
+{display: none;}
+
+header .inner {
+    width: 100%;
+    padding: 0 32px
+}
+
+div.innerLogo {
+    width: auto;
+}
+
+
+header ul {
+    display: flex;
+flex-direction: column;
+overflow: hidden;}
+
+.global, .gnb{flex:unset;
+}
+
+div.global {display: flex;
+order: 2;
+width: 80%;
+margin-top: 40px;
+padding: 0;
+gap: 16px;}
+
+div.global a {
+    font-size: 12px;
+    color: var(--colorGreen)
+}
+
+nav ul.gnb > li > ul.submenu {
+    flex-direction: column;
+}
+
+nav ul.gnb > li.bt {display: flex;}
+
+
+.innerMenu {display: flex;
+    flex-direction: column;
+    position:fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height:100vh;
+    z-index: 999;
+    background: #fff;
+    transform:translateX(200%);
+    padding:80px 40px 0 40px;
+flex: unset;
+gap: 20px;
+align-items:flex-start;}
+
+.innerMenu.on{
+    transform:translateX(0%);
+    box-shadow : rgba(0,0,0,0.5) 0 0 0 9999px;
+    transition: all 0.5s;
+}
+
+
+
+/* .innerMenu {display: flex;
+    flex-direction: column;
+    position:fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height:100vh;
+    z-index: 999;
+    background: #fff;
+    transform:translateX(0%);
+    box-shadow : rgba(0,0,0,0.5) 0 0 0 9999px;
+    padding:72px 40px;
+flex: unset;
+gap: 20px;
+align-items:flex-start} */
+
+
+nav>ul.gnb {display: flex;
+    flex-direction: column;
+    gap:40px;
+    width: 100%;
+    height:auto;}
+
+nav .gnb>li>a {
+    align-items:flex-start;
+    font-weight: 500;
+    height:auto;}
+
+nav ul.gnb > li > ul.submenu {
+    top: 56px;
+    height:auto;
+position: unset;}
+
+
+nav ul.gnb > li > ul.submenu > li {
+ padding-bottom:16px;
+ height: auto;  
+}
+
+nav ul.gnb > li > ul.submenu a{
+position: relative;
+top: 0; left: 0;
+display: flex;
+flex-direction: column;
+padding: 0;
+font-size: 12px;
+}
+
+nav ul.gnb li.bt {position: fixed;
+top: 13px; right: 10px;
+width: 56px; height: 56px;
+cursor: pointer;}
+
+nav ul.gnb li.bt span{
+    color: var(--colorGreen);
+    font-weight: 500;
+    line-height: 56px;
+}
+
+nav ul.gnb li.bt .material-symbols-outlined {
+    padding: 0;
+}
+
+nav ul.gnb li.bt span {
+    font-size: 40px;
+}
+
+div.section > .sec01 {
+    width: 100%;
+}
+
+.global {
+    display: none;
+}
+
+nav .gnb {
+    padding: unset;
+    /* display: none */
+}
+
+nav .gnb > li {
+    height: 100%;
+}
+
+nav ul.gnb > li > ul.submenu>li{display: none;}
+
+
+.btn.menu-toggle{
+    display: flex;
+position: absolute;
+top: 0; right: 10px;
+padding: 0;
+width: 56px; height: 56px;
+z-index: 2;
+align-items: center;
+overflow: visible;
+margin: 0;
+background-color: transparent;
+}
+
+.btn{
+    text-align: center;
+    cursor: pointer;
+    border: unset;
+}
+
+button{
+    font-family: inherit;
+}
+
+button .material-symbols-outlined{
+    padding: 25px 0 0 0;
+    font-size: 40px;
+    font-weight: 400;
+    color: var(--colorMarjenta);
+}
+
+
+/* 섹션1 */
+
+.sec01 > .inner {
+    max-width: 1024px;
+    min-width: 641px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    overflow: hidden;
+
+}
+
+.swiper {
+    width: 100%;
+    height: auto;
+}
+
+.swiper-slide {
+    width: 100%;
+    height: auto;
+}
+
+.swiper-slide img {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide video {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* 섹션2 */
+
+.sec02 .inner {
+    width: 100%;
+    align-items: center;
+}
+
+.sec02 h1 {
+    padding: 80px 20px 0 20px;
+    width: 100%;
+    align-items: center;
+}
+
+
+.sec02 .menus {
+    width: 100%;
+    height: 768px;
+}
+
+.sec02 img {
+    width: 240px;
+}
+
+.sec02 .menus > div:nth-child(4) img {
+    width: 170px;
+}
+
+.sec02 .menus > div {
+    position: absolute;
+}
+
+/* 메뉴텍스트 */
+
+.sec02 .menus>div:first-child div{
+    position: absolute;
+    left:160px; top:20px;
+   }
+
+   .sec02 .menus>div:nth-child(2) div{
+    position: absolute;
+    left: 180px; top:80px;
+   }
+
+   .sec02 .menus>div:nth-child(3) div{
+    position: absolute;
+    left:0px; top:140px;
+   }
+
+   .sec02 .menus>div:nth-child(4) div{
+    position: absolute;
+    left: -40px; top:180px;
+   }
+
+
+/* 메뉴이미지 */
+
+
+.sec02 .menus>div:first-of-type {
+    z-index: 10;
+    left: 80px;
+    top: 80px;
+}
+
+.sec02 .menus>div:nth-of-type(2){
+    z-index: 10;
+    left: 80px;
+    bottom: 120px;
+}
+
+.sec02 .menus>div:nth-of-type(3) {
+    z-index: 10;
+    right: 80px;
+    bottom: 48px;
+}
+
+.sec02 .menus>div:nth-of-type(4) {
+    z-index: 10;
+    right: 80px;
+    top: 120px;
+}
+
+
+/* 섹션3 */
+.sec03 {
+    height: 846px;
+}
+
+.sec03 .inner {
+    width: 100%;
+    height: 100%;
+    padding: 120px 0 90px 0;
+    align-items: center;
+}
+
+.sec03 .inner .title {
+    justify-content: center;
+}
+
+.sec03 .KateBox {
+    padding: 0 16px 0 16px;
+    width: 100%;
+    gap: 16px;
+}
+
+.sec03 .KateBox>.kategorie:first-of-type {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat center / cover;}
+
+.sec03 .KateBox>.kategorie:first-of-type:hover {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat center / cover;}
+
+
+.sec03 .KateBox>.kategorie:nth-of-type(2) {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat center / cover;}
+
+.sec03 .KateBox>.kategorie:nth-of-type(2):hover {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat center / cover;}
+
+
+.sec03 .KateBox>.kategorie:nth-of-type(3) {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat center / cover;}
+
+    .sec03 .KateBox>.kategorie:nth-of-type(3):hover {
+        background: url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat center / cover;}
+
+
+.sec03 .KateBox>.kategorie:nth-of-type(4) {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat center / cover;}
+
+    .sec03 .KateBox>.kategorie:nth-of-type(4):hover {
+        background: url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat center / cover;}
+
+
+      .sec03 .KateBox>.kategorie:hover{
+        transition: all 0.5s;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      }
+
+.sec03 .KateBox > .kategorie span {
+    font-size: 0.625rem;
+    line-height: 1;
+}
+
+.sec03 .title > div > span,
+.sec03 .addBt {
+    display: none;
+}
+
+
+.sec03 .KateBox > .kategorie:nth-of-type(4) {
+    display: none;
+}
+
+.sec03 button {display: block;
+    width: 104px; height: 40px;
+    color: #FFFFFF;
+    border:  1px solid #FFFFFF;
+    background-color: var(--colorGreen);
+    border-radius: 20px;
+}
+
+.sec03 button:hover {
+    background-color: var(--colorGreen);
+    filter: brightness(80%);
+    transition: all 0.3s;
+}
+
+
+
+
+/* 섹션4 */
+.sec04{
+    height: 1504px;
+    flex-direction: column;
+}
+
+.morebt>.material-symbols-outlined{
+    padding: 0;
+}
+
+.sec04>.inner{
+    flex:1 1 50%;
+    overflow: hidden;
+}
+
+.sec04>.inner:first-child,
+.sec04>.inner:last-child {
+    width: 100%;
+    height: 100%;
+    padding: 32px;
+}
+
+.sec04 > div {
+    padding: 0 34px;
+}
+
+.sec04 > div > .left {
+    width: 100%;
+}
+
+.sec04 > div .left {
+    background:url(/ex/3.imgs/6.krispykream/sec4/크리스피크림아이콘.svg) no-repeat right 16px top 50% / 500px auto;}
+
+.sec04 > div .right {background:url(/ex/3.imgs/6.krispykream/sec4/롯데잇츠logo.svg) no-repeat left 16px top 50% / 500px auto;}
+
+.sec04 .left_over,
+.sec04 .right_over {
+    padding: unset;
+}
+
+.sec04 .left_over h1 {
+    padding: 80px 0 0 0;
+}
+
+.sec04>.inner:first-child:hover {
+   flex:1 1 50%;}
+.sec04>.inner:last-child:hover {
+    flex:1 1 50%;}
+
+
+/* 섹션5 */
+
+
+.sec05 {
+    max-width:1024px;
+    height:865px;}
+
+    .sec05 .inner {gap: unset;}
+
+.sec05 .inner .twitter {
+    display: none;
+}
+
+.sec05 .inner h1 {
+    padding: 70px 0 78px 0;
+}
+
+.sec05 .inner > div {
+    width: 100%;}
+
+    .sec05 .inner .insta{
+        width: 100%;    }
+
+    .sec05 .inner > div > div >div {align-items: center;
+    justify-content: center;
+}
+
+.sec05 .inner .insta > div + div {
+    height:100%;
+    align-content:center
+
+}
+
+    .sec05 .instapic{
+        flex: 1 1 25%;
+    }
+
+    .sec05 .instapic:nth-of-type(8),
+    .sec05 .instapic:nth-of-type(7) {
+        display: none;
+    }
+
+
+/* 푸터 */
+footer {
+    padding: 32px 0;
+    height: auto;
+}
+
+footer .inner {
+    width: 100%;
+}
+
+footer .footer_bottom {
+    padding: 32px 0 0 0;
+    height: auto;
+}
+
+footer .bf::before{display: none;}
