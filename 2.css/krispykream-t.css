@@ -88,6 +88,8 @@ align-items:flex-start;}
     transition: all 0.5s;
 }
 
+
+
 /* .innerMenu {display: flex;
     flex-direction: column;
     position:fixed;
@@ -151,6 +153,10 @@ nav ul.gnb li.bt .material-symbols-outlined {
     padding: 0;
 }
 
+nav ul.gnb li.bt span {
+    font-size: 40px;
+}
+
 div.section > .sec01 {
     width: 100%;
 }
@@ -194,7 +200,7 @@ button{
     font-family: inherit;
 }
 
-.material-symbols-outlined{
+button .material-symbols-outlined{
     padding: 25px 0 0 0;
     font-size: 40px;
     font-weight: 400;
@@ -256,6 +262,10 @@ button{
 
 .sec02 img {
     width: 240px;
+}
+
+.sec02 .menus > div:nth-child(4) img {
+    width: 170px;
 }
 
 .sec02 .menus > div {
@@ -430,10 +440,10 @@ button{
     width: 100%;
 }
 
-.sec04>div>.left {
+.sec04 > div .left {
     background:url(/ex/3.imgs/6.krispykream/sec4/크리스피크림아이콘.svg) no-repeat right 16px top 50% / 500px auto;}
 
-.sec04>div>.right {background:url(/ex/3.imgs/6.krispykream/sec4/롯데잇츠logo.svg) no-repeat left 16px top 50% / 500px auto;}
+.sec04 > div .right {background:url(/ex/3.imgs/6.krispykream/sec4/롯데잇츠logo.svg) no-repeat left 16px top 50% / 500px auto;}
 
 .sec04 .left_over,
 .sec04 .right_over {

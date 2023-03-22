@@ -10,7 +10,7 @@ $(".frm").submit(function() {
     // pw칸의 공란여부 체크
     if (!$(".stday").val()) {
         // 빈칸이면
-        $(".mg2").css("display", "block");
+        $(".mg2").css("display", "flex");
         $(".mg2").focus();
         // 경고문 출력후 입력포커스 이동
         return false;

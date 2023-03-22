@@ -16,13 +16,6 @@ $(".gnb").unbind("hover").hover(function () {
 
 });
 
-
-window.addEventListener('resize', () => {
-  let wiw = window.innerWidth;
-if (wiw < 1025) {
-  $("header.on").removClass("on");
-}});
-
 console.log("click");
 
 window.onload = () => {

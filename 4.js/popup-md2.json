@@ -1,0 +1,38 @@
+[
+    {
+    "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/md/콰트로캔틴메탈그린.png",
+    "name":"콰트로캔틴 메탈 그린",
+    "infor":"콰트로캔틴 메탈 그린 490mL",
+    "price":"34,000원"
+ },
+ {
+    "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/md/콰트로캔틴메탈레드.png",
+    "name":"워터저그 디스펜서 아이보리",
+    "infor":"콰트로캔틴 메탈 레드 490mL",
+    "price":"34,000원"
+ },
+ {
+    "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/md/알파인플라스크버건디.png",
+    "name":"알파인 플라스크 버건디",
+    "infor":"알파인 플라스크 버건디 530ml",
+    "price":"32,000원"
+ },
+ {
+    "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/md/알파인플라스크화이트.png",
+    "name":"알파인 플라스크 화이트",
+    "infor":"알파인 플라스크 화이트 530ml",
+    "price":"32,000원"
+ },
+ {
+    "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/md/캠핑&펫보틀블루.png",
+    "name":"캠핑&펫보틀 블루",
+    "infor":"캠핑&펫보틀 블루 1.1L",
+    "price":"38,000원"
+ },
+ {
+    "imgfile":"/ex/3.imgs/6.krispykream/서브페이지/md/캠핑&펫보틀화이트.png",
+    "name":"캠핑&펫보틀 화이트",
+    "infor":"캠핑&펫보틀 화이트 1.1L",
+    "price":"38,000원"
+ }
+]
