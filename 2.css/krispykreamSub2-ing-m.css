@@ -1,0 +1,133 @@
+@charset "utf-8";
+
+html,
+body {
+    min-width: 320px;
+}
+
+/* 헤더나브 */
+header {
+    width: 100%;
+    height: 60px;
+}
+
+.logo, .footer_logo {
+    width: 80px;
+    height: 60px;
+}
+
+
+nav ul.gnb li.bt {
+    top:3px;
+    right: 9px;
+}
+
+button .material-symbols-outlined{
+ padding: 5px 0 0 0;
+}
+
+
+.sec01>h1 {
+    padding: 0 32px;
+}
+
+.sec01>ul {
+    justify-content:space-around;
+    padding: 0 32px;
+gap: 8px;
+    }
+
+.sec01>ul>li>a {
+    font-size: 1.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: var(--colorDarkGrey);
+    letter-spacing: -4px;}    
+
+.sec02 .title h2 {
+    font-size: 1.875rem;
+text-align: center;
+}
+
+.sec02>.inner {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start
+}
+
+.sec02 .title{
+    align-items: center;
+}
+
+
+
+
+/* 푸터 */
+footer .inner > div:first-of-type {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 0 0 16px 0;
+}
+
+footer .footer_left {
+    flex-direction: column;
+}
+
+footer .bf::before{display: none;}
+
+footer ul {
+    display: flex;
+    flex-direction: column;
+}
+
+footer>.inner>.footer_bottom {
+    padding: unset;
+    flex-direction: column;
+    gap: 16px;
+    padding-top:16px ;
+    align-items: center;
+}
+
+footer p{
+    padding:20px 0 0 0 ;
+    text-align: center;
+}
+
+footer .footer_bottom > .footer_left span{
+font-size: 1rem;
+font-weight: 500;
+}
+
+.footer_contents .footer_left{
+flex-direction: column;
+justify-content: center;
+}
+
+footer .footer_bottom >.footer_left {
+    flex-direction: row;
+    justify-content: center;
+    }
+
+footer .footer_bottom > .footer_right {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+footer .footer_bottom > .footer_right a{
+    width: 300%;
+    margin:0;
+    text-align: center;;
+}
+
+footer .fa-brands{
+    height: 100%;
+    padding: 0 20px;
+}
+
+select{order: 2;}

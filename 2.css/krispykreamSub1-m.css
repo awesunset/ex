@@ -5,6 +5,32 @@ body {
     min-width: 320px;
 }
 
+h1 {
+    font-size: 1.875rem;
+}
+/* 나브헤더 */
+header {
+    width: 100%;
+    height: 60px;
+}
+
+.logo, .footer_logo {
+    width: 80px;
+    height: 60px;
+}
+
+
+nav ul.gnb li.bt {
+    top:3px;
+    right: 9px;
+}
+
+button .material-symbols-outlined{
+ padding: 5px 0 0 0;
+}
+
+
+/* 섹션1 */
 .sec01>h1 {
     padding: 0 32px;
 }
@@ -51,7 +77,7 @@ font-weight: 600;
     }
 
     .swiper-slide .img_box{
-        width: 100%;
+        width: 92%;
         height: auto;
         box-shadow: none;
     }
@@ -88,3 +114,69 @@ font-weight: 600;
         transform:translate(-50%, -50%) scale(0.7);
     }
 
+    /* 푸터 */
+    footer .inner > div:first-of-type {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        padding: 0 0 16px 0;
+    }
+    
+    footer .footer_left {
+        flex-direction: column;
+    }
+    
+    footer .bf::before{display: none;}
+    
+    footer ul {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    footer>.inner>.footer_bottom {
+        padding: unset;
+        flex-direction: column;
+        gap: 16px;
+        padding-top:16px ;
+        align-items: center;
+    }
+    
+    footer p{
+        padding:20px 0 0 0 ;
+        text-align: center;
+    }
+    
+    footer .footer_bottom > .footer_left span{
+    font-size: 1rem;
+    font-weight: 500;
+    }
+    
+    .footer_contents .footer_left{
+    flex-direction: column;
+    justify-content: center;
+    }
+    
+    footer .footer_bottom >.footer_left {
+        flex-direction: row;
+        justify-content: center;
+        }
+    
+    footer .footer_bottom > .footer_right {
+        width: 80%;
+        display: flex;
+        align-items: center;
+        margin: 0;
+    }
+    
+    footer .footer_bottom > .footer_right a{
+        width: 300%;
+        margin:0;
+        text-align: center;;
+    }
+    
+    footer .fa-brands{
+        height: 100%;
+        padding: 0 20px;
+    }
+    
+    select{order: 2;}

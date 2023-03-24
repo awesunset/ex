@@ -27,8 +27,9 @@ header {
     height: 80px;
 }
 
-header.on::after
-{display: none;}
+header.on::after {
+    display: none;
+}
 
 header .inner {
     width: 100%;
@@ -42,108 +43,113 @@ div.innerLogo {
 
 header ul {
     display: flex;
-flex-direction: column;
-overflow: hidden;}
-
-.global, .gnb{flex:unset;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-div.global {display: flex;
-order: 2;
-width: 80%;
-margin-top: 40px;
-padding: 0;
-gap: 16px;}
+.global, .gnb {
+    flex: unset;
+}
+
+div.global {
+    display: flex;
+    order: 2;
+    width: 80%;
+    margin-top: 40px;
+    padding: 0;
+    gap: 16px;
+}
 
 div.global a {
     font-size: 12px;
     color: var(--colorGreen)
 }
 
-nav ul.gnb > li > ul.submenu {
-    flex-direction: column;
+
+nav ul.gnb > li.bt {
+    display: flex;
 }
 
-nav ul.gnb > li.bt {display: flex;}
 
-
-.innerMenu {display: flex;
+.innerMenu {
+    display: flex;
     flex-direction: column;
-    position:fixed;
+    position: fixed;
     top: 0;
     right: 0;
     width: 320px;
-    height:100vh;
+    height: 100vh;
     z-index: 999;
     background: #fff;
-    transform:translateX(200%);
-    padding:80px 40px 0 40px;
-flex: unset;
-gap: 20px;
-align-items:flex-start;}
+    transform: translateX(200%);
+    padding: 80px 40px 0 40px;
+    flex: unset;
+    gap: 20px;
+    align-items: flex-start;
+}
 
-.innerMenu.on{
-    transform:translateX(0%);
-    box-shadow : rgba(0,0,0,0.5) 0 0 0 9999px;
+.innerMenu.on {
+    transform: translateX(0%);
+    box-shadow: rgba(0, 0, 0, 0.5) 0 0 0 9999px;
     transition: all 0.5s;
 }
 
 
 
-/* .innerMenu {display: flex;
+nav .gnb {
+    display: flex;
     flex-direction: column;
-    position:fixed;
-    top: 0;
-    right: 0;
-    width: 320px;
-    height:100vh;
-    z-index: 999;
-    background: #fff;
-    transform:translateX(0%);
-    box-shadow : rgba(0,0,0,0.5) 0 0 0 9999px;
-    padding:72px 40px;
-flex: unset;
-gap: 20px;
-align-items:flex-start} */
-
-
-nav>ul.gnb {display: flex;
-    flex-direction: column;
-    gap:40px;
+    align-items: unset;
+    gap: 40px;
     width: 100%;
-    height:auto;}
-
-nav .gnb>li>a {
-    align-items:flex-start;
-    font-weight: 500;
-    height:auto;}
-
-nav ul.gnb > li > ul.submenu {
-    top: 56px;
-    height:auto;
-position: unset;}
-
-
+    height: auto;
+}
+nav .gnb > li, nav .gnb > li > a {
+    align-items: flex-start;
+    font-weight: 600;
+    height: auto;
+}
+nav .gnb > li{ height: auto; }
+nav .gnb > li > a{ text-align: left; }
+nav .gnb > li > ul.submenu {
+    top: auto;
+    left: auto;
+    height: 0;
+    position: unset;
+    transform: unset;
+    overflow: hidden;
+    padding: 10px 0 0 0;
+}
+nav ul.gnb > li > ul.submenu.on {
+    height: auto;
+}
 nav ul.gnb > li > ul.submenu > li {
- padding-bottom:16px;
- height: auto;  
+    display: block;
+    padding-bottom: 16px;
+    height: auto;
 }
 
-nav ul.gnb > li > ul.submenu a{
-position: relative;
-top: 0; left: 0;
-display: flex;
-flex-direction: column;
-padding: 0;
-font-size: 12px;
+
+nav ul.gnb > li > ul.submenu a {
+    position: relative;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    font-size: 16px;
 }
 
-nav ul.gnb li.bt {position: fixed;
-top: 13px; right: 10px;
-width: 56px; height: 56px;
-cursor: pointer;}
+nav ul.gnb li.bt {
+    position: fixed;
+    top: 13px;
+    right: 10px;
+    width: 56px;
+    height: 56px;
+    cursor: pointer;
+}
 
-nav ul.gnb li.bt span{
+nav ul.gnb li.bt span {
     color: var(--colorGreen);
     font-weight: 500;
     line-height: 56px;
@@ -167,40 +173,36 @@ div.section > .sec01 {
 
 nav .gnb {
     padding: unset;
-    /* display: none */
 }
 
-nav .gnb > li {
-    height: 100%;
-}
-
-nav ul.gnb > li > ul.submenu>li{display: none;}
 
 
-.btn.menu-toggle{
+.btn.menu-toggle {
     display: flex;
-position: absolute;
-top: 0; right: 10px;
-padding: 0;
-width: 56px; height: 56px;
-z-index: 2;
-align-items: center;
-overflow: visible;
-margin: 0;
-background-color: transparent;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    padding: 0;
+    width: 56px;
+    height: 56px;
+    z-index: 2;
+    align-items: center;
+    overflow: visible;
+    margin: 0;
+    background-color: transparent;
 }
 
-.btn{
+.btn {
     text-align: center;
     cursor: pointer;
     border: unset;
 }
 
-button{
+button {
     font-family: inherit;
 }
 
-button .material-symbols-outlined{
+button .material-symbols-outlined {
     padding: 25px 0 0 0;
     font-size: 40px;
     font-weight: 400;
@@ -274,49 +276,53 @@ button .material-symbols-outlined{
 
 /* 메뉴텍스트 */
 
-.sec02 .menus>div:first-child div{
+.sec02 .menus > div:first-child div {
     position: absolute;
-    left:160px; top:20px;
-   }
+    left: 160px;
+    top: 20px;
+}
 
-   .sec02 .menus>div:nth-child(2) div{
+.sec02 .menus > div:nth-child(2) div {
     position: absolute;
-    left: 180px; top:80px;
-   }
+    left: 180px;
+    top: 80px;
+}
 
-   .sec02 .menus>div:nth-child(3) div{
+.sec02 .menus > div:nth-child(3) div {
     position: absolute;
-    left:0px; top:140px;
-   }
+    left: 0px;
+    top: 140px;
+}
 
-   .sec02 .menus>div:nth-child(4) div{
+.sec02 .menus > div:nth-child(4) div {
     position: absolute;
-    left: -40px; top:180px;
-   }
+    left: -40px;
+    top: 180px;
+}
 
 
 /* 메뉴이미지 */
 
 
-.sec02 .menus>div:first-of-type {
+.sec02 .menus > div:first-of-type {
     z-index: 10;
     left: 80px;
     top: 80px;
 }
 
-.sec02 .menus>div:nth-of-type(2){
+.sec02 .menus > div:nth-of-type(2) {
     z-index: 10;
     left: 80px;
     bottom: 120px;
 }
 
-.sec02 .menus>div:nth-of-type(3) {
+.sec02 .menus > div:nth-of-type(3) {
     z-index: 10;
     right: 80px;
     bottom: 48px;
 }
 
-.sec02 .menus>div:nth-of-type(4) {
+.sec02 .menus > div:nth-of-type(4) {
     z-index: 10;
     right: 80px;
     top: 120px;
@@ -345,38 +351,46 @@ button .material-symbols-outlined{
     gap: 16px;
 }
 
-.sec03 .KateBox>.kategorie:first-of-type {
-    background: url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat center / cover;}
+.sec03 .KateBox > .kategorie:first-of-type {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat center / cover;
+}
 
-.sec03 .KateBox>.kategorie:first-of-type:hover {
-    background: url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat center / cover;}
-
-
-.sec03 .KateBox>.kategorie:nth-of-type(2) {
-    background: url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat center / cover;}
-
-.sec03 .KateBox>.kategorie:nth-of-type(2):hover {
-    background: url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat center / cover;}
+.sec03 .KateBox > .kategorie:first-of-type:hover {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail01.jpg)no-repeat center / cover;
+}
 
 
-.sec03 .KateBox>.kategorie:nth-of-type(3) {
-    background: url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat center / cover;}
+.sec03 .KateBox > .kategorie:nth-of-type(2) {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat center / cover;
+}
 
-    .sec03 .KateBox>.kategorie:nth-of-type(3):hover {
-        background: url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat center / cover;}
-
-
-.sec03 .KateBox>.kategorie:nth-of-type(4) {
-    background: url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat center / cover;}
-
-    .sec03 .KateBox>.kategorie:nth-of-type(4):hover {
-        background: url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat center / cover;}
+.sec03 .KateBox > .kategorie:nth-of-type(2):hover {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail02.jpg)no-repeat center / cover;
+}
 
 
-      .sec03 .KateBox>.kategorie:hover{
-        transition: all 0.5s;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-      }
+.sec03 .KateBox > .kategorie:nth-of-type(3) {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat center / cover;
+}
+
+.sec03 .KateBox > .kategorie:nth-of-type(3):hover {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail03.jpg)no-repeat center / cover;
+}
+
+
+.sec03 .KateBox > .kategorie:nth-of-type(4) {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat center / cover;
+}
+
+.sec03 .KateBox > .kategorie:nth-of-type(4):hover {
+    background: url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg)no-repeat center / cover;
+}
+
+
+.sec03 .KateBox > .kategorie:hover {
+    transition: all 0.5s;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
 
 .sec03 .KateBox > .kategorie span {
     font-size: 0.625rem;
@@ -393,15 +407,23 @@ button .material-symbols-outlined{
     display: none;
 }
 
-.sec03 button {display: block;
-    width: 104px; height: 40px;
+.sec03 .button {
+    display: flex;
+    width: 104px;
+    height: 40px;
     color: #FFFFFF;
-    border:  1px solid #FFFFFF;
+    border: 1px solid #FFFFFF;
     background-color: var(--colorGreen);
     border-radius: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
-.sec03 button:hover {
+.sec03 .button span {
+    display: flex;
+}
+
+.sec03 .button:hover {
     background-color: var(--colorGreen);
     filter: brightness(80%);
     transition: all 0.3s;
@@ -411,22 +433,22 @@ button .material-symbols-outlined{
 
 
 /* 섹션4 */
-.sec04{
+.sec04 {
     height: 1504px;
     flex-direction: column;
 }
 
-.morebt>.material-symbols-outlined{
+.morebt > .material-symbols-outlined {
     padding: 0;
 }
 
-.sec04>.inner{
-    flex:1 1 50%;
+.sec04 > .inner {
+    flex: 1 1 50%;
     overflow: hidden;
 }
 
-.sec04>.inner:first-child,
-.sec04>.inner:last-child {
+.sec04 > .inner:first-child,
+.sec04 > .inner:last-child {
     width: 100%;
     height: 100%;
     padding: 32px;
@@ -441,9 +463,12 @@ button .material-symbols-outlined{
 }
 
 .sec04 > div .left {
-    background:url(/ex/3.imgs/6.krispykream/sec4/크리스피크림아이콘.svg) no-repeat right 16px top 50% / 500px auto;}
+    background: url(/ex/3.imgs/6.krispykream/sec4/크리스피크림아이콘.svg) no-repeat right 16px top 50% / 500px auto;
+}
 
-.sec04 > div .right {background:url(/ex/3.imgs/6.krispykream/sec4/롯데잇츠logo.svg) no-repeat left 16px top 50% / 500px auto;}
+.sec04 > div .right {
+    background: url(/ex/3.imgs/6.krispykream/sec4/롯데잇츠logo.svg) no-repeat left 16px top 50% / 500px auto;
+}
 
 .sec04 .left_over,
 .sec04 .right_over {
@@ -454,20 +479,25 @@ button .material-symbols-outlined{
     padding: 80px 0 0 0;
 }
 
-.sec04>.inner:first-child:hover {
-   flex:1 1 50%;}
-.sec04>.inner:last-child:hover {
-    flex:1 1 50%;}
+.sec04 > .inner:first-child:hover {
+    flex: 1 1 50%;
+}
+.sec04 > .inner:last-child:hover {
+    flex: 1 1 50%;
+}
 
 
 /* 섹션5 */
 
 
 .sec05 {
-    max-width:1024px;
-    height:865px;}
+    max-width: 1024px;
+    height: 865px;
+}
 
-    .sec05 .inner {gap: unset;}
+.sec05 .inner {
+    gap: unset;
+}
 
 .sec05 .inner .twitter {
     display: none;
@@ -478,29 +508,31 @@ button .material-symbols-outlined{
 }
 
 .sec05 .inner > div {
-    width: 100%;}
+    width: 100%;
+}
 
-    .sec05 .inner .insta{
-        width: 100%;    }
+.sec05 .inner .insta {
+    width: 100%;
+}
 
-    .sec05 .inner > div > div >div {align-items: center;
+.sec05 .inner > div > div > div {
+    align-items: center;
     justify-content: center;
 }
 
 .sec05 .inner .insta > div + div {
-    height:100%;
-    align-content:center
-
+    height: 100%;
+    align-content: center
 }
 
-    .sec05 .instapic{
-        flex: 1 1 25%;
-    }
+.sec05 .instapic {
+    flex: 1 1 25%;
+}
 
-    .sec05 .instapic:nth-of-type(8),
-    .sec05 .instapic:nth-of-type(7) {
-        display: none;
-    }
+.sec05 .instapic:nth-of-type(8),
+.sec05 .instapic:nth-of-type(7) {
+    display: none;
+}
 
 
 /* 푸터 */
@@ -518,4 +550,6 @@ footer .footer_bottom {
     height: auto;
 }
 
-footer .bf::before{display: none;}
+footer .bf::before {
+    display: none;
+}

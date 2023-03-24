@@ -38,6 +38,7 @@ li {
 h1 {
     width: 100%;
     font-size: 3rem;
+    text-align: center;
 }
 
 h3 {
@@ -127,14 +128,17 @@ nav {
 nav .gnb {
     display: inherit;
     align-items: center;
-    gap: 88px;
+    width: 100%;
+    gap: 30px;
     font-size: 20px;
     font-weight: bold;
     padding: 0 0 16px 0;
+    position: relative;
+    z-index: 50;
 }
 
 nav .gnb > li {
-    width: 100%;
+    flex: 1 1 20%;
     height: 36px;
     position: relative;
 }
@@ -146,9 +150,14 @@ nav .gnb > li {
 
 .global {
     display: flex;
-    align-items: flex-end;
+    justify-content: flex-end;
+    align-items: center;
     gap: 21px;
-    padding: 0 0 12px 0;
+    padding-right:8%;
+    background: #fff;
+    width: 100%;
+    position: relative;
+    z-index: 100;
 }
 
 .global a {
@@ -157,13 +166,17 @@ nav .gnb > li {
 }
 
 nav .gnb > li > a {
-    height: auto;
     display: flex;
+    /* justify-content: flex-end; */
     align-items: center;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 8px;
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 10;
+    background: #fff;
 }
+
 
 nav .gnb > li:hover {
     color: var(--colorGreen);
@@ -173,9 +186,13 @@ nav .gnb > li:hover {
 nav .gnb > li > a::after {
     display: block;
     content: '';
-    width: 96%;
+    width: 100%;
     height: 3px;
     background: transparent;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
 }
 
 nav .gnb > li:hover > a::after {
@@ -183,21 +200,22 @@ nav .gnb > li:hover > a::after {
     transition: all 0.5s;
 }
 
-nav ul.gnb > li > ul.submenu {
+nav .gnb > li > ul.submenu {
     display: flex;
     flex-direction: column;
     position: absolute;
     left: 0px;
     top: 52px;
+    z-index: 5;
+    transform: translateY(-300px);
+    transition: transform 0.28s;
 }
-nav ul.gnb > li > ul.submenu {
-    display: none;
+header.on nav ul.gnb > li > ul.submenu {
+    transform: translateY(0);
 }
 nav ul.gnb > li > ul.submenu > li {
     width: 160px;
     padding: 0 0 20px 0;
-    position: relative;
-    z-index: 100;
     font-size: 16px;
 }
 
@@ -485,7 +503,7 @@ body {
 }
 
 .sec03 .KateBox > .kategorie:nth-of-type(4):hover {
-    background: #00704A url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg) 50% 27% / 120% no-repeat;
+    background: #00704A08 url(/ex/3.imgs/6.krispykream/main-thumbnail04.jpg) 50% 27% / 120% no-repeat;
     transition: all 0.5s;
 }
 
@@ -549,7 +567,7 @@ body {
     color: var(--colorDarkGrey);
 }
 
-.sec03 button {
+.sec03 .button,.sec03 .button span {
     display: none;
 }
 
@@ -861,13 +879,19 @@ footer ul li {
 
 footer .footer_bottom {
     width: 100%;
-    height: 222px;
+    height: 100px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     box-sizing: border-box;
     border-top: 1px solid rgba(255, 255, 255, 0.5);
 }
+
+footer  p {
+    width: 100%;
+    color:rgba(255, 255, 255, 0.5);
+padding-bottom: 40px;
+text-align: left;}
 
 footer .footer_bottom > .footer_left span {
     display: flex;

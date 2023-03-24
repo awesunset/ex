@@ -9,6 +9,7 @@ h1 {
     font-size: 1.875rem;
 }
 
+/* 헤더나브 */
 header {
     width: 100%;
     height: 60px;
@@ -28,6 +29,7 @@ nav ul.gnb li.bt {
 button .material-symbols-outlined{
  padding: 5px 0 0 0;
 }
+
 
 .sec01 > .inner {
 width:100%;}
@@ -223,7 +225,7 @@ justify-content: flex-end;}
     flex-wrap: unset;
     align-items: flex-start;
 }
-
+/* 푸터 */
 footer .inner > div:first-of-type {
     flex-direction: column;
     align-items: center;
@@ -247,6 +249,12 @@ footer>.inner>.footer_bottom {
     flex-direction: column;
     gap: 16px;
     padding-top:16px ;
+    align-items: center;
+}
+
+footer p{
+    padding:20px 0 0 0 ;
+    text-align: center;
 }
 
 footer .footer_bottom > .footer_left span{
