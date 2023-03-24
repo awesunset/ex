@@ -8,7 +8,7 @@
     padding: 0;
     margin: 0;
     word-break: keep-all;
-    /* outline: 1px solid red; */
+    outline: 1px solid red;
     line-height: 1.4;
     color: var(--colorDarkGrey);
     font-size: 14px;
@@ -52,6 +52,8 @@ body {
     height: 100%;
 }
 
+
+/* 헤더나브 */
 
 header {
     width: 100%;
@@ -228,7 +230,15 @@ nav .gnb > li.bt {
 }
 
 
-
+.inner {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0
+}
 
 section {
     width: 100%;
@@ -301,6 +311,7 @@ gap: 80px;
     transition: all 0.3s;
 }
 
+
 .sec02 {
     max-width: 1440px;
     height: auto;
@@ -312,6 +323,22 @@ gap: 80px;
 gap: 28px;
 }
 
+.sec02 h1 {
+    padding-top: 120px;
+    font-size: 4rem;
+    font-weight: 700;
+    color:var(--colorDarkMarjenta);
+    text-align: left;
+    text-shadow:
+    -1px -1px 0 #fff,
+    1px -1px 0 #fff,
+    -1px 1px 0 #fff,
+    1px 1px 0 #fff;
+    line-height: 1;
+}
+
+.sec02 img{
+width: 100%;}
 
 .sec02 .title {
     display: flex;
@@ -350,6 +377,8 @@ gap: 28px;
     transition: all 0.3s;
 }
 
+
+/* 섹션3 */
 .sec03 {
     padding-bottom: 120px;
 }
@@ -357,19 +386,20 @@ gap: 28px;
 .sec03 > .inner {
     width: 100%;
     height: 456px;
-    background: var(--colorGreen);
     display: flex;
     justify-content: center;
     align-items: center;
+    background: var(--colorGreen);
 }
 
-.swiper-slide {
-    text-align: center;
-    font-size: 18px;
-    background: #fff;
+
+.swiper {
+    width:90%; 
+    position: relative;
+}
+
+.swiper-wrapper{
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
@@ -380,15 +410,7 @@ gap: 28px;
     object-fit: cover;
 }
 
-
-.swiper {
-    max-width: 1440px;
-    height: 300px;
-}
-
 .swiper-slide {
-    max-width: 30%;
-    max-height: 520px;
     border: 1px solid var(--colorRightGrey);
     overflow: hidden;
     display: flex;
@@ -444,6 +466,17 @@ background: rgba(255,255,255,0.8);
     1px -1px 0 #fff,
     -1px 1px 0 #fff,
     1px 1px 0 #fff;
+    
+}
+
+.swiper-button-next{
+    position: absolute;
+    right: 0px;
+}
+
+.swiper-button-prev:after{
+    position: absolute;
+    left: 0px;
 }
 
 /* 푸터 */

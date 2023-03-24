@@ -10,6 +10,7 @@ $(document).ready(function () {
       // 1차메뉴
       $(".btn").click(function () {
         $(".submenu").removeClass("on");
+        // 처음에 닫혀서 나오게 설정
         $(".innerMenu").addClass('on');
       }); // 햄버거버튼
       $(".bt").click(function () {
@@ -59,6 +60,8 @@ $(document).ready(function () {
 var swiper = new Swiper(".mySwiper", {
   slidesPerView: 3, //레이아웃 뷰 개수
     spaceBetween: 10,
+    slidesOffsetBefore: 100,
+    slidesOffsetAfter: 100,
     pagination: {
       el: ".swiper-pagination",
       type: "fraction",

@@ -62,7 +62,15 @@ text-align: center;
     align-items: center;
 }
 
+/* 스와이퍼 */
+.swiper-slide {
+    height: 60%;
+    }
 
+.swiper-slide .text h2 {
+    height:60px;
+    font-size: 1rem;
+}
 
 
 /* 푸터 */

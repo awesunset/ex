@@ -212,8 +212,24 @@ button .material-symbols-outlined {
 }
 
             /* 섹션3 스와이퍼 */
+
+
+/* .sec03 {
+    height: 60%;
+} */
+
 .sec03 > .inner {
     padding: 0 32px;
+    height: 300px;
+}
+
+.swiper {
+    width:100%; 
+    position: relative;
+}
+
+.swiper-slide {
+height: 80%;
 }
 
 .swiper-slide:hover text{
@@ -221,6 +237,12 @@ height: 100%;
 background:#00000050;
 color: #fff;
 }
+
+.swiper-slide .text h2 {
+    height:60px;
+    font-size: 1rem;
+}
+
 
 .swiper-slide:hover img {
     transform: scale(1.2);
